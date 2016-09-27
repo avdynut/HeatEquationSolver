@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.25618.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeatEquationSolver", "HeatEquationSolver\HeatEquationSolver.csproj", "{BD9C1151-54C7-4F86-9BAD-0ACB44CCA252}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleSolver", "ConsoleSolver\ConsoleSolver.csproj", "{4C03C264-3491-47BA-916B-409073363AB0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{BD9C1151-54C7-4F86-9BAD-0ACB44CCA252}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD9C1151-54C7-4F86-9BAD-0ACB44CCA252}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD9C1151-54C7-4F86-9BAD-0ACB44CCA252}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C03C264-3491-47BA-916B-409073363AB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C03C264-3491-47BA-916B-409073363AB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C03C264-3491-47BA-916B-409073363AB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C03C264-3491-47BA-916B-409073363AB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
