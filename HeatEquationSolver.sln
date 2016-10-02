@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleSolver", "ConsoleSol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeatEquationSolver.Tests", "HeatEquationSolver.Tests\HeatEquationSolver.Tests.csproj", "{F6008B34-A45D-4AA8-81A5-47B06580EE80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NonlinearSystemSolver", "NonlinearSystemSolver\NonlinearSystemSolver.csproj", "{2617A936-1701-4A3D-A7A5-003B1E9B01F4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeatEquationSolverUI", "HeatEquationSolverUI\HeatEquationSolverUI.csproj", "{795BB736-68A0-4A7D-9C50-EC9D61887E89}"
 EndProject
 Global
@@ -31,10 +29,6 @@ Global
 		{F6008B34-A45D-4AA8-81A5-47B06580EE80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6008B34-A45D-4AA8-81A5-47B06580EE80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6008B34-A45D-4AA8-81A5-47B06580EE80}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2617A936-1701-4A3D-A7A5-003B1E9B01F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2617A936-1701-4A3D-A7A5-003B1E9B01F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2617A936-1701-4A3D-A7A5-003B1E9B01F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2617A936-1701-4A3D-A7A5-003B1E9B01F4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{795BB736-68A0-4A7D-9C50-EC9D61887E89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{795BB736-68A0-4A7D-9C50-EC9D61887E89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{795BB736-68A0-4A7D-9C50-EC9D61887E89}.Release|Any CPU.ActiveCfg = Release|Any CPU

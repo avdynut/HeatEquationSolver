@@ -39,6 +39,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Equation.cs" />
+    <Compile Include="EntryPoint.cs" />
+    <Compile Include="NonlinearSystemSolver\BetaCalculators\BetaCalculator.cs" />
+    <Compile Include="NonlinearSystemSolver\BetaCalculators\No6Method.cs" />
+    <Compile Include="NonlinearSystemSolver\BetaCalculators\No6ModMethod.cs" />
+    <Compile Include="NonlinearSystemSolver\BetaCalculators\PuzyninMethod.cs" />
+    <Compile Include="NonlinearSystemSolver\Solver.cs" />
+    <Compile Include="Solver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
