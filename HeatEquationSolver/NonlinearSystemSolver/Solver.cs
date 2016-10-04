@@ -28,11 +28,11 @@ namespace HeatEquationSolver.NonlinearSystemSolver
 
             while (norm > epsilon)
             {
-                MakeSystem();
-                var answer = TridiagonalMatrixAlgorithm();
+                //MakeSystem();
+                //var answer = TridiagonalMatrixAlgorithm();
 
-                for (int i = 0; i <= N; i++)
-                    x[i] += answer[i];
+                //for (int i = 0; i <= N; i++)
+                //    x[i] += answer[i];
 
                 f = system.SubstituteValues(x);
                 norm = CalculateNorm(f);
@@ -48,26 +48,6 @@ namespace HeatEquationSolver.NonlinearSystemSolver
         {
             double sum = f.Sum(x => x * x);
             return Math.Sqrt(sum / N);
-        }
-
-        public double[] TridiagonalMatrixAlgorithm(double[] a, double[] c, double[] b, double[] f)
-        {
-            int n = c.Length;
-            var x = new double[n];
-            double m;
-
-            for (int i = 1; i < n; i++)
-            {
-                m = a[i] / c[i - 1];
-                c[i] -= m * b[i - 1];
-                f[i] -= m * f[i - 1];
-            }
-
-            x[n - 1] = f[n - 1] / c[n - 1];
-            for (int i = n - 2; i >= 0; i--)
-                x[i] = (f[i] - b[i] * x[i + 1]) / c[i];
-
-            return x;
         }
     }
 }

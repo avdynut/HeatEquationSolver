@@ -21,7 +21,8 @@ namespace HeatEquationSolver
         public double[] SubstituteValues(double[] x)
         {
             var answer = new double[N];
-            answer[0] = x[0] - u(x1, t);
+            //answer[0] = x[0] - u(x1, t);
+            return answer;
         }
     }
 }

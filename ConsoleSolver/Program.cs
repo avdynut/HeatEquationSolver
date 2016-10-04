@@ -6,8 +6,12 @@ namespace ConsoleSolver
     {
         static void Main(string[] args)
         {
-            var eq = new Equation(u, k, g, (x, t) => 2 * x * t, (x, t) => 2 * t, (x, t) => x * x, (x, t, u) => 2 * u);
-            var d = eq.f(4, 3);
+            //var eq = new Equation(u, k, g, (x, t) => 2 * x * t, (x, t) => 2 * t, (x, t) => x * x, (x, t, u) => 2 * u);
+            //var d = eq.f(4, 3);
+
+            QuasiNewton qn = new QuasiNewton(1, 10, 1, 400, 0.01, 1e-3);
+            var answer = qn.Answer;
+            var norm = qn.Norm;
         }
 
         private static double u(double x, double t)

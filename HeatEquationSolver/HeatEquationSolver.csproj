@@ -45,6 +45,7 @@
     <Compile Include="NonlinearSystemSolver\BetaCalculators\No6ModMethod.cs" />
     <Compile Include="NonlinearSystemSolver\BetaCalculators\PuzyninMethod.cs" />
     <Compile Include="NonlinearSystemSolver\Solver.cs" />
+    <Compile Include="QuasiNewton.cs" />
     <Compile Include="Solver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

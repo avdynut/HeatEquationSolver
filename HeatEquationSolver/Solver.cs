@@ -49,18 +49,18 @@ namespace HeatEquationSolver
 
             C[0] = C[N] = 1;
             f[0] = equation.u(0, t);
-            f[N] = equation.u(a, t);
+            //f[N] = equation.u(a, t);
             double x;
 
             for (int n = 1; n < N; n++)
             {
                 x = x1 + n * h;
-                A[n] = B[n] = -gamma;
-                C[n] = 1 + 2 * gamma;
-                f[n] = y[n] + tau * g(x, t);
+                //A[n] = B[n] = -gamma;
+                //C[n] = 1 + 2 * gamma;
+                //f[n] = y[n] + tau * g(x, t);
             }
 
-            y = TridiagonalMatrixAlgorithm(A, C, B, f);
+            //y = TridiagonalMatrixAlgorithm(A, C, B, f);
         }
     }
 }
