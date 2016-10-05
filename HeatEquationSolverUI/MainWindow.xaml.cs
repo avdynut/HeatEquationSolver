@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using HeatEquationSolver;
+using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace HeatEquationSolverUI
 {
@@ -22,6 +12,22 @@ namespace HeatEquationSolverUI
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void SolveButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                AnswerTextBlock.Text = "";
+                QuasiNewton qn = new QuasiNewton(double.Parse(a.Text), int.Parse(N.Text), double.Parse(T.Text),
+                    int.Parse(M.Text) * 40, double.Parse(Beta0.Text), double.Parse(Eps.Text));
+                AnswerTextBlock.Text = qn.Answer;
+                Norm.Content = qn.Norm;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

@@ -7,6 +7,71 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <GroupBox Grid.Row="0" Header="Настройки">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="StackPanel">
+                        <Setter Property="Orientation" Value="Horizontal"/>
+                    </Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Width" Value="70"/>
+                    </Style>
+                </Grid.Resources>
+                <StackPanel Grid.Row="0" Grid.Column="0">
+                    <Label Content="a"/>
+                    <TextBox Name="a" Text="1"/>
+                    <Label Content="N"/>
+                    <TextBox Name="N" Text="10"/>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Grid.Column="0">
+                    <Label Content="Eps"/>
+                    <TextBox Name="Eps" Text="1e-3"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="0">
+                    <Label Content="T"/>
+                    <TextBox Name="T" Text="1"/>
+                    <Label Content="M"/>
+                    <TextBox Name="M" Text="10"/>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Grid.Column="0">
+                    <Label Content="Beta0"/>
+                    <TextBox Name="Beta0" Text="0,01"/>
+                    <CheckBox Name="NeedReport" Content="Записывать данные" Margin="3,5" FontSize="12" Visibility="Hidden"/>
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="4">
+                    <!--<Image Source="ur.PNG" Height="100" Margin="10,0"></Image>-->
+                </StackPanel>
+                <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
+            </Grid>
+        </GroupBox>
+        <Button Grid.Row="1" Content="Решить" Click="SolveButton_Click" Width="400"/>
+        <GroupBox Grid.Row="2" Header="Ответ">
+            <StackPanel>
+                <TextBox Name="AnswerTextBlock" Height="260" VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Норма невязки:"/>
+                    <Label Name="Norm"/>
+                    <!--<Button Content="Посмотреть процесс" Width="130" HorizontalAlignment="Left"/>-->
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <!--<Label Content="Developer: Andrey Arekhva"/>-->
     </Grid>
 </Window>

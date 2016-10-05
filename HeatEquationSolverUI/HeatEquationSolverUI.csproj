@@ -86,6 +86,12 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HeatEquationSolver\HeatEquationSolver.csproj">
+      <Project>{bd9c1151-54c7-4f86-9bad-0acb44cca252}</Project>
+      <Name>HeatEquationSolver</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
