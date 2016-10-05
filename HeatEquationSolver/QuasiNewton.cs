@@ -1,4 +1,5 @@
 ﻿using System;
+using NLog;
 
 namespace HeatEquationSolver
 {
@@ -11,6 +12,7 @@ namespace HeatEquationSolver
         double eps;                             // точность
         public string Answer;
         public double Norm;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public QuasiNewton(double a, int N, double T, int M, double beta0, double eps)
         {
@@ -20,8 +22,7 @@ namespace HeatEquationSolver
             tau = T / M;
             this.eps = eps;
 
-            //    File.WriteAllText(reportFile, string.Format("a={0}, N={1}, T={2}, M={3}, h={4}, tau={5}," +
-            //        "beta0={6}, eps={7}" + Environment.NewLine, a, N, T, M, h, tau, beta0, eps));
+            logger.Debug("a={0}, N={1}, T={2}, M={3}, h={4}, tau={5}, beta0={6}, eps={7}", a, N, T, M, h, tau, beta0, eps);
 
             var y = new double[N + 1];     // mu1 = u(x, 0)
             for (int i = 0; i <= N; i++)
@@ -29,7 +30,7 @@ namespace HeatEquationSolver
 
             for (int m = 1; m <= M; m++)
             {
-                //    File.AppendAllText(reportFile, "Слой: " + m + "-----------------------" + Environment.NewLine);
+                logger.Debug("Слой: {0} -----------------------", m);
 
                 double t = m * tau;
                 y = SolveSystem(y, t, beta0);
@@ -68,7 +69,7 @@ namespace HeatEquationSolver
 
             while (norm > eps)
             {
-                //    File.AppendAllText(reportFile, string.Format("norm = {0}, beta = {1}" + Environment.NewLine, norm, beta));
+                logger.Debug("norm = {0}, beta = {1}", norm, beta);
                 double x, l, r;
 
                 for (int n = 1; n < N; n++)
