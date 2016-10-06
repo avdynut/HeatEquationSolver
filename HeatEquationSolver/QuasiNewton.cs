@@ -30,7 +30,7 @@ namespace HeatEquationSolver
 
             for (int m = 1; m <= M; m++)
             {
-                logger.Debug("Слой: {0} -----------------------", m);
+                logger.Debug("Layer: {0} -----------------------", m);
 
                 double t = m * tau;
                 y = SolveSystem(y, t, beta0);
@@ -46,14 +46,13 @@ namespace HeatEquationSolver
             Norm = Math.Sqrt(sum);
         }
 
-        double normDifference(double[] x, double[] y)
-        {
-            double sum = 0;
-            for (int n = 0; n <= N; n++)
-                sum += Math.Pow(x[n] - y[n], 2);
-            sum /= N;
-            return Math.Sqrt(sum);
-        }
+        //double normDifference(double[] x, double[] y)
+        //{
+        //    double sum = 0;
+        //    for (int n = 0; n <= N; n++)
+        //        sum += Math.Pow(x[n] - y[n], 2);
+        //    return Math.Sqrt(sum / N);
+        //}
 
         double[] SolveSystem(double[] y, double t, double beta)
         {
