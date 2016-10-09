@@ -10,6 +10,7 @@ namespace ConsoleSolver
             //var d = eq.f(4, 3);
 
             QuasiNewton qn = new QuasiNewton(1, 10, 1, 400, 0.01, 1e-3);
+            qn.Solve();
             var answer = qn.Answer;
             var norm = qn.Norm;
         }

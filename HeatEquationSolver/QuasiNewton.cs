@@ -1,15 +1,18 @@
 ﻿using System;
 using NLog;
+using System.Linq;
 
 namespace HeatEquationSolver
 {
     public class QuasiNewton
     {
         int N;                                  // количество разбиений по x
+        private int M;
         double a;                               // длина отрезка по x
         double h;                               // шаг по x
         double tau;                             // шаг по t
         double eps;                             // точность
+        private double beta0;
         public string Answer;
         public double Norm;
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -20,10 +23,15 @@ namespace HeatEquationSolver
             this.N = N;
             h = a / N;
             tau = T / M;
+            this.M = M;
+            this.beta0 = beta0;
             this.eps = eps;
 
             logger.Debug("a={0}, N={1}, T={2}, M={3}, h={4}, tau={5}, beta0={6}, eps={7}", a, N, T, M, h, tau, beta0, eps);
+        }
 
+        public void Solve()
+        {
             var y = new double[N + 1];     // mu1 = u(x, 0)
             for (int i = 0; i <= N; i++)
                 y[i] = u(i * h, 0);
@@ -37,6 +45,7 @@ namespace HeatEquationSolver
             }
 
             double sum = 0;
+            double T = tau * M;
             for (int n = 0; n <= N; n++)
             {
                 double sol = u(n * h, T);
@@ -45,14 +54,6 @@ namespace HeatEquationSolver
             }
             Norm = Math.Sqrt(sum);
         }
-
-        //double normDifference(double[] x, double[] y)
-        //{
-        //    double sum = 0;
-        //    for (int n = 0; n <= N; n++)
-        //        sum += Math.Pow(x[n] - y[n], 2);
-        //    return Math.Sqrt(sum / N);
-        //}
 
         double[] SolveSystem(double[] y, double t, double beta)
         {
@@ -68,17 +69,21 @@ namespace HeatEquationSolver
 
             while (norm > eps)
             {
-                logger.Debug("norm = {0}, beta = {1}", norm, beta);
+                //logger.Debug("norm = {0}, beta = {1}", norm, beta);
                 double x, l, r;
 
                 for (int n = 1; n < N; n++)
                 {
                     x = n * h;
-                    l = KDu(x, t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
+                    l = KDy(x, t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
                     r = K(x, t, y[n]) / (h * h);
                     A[n - 1] = l + r;
                     B[n - 1] = -l + r;
                     C[n] = -2 * r - 1 / tau;
+                    //r = -K(x, t, y[n]) / (h * h);
+                    //A[n - 1] = -l + r;
+                    //B[n - 1] = l + r;
+                    //C[n] = -2 * r + 1 / tau;
                     f[n] *= -beta;
                 }
                 f[0] *= -beta;
@@ -99,8 +104,7 @@ namespace HeatEquationSolver
             //    for (int n = 0; n <= N; n++)
             //        File.AppendAllText(reportFile, yK[n] + "\t" + u(n * h, t).ToString() + Environment.NewLine);
 
-            y = (double[])yK.Clone();
-            return y;
+            return yK;
         }
 
         double[] fx(double t, double[] y, double[] yK)
@@ -112,19 +116,21 @@ namespace HeatEquationSolver
             for (int n = 1; n < N; n++)
             {
                 x = n * h;
-                f[n] = KDu(x, t, y[n]) * Math.Pow((yK[n + 1] - yK[n - 1]) / (2 * h), 2) +
+                f[n] = KDy(x, t, y[n]) * Math.Pow((yK[n + 1] - yK[n - 1]) / (2 * h), 2) +
                             K(x, t, y[n]) * (yK[n + 1] - 2 * yK[n] + yK[n - 1]) / (h * h) +
                             g(x, t, y[n]) - (yK[n] - y[n]) / tau;
+                //f[n] = (yK[n] - y[n]) / tau
+                //     - KDy(x, t, y[n]) * Math.Pow((yK[n + 1] - yK[n - 1]) / (2 * h), 2)
+                //     - K(x, t, y[n]) * (yK[n + 1] - 2 * yK[n] + yK[n - 1]) / (h * h)
+                //     - g(x, t, y[n]);
             }
             return f;
         }
 
         double getNorm(double[] f)
         {
-            double sum = 0;
-            for (int n = 0; n <= N; n++)
-                sum += f[n] * f[n];
-            return Math.Sqrt(sum);
+            double sum = f.Sum(x => x * x);
+            return Math.Sqrt(sum);  // sum / N
         }
 
         double u(double x, double t)
@@ -142,12 +148,12 @@ namespace HeatEquationSolver
             return x * x * t + y * y;
         }
 
-        double KDu(double x, double t, double y)
+        double KDy(double x, double t, double y)
         {
             return 2 * y;
         }
 
-        public double[] TridiagonalMatrixAlgorithm(double[] a, double[] c, double[] b, double[] f)
+        private double[] TridiagonalMatrixAlgorithm(double[] a, double[] c, double[] b, double[] f)
         {
             int n = c.Length;
             var x = new double[n];
