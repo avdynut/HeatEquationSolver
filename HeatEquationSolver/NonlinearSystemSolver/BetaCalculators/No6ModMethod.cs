@@ -4,7 +4,7 @@ namespace HeatEquationSolver.NonlinearSystemSolver.BetaCalculators
 {
     public class No6ModMethod : No6Method
     {
-        public override double Multiplier => -Math.Sqrt(beta);
+        public override double Multiplier => -Math.Sqrt(Beta);
 
         public No6ModMethod(double beta0, bool onlyUp = true) : base(beta0, onlyUp)
         {
@@ -12,11 +12,11 @@ namespace HeatEquationSolver.NonlinearSystemSolver.BetaCalculators
 
         protected override double CalculateBeta(double norm)
         {
-            double nextBeta = Math.Min(1, norm0 * norm0 * gamma / (norm * norm * beta));
+            double nextBeta = Math.Min(1, norm0 * norm0 * gamma / (norm * norm * Beta));
             if (AssignBeta(nextBeta))
-                gamma *= nextBeta / beta;
+                gamma *= nextBeta / Beta;
             predNorm = norm;
-            return beta;
+            return Beta;
         }
     }
 }

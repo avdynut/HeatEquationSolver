@@ -1,6 +1,7 @@
 ﻿using System;
 using NLog;
 using System.Linq;
+using HeatEquationSolver.NonlinearSystemSolver.BetaCalculators;
 
 namespace HeatEquationSolver
 {
@@ -16,6 +17,7 @@ namespace HeatEquationSolver
         public string Answer;
         public double Norm;
         private static Logger logger = LogManager.GetCurrentClassLogger();
+        private BetaCalculator betaCalculator;
 
         public QuasiNewton(double a, int N, double T, int M, double beta0, double eps)
         {
@@ -26,7 +28,6 @@ namespace HeatEquationSolver
             this.M = M;
             this.beta0 = beta0;
             this.eps = eps;
-
             logger.Debug("a={0}, N={1}, T={2}, M={3}, h={4}, tau={5}, beta0={6}, eps={7}", a, N, T, M, h, tau, beta0, eps);
         }
 
@@ -41,7 +42,7 @@ namespace HeatEquationSolver
                 logger.Debug("Layer: {0} -----------------------", m);
 
                 double t = m * tau;
-                y = SolveSystem(y, t, beta0);
+                y = SolveSystem(y, t);
             }
 
             double sum = 0;
@@ -55,7 +56,7 @@ namespace HeatEquationSolver
             Norm = Math.Sqrt(sum);
         }
 
-        double[] SolveSystem(double[] y, double t, double beta)
+        double[] SolveSystem(double[] y, double t)
         {
             double[] A = new double[N + 1];
             double[] C = new double[N + 1];
@@ -65,41 +66,22 @@ namespace HeatEquationSolver
 
             C[0] = C[N] = 1;
             f = fx(t, y, yK);
-            double norm = getNorm(f);
+            double norm = CalculateNorm(f);
+            betaCalculator = new PuzyninMethod(beta0);
+            betaCalculator.Init(norm);
 
             while (norm > eps)
             {
                 //logger.Debug("norm = {0}, beta = {1}", norm, beta);
-                double x, l, r;
 
-                for (int n = 1; n < N; n++)
-                {
-                    x = n * h;
-                    l = KDy(x, t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
-                    r = K(x, t, y[n]) / (h * h);
-                    A[n - 1] = l + r;
-                    B[n - 1] = -l + r;
-                    C[n] = -2 * r - 1 / tau;
-                    //r = -K(x, t, y[n]) / (h * h);
-                    //A[n - 1] = -l + r;
-                    //B[n - 1] = l + r;
-                    //C[n] = -2 * r + 1 / tau;
-                    f[n] *= -beta;
-                }
-                f[0] *= -beta;
-                f[N] *= -beta;
-
-                double[] sol = TridiagonalMatrixAlgorithm(A, C, B, f);
+                var answer = MakeAndSolveSystem(t, y, yK, f);
 
                 for (int n = 0; n <= N; n++)
-                    yK[n] += sol[n];
+                    yK[n] += answer[n];
 
                 f = fx(t, y, yK);
-                double newNorm = getNorm(f);
-                double b = beta * norm / newNorm;
-                if (b > beta)
-                    beta = (b < 1) ? b : 1;
-                norm = newNorm;
+                norm = CalculateNorm(f);
+                betaCalculator.NextBeta(norm);
             }
             //    for (int n = 0; n <= N; n++)
             //        File.AppendAllText(reportFile, yK[n] + "\t" + u(n * h, t).ToString() + Environment.NewLine);
@@ -107,7 +89,7 @@ namespace HeatEquationSolver
             return yK;
         }
 
-        double[] fx(double t, double[] y, double[] yK)
+        private double[] fx(double t, double[] y, double[] yK)
         {
             double[] f = new double[N + 1];
             double x;
@@ -127,28 +109,56 @@ namespace HeatEquationSolver
             return f;
         }
 
-        double getNorm(double[] f)
+        private double CalculateNorm(double[] f)
         {
             double sum = f.Sum(x => x * x);
             return Math.Sqrt(sum);  // sum / N
         }
 
-        double u(double x, double t)
+        private double[] MakeAndSolveSystem(double t, double[] y, double[] yK, double[] f)
+        {
+            double[] A = new double[N + 1];
+            double[] C = new double[N + 1];
+            double[] B = new double[N + 1];
+            double x, l, r;
+            C[0] = C[N] = 1;
+
+            for (int n = 1; n < N; n++)
+            {
+                x = n * h;
+                l = KDy(x, t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
+                r = K(x, t, y[n]) / (h * h);
+                A[n - 1] = l + r;
+                B[n - 1] = -l + r;
+                C[n] = -2 * r - 1 / tau;
+                //r = -K(x, t, y[n]) / (h * h);
+                //A[n - 1] = -l + r;
+                //B[n - 1] = l + r;
+                //C[n] = -2 * r + 1 / tau;
+                f[n] *= betaCalculator.Multiplier;
+            }
+            f[0] *= betaCalculator.Multiplier;
+            f[N] *= betaCalculator.Multiplier;
+
+            return TridiagonalMatrixAlgorithm(A, C, B, f);
+        }
+
+        public static double u(double x, double t)
         {
             return x * x * t + 3 * x * t * t;
         }
 
-        double g(double x, double t, double y)
+        public static double g(double x, double t, double y)
         {
             return x * x + 6 * t * x - 2 * y * Math.Pow(2 * x * t + 3 * t * t, 2) - 2 * t * (x * x * t + y * y);
         }
 
-        double K(double x, double t, double y)
+        public static double K(double x, double t, double y)
         {
             return x * x * t + y * y;
         }
 
-        double KDy(double x, double t, double y)
+        public static double KDy(double x, double t, double y)
         {
             return 2 * y;
         }

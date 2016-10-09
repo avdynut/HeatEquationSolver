@@ -1,36 +1,47 @@
 ﻿using HeatEquationSolver.NonlinearSystemSolver.BetaCalculators;
+using NLog;
 using System;
 
 namespace HeatEquationSolver
 {
     public static class EntryPoint
     {
+        public static double x1 { get; set; } = 0;
+        public static double x2 { get; set; } = 1;
+        public static double t1 { get; set; } = 0;
+        public static double t2 { get; set; } = 1;
+        public static double tau { get; set; }
+        public static double h { get; set; }
+        public static int M { get; set; } = 400;
         public static int N { get; set; } = 10;
-        public static double Epsilon { get; set; } = 1e-5;
+        public static double Epsilon { get; set; } = 1e-3;
         public static double Beta0 { get; set; } = 0.01;        // maybe not here
         public static BetaCalculator BetaCalculator { get; set; }   // maybe not here
+        public static Equation equation { get; set; }
+        public static Logger logger = LogManager.GetCurrentClassLogger();
+        public static string Answer;
+        public static double Norm;
 
         public static void SetUp(MethodBeta methodBeta)
         {
-            BetaCalculator betaCalculator = null;
+            tau = (t2 - t1) / M;
+            h = (x2 - x1) / N;
+
             switch (methodBeta)
             {
                 case MethodBeta.Puzynin:
-                    betaCalculator = new PuzyninMethod(Beta0, true);
+                    BetaCalculator = new PuzyninMethod(Beta0, true);
                     break;
                 case MethodBeta.No6:
-                    betaCalculator = new No6Method(Beta0);
+                    BetaCalculator = new No6Method(Beta0);
                     break;
                 case MethodBeta.ModNo6:
-                    betaCalculator = new No6ModMethod(Beta0);
+                    BetaCalculator = new No6ModMethod(Beta0);
                     break;
                 default:
                     new ArgumentException("Incorrect value of method for calculating beta");
                     break;
             }
-
-            var eq = new Equation(u, k, g, (x, t) => 2 * x * t, (x, t) => 2 * t, (x, t) => x * x, (x, t, u) => 2 * u);
-            var d = eq.f(4, 3);
         }
 
         private static double u(double x, double t)

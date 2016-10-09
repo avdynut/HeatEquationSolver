@@ -4,7 +4,7 @@ namespace HeatEquationSolver.NonlinearSystemSolver.BetaCalculators
 {
     public class No6Method : BetaCalculator
     {
-        public override double Multiplier => -beta;
+        public override double Multiplier => -Beta;
 
         protected double norm0;
         protected double gamma;
@@ -22,11 +22,11 @@ namespace HeatEquationSolver.NonlinearSystemSolver.BetaCalculators
 
         protected override double CalculateBeta(double norm)
         {
-            double nextBeta = Math.Min(1, norm0 * gamma / (norm * beta));
+            double nextBeta = Math.Min(1, norm0 * gamma / (norm * Beta));
             if (AssignBeta(nextBeta))
-                gamma *= nextBeta / beta;
+                gamma *= nextBeta / Beta;
             predNorm = norm;
-            return beta;
+            return Beta;
         }
     }
 }

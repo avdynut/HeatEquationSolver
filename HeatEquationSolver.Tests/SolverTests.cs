@@ -5,12 +5,18 @@ namespace HeatEquationSolver.Tests
     public class SolverTests
     {
         private QuasiNewton solver;
+        //private Solver solver;
 
         [OneTimeSetUp]
         public void Init()
         {
             solver = new QuasiNewton(1, 10, 1, 400, 0.01, 1e-3);
             solver.Solve();
+            //var equation = new Equation(QuasiNewton.u, QuasiNewton.K, QuasiNewton.g, QuasiNewton.KDy);
+            //EntryPoint.equation = equation;
+            //EntryPoint.SetUp(NonlinearSystemSolver.BetaCalculators.MethodBeta.Puzynin);
+            //solver = new Solver();
+            //solver.Solve();
         }
 
         [Test]

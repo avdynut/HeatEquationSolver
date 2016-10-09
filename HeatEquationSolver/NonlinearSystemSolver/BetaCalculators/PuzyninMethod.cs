@@ -4,7 +4,7 @@ namespace HeatEquationSolver.NonlinearSystemSolver.BetaCalculators
 {
     public class PuzyninMethod : BetaCalculator
     {
-        public override double Multiplier => -beta;
+        public override double Multiplier => -Beta;
 
         public PuzyninMethod(double beta0, bool onlyUp = true) : base(beta0, onlyUp)
         {
@@ -12,10 +12,10 @@ namespace HeatEquationSolver.NonlinearSystemSolver.BetaCalculators
 
         protected override double CalculateBeta(double norm)
         {
-            double nextBeta = Math.Min(1, beta * predNorm / norm);
+            double nextBeta = Math.Min(1, Beta * predNorm / norm);
             AssignBeta(nextBeta);
             predNorm = norm;
-            return beta;
+            return Beta;
         }
     }
 }

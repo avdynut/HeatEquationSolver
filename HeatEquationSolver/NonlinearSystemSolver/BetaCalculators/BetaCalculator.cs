@@ -2,7 +2,7 @@
 {
     public abstract class BetaCalculator
     {
-        protected double beta;
+        public double Beta;
         protected double predNorm;
         protected bool onlyUp;
         protected bool notRecalculate;
@@ -10,7 +10,7 @@
 
         public BetaCalculator(double beta0, bool onlyUp = true)
         {
-            beta = beta0;
+            Beta = beta0;
             this.onlyUp = onlyUp;
         }
 
@@ -22,12 +22,12 @@
         public double NextBeta(double norm)
         {
             if (notRecalculate)
-                return beta;
-            if (norm < predNorm)
-            {
-                notRecalculate = true;
-                return beta = 1;
-            }
+                return Beta;
+            //if (norm < predNorm)
+            //{
+            //    notRecalculate = true;
+            //    return Beta = 1;
+            //}
             return CalculateBeta(norm);
         }
 
@@ -35,9 +35,9 @@
 
         protected bool AssignBeta(double nextBeta)
         {
-            if (!onlyUp || (onlyUp && nextBeta > beta))
+            if (!onlyUp || (onlyUp && nextBeta > Beta))
             {
-                beta = nextBeta;
+                Beta = nextBeta;
                 return true;
             }
             return false;
