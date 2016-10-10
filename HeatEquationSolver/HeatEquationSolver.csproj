@@ -50,6 +50,8 @@
     <Compile Include="NonlinearSystemSolver\BetaCalculators\PuzyninMethod.cs" />
     <Compile Include="NonlinearSystemSolver\Solver.cs" />
     <Compile Include="QuasiNewton.cs" />
+    <Compile Include="Samples\CurrentEq.cs" />
+    <Compile Include="Samples\OldEquation.cs" />
     <Compile Include="Solver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

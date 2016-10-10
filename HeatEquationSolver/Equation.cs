@@ -9,37 +9,36 @@ namespace HeatEquationSolver
     public class Equation
     {
         public Function u;
-        public Function f;
         public ComplexFunction K;
-        private ComplexFunction g;
+        public ComplexFunction g;
         public ComplexFunction dK_dy;
 
-        public Equation(Function u, ComplexFunction k, ComplexFunction g, ComplexFunction dk_du,
-            Function du_dx = null, Function d2u_dx = null, Function du_dt = null)
+        public Equation(Function u, ComplexFunction K, ComplexFunction g, ComplexFunction dK_dy)
         {
             this.u = u;
-            f = (x, t) => du_dt(x, t) - dk_du(x, t, u(x, t)) * Math.Pow(du_dx(x, t), 2) - k(x, t, u(x, t)) * d2u_dx(x, t) - g(x, t, u(x, t));
-            this.K = k;
+            this.K = K;
             this.g = g;
-            this.dK_dy = dk_du;
+            this.dK_dy = dK_dy;
+        }
+
+        public void CheckEquation(Function du_dx, Function d2u_dx, Function du_dt)
+        {
+            Function f = (x, t) => du_dt(x, t) - dK_dy(x, t, u(x, t)) * Math.Pow(du_dx(x, t), 2) - K(x, t, u(x, t)) * d2u_dx(x, t) - g(x, t, u(x, t));
+            if (f(4, 3) != 0)
+                throw new Exception("Incorrect equation");
         }
 
         public double[] SubstituteValues(double t, double[] y, double[] yK)
         {
             double[] f = new double[N + 1];
-            double x;
             f[0] = yK[0] - u(x1, t);
             f[N] = yK[N] - u(x2, t);
             for (int n = 1; n < N; n++)
             {
-                x = n * h;
+                double x = n * h;
                 f[n] = dK_dy(x, t, y[n]) * Math.Pow((yK[n + 1] - yK[n - 1]) / (2 * h), 2) +
                             K(x, t, y[n]) * (yK[n + 1] - 2 * yK[n] + yK[n - 1]) / (h * h) +
                             g(x, t, y[n]) - (yK[n] - y[n]) / tau;
-                //f[n] = (yK[n] - y[n]) / tau
-                //     - KDy(x, t, y[n]) * Math.Pow((yK[n + 1] - yK[n - 1]) / (2 * h), 2)
-                //     - K(x, t, y[n]) * (yK[n + 1] - 2 * yK[n] + yK[n - 1]) / (h * h)
-                //     - g(x, t, y[n]);
             }
             return f;
         }
