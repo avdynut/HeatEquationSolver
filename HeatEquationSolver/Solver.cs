@@ -1,15 +1,41 @@
 ﻿using System;
-using static HeatEquationSolver.EntryPoint;
+using HeatEquationSolver.NonlinearSystemSolver.BetaCalculators;
+using NLog;
+using static HeatEquationSolver.Settings;
 
 namespace HeatEquationSolver
 {
     public class Solver
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly double h;
+        private readonly double tau;
+        private BetaCalculator betaCalculator;
+
+        public Solver()
+        {
+            h = (X2 - X1) / N;
+            tau = (T2 - T1) / M;
+
+            switch (MethodForBeta)
+            {
+                case MethodBeta.Puzynin:
+                    betaCalculator = new PuzyninMethod(Beta0);
+                    break;
+                case MethodBeta.No6:
+                    betaCalculator = new No6Method(Beta0);
+                    break;
+                case MethodBeta.ModNo6:
+                    betaCalculator = new No6ModMethod(Beta0);
+                    break;
+            }
+        }
+
         public void Solve()
         {
             var y = new double[N + 1];
             for (int i = 0; i <= N; i++)
-                y[i] = equation.u(x1 + i * h, 0);
+                y[i] = equation.u(X1 + i * h, 0);
 
             var solver = new NonlinearSystemSolver.Solver();
 
