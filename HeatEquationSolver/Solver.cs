@@ -44,8 +44,8 @@ namespace HeatEquationSolver
         public void Solve()
         {
             var y = new double[N + 1];
-            for (int i = 0; i <= N; i++)
-                y[i] = Equation.u(X1 + i * h, 0);
+            for (int n = 0; n <= N; n++)
+                y[n] = Equation.u(x[n], 0);
 
             double t = T1;
             for (int m = 1; m <= M; m++)
@@ -67,10 +67,8 @@ namespace HeatEquationSolver
 
         double[] SolveSystem(double[] y, double t)
         {
-            var f = new double[N + 1];
             var yK = (double[])y.Clone();
-
-            f = fx(t, y, yK);
+            var f = SubstituteInSystem(t, y, yK);
             double norm = CalculateNorm(f);
             betaCalculator.Init(norm);
 
@@ -83,7 +81,7 @@ namespace HeatEquationSolver
                 for (int i = 0; i <= N; i++)
                     yK[i] += answer[i];
 
-                f = fx(t, y, yK);
+                f = SubstituteInSystem(t, y, yK);
                 norm = CalculateNorm(f);
                 betaCalculator.NextBeta(norm);
 
@@ -96,18 +94,16 @@ namespace HeatEquationSolver
             return yK;
         }
 
-        private double[] fx(double t, double[] y, double[] yK)
+        private double[] SubstituteInSystem(double t, double[] y, double[] yK)
         {
-            double[] f = new double[N + 1];
+            var f = new double[N + 1];
             f[0] = yK[0] - Equation.u(0, t);
             f[N] = yK[N] - Equation.u(X2, t);
 
             for (int n = 1; n < N; n++)
-            {
                 f[n] = Equation.dK_dy(x[n], t, y[n]) * Math.Pow((yK[n + 1] - yK[n - 1]) / (2 * h), 2) +
-                            Equation.K(x[n], t, y[n]) * (yK[n + 1] - 2 * yK[n] + yK[n - 1]) / (h * h) +
-                            Equation.g(x[n], t, y[n]) - (yK[n] - y[n]) / tau;
-            }
+                       Equation.K(x[n], t, y[n]) * (yK[n + 1] - 2 * yK[n] + yK[n - 1]) / (h * h) +
+                       Equation.g(x[n], t, y[n]) - (yK[n] - y[n]) / tau;
             return f;
         }
 
