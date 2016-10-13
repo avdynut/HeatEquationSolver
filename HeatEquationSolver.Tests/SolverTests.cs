@@ -1,4 +1,5 @@
-﻿using HeatEquationSolver.Samples;
+﻿using System;
+using HeatEquationSolver.Samples;
 using NUnit.Framework;
 
 namespace HeatEquationSolver.Tests
@@ -6,7 +7,6 @@ namespace HeatEquationSolver.Tests
     public class SolverTests
     {
         private Solver solver;
-        //private Solver solver;
 
         [OneTimeSetUp]
         public void Init()
@@ -28,8 +28,8 @@ namespace HeatEquationSolver.Tests
         [Test]
         public void Solver_should_return_correct_norm()
         {
-            double expectedNorm = 0.00042247427682090658;
-            Assert.That(solver.Norm, Is.EqualTo(expectedNorm), "Incorrect norm");
+            double expectedNorm = Math.Round(0.00042247427682090658, 7);
+            Assert.That(Math.Round(solver.Norm, 7), Is.EqualTo(expectedNorm), "Incorrect norm");
         }
     }
 }

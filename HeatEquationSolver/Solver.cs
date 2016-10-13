@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using HeatEquationSolver.BetaCalculators;
 using NLog;
 using static HeatEquationSolver.Settings;
@@ -8,11 +9,11 @@ namespace HeatEquationSolver
 {
     public class Solver
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly double h;
         private readonly double tau;
-        private double[] x;
-        private BetaCalculator betaCalculator;
+        private readonly double[] x;
+        private readonly BetaCalculator betaCalculator;
 
         public string Answer;
         public double Norm;
@@ -29,16 +30,17 @@ namespace HeatEquationSolver
             switch (MethodForBeta)
             {
                 case MethodBeta.Puzynin:
-                    betaCalculator = new PuzyninMethod(Beta0);
+                    betaCalculator = new PuzyninMethod();
                     break;
                 case MethodBeta.No6:
-                    betaCalculator = new No6Method(Beta0);
+                    betaCalculator = new No6Method();
                     break;
                 case MethodBeta.ModNo6:
-                    betaCalculator = new No6ModMethod(Beta0);
+                    betaCalculator = new No6ModMethod();
                     break;
             }
-            //logger.Debug("a={0}, N={1}, T={2}, M={3}, h={4}, tau={5}, beta0={6}, eps={7}", a, N, T, M, h, tau, beta0, eps);
+            Logger.Debug("X1={0}, X2={1}, T1={2}, T2={3}, N={4}, M={5}, h={6}, tau={7}, Epsilon={8}, Beta0={9}, MethodForBeta={10}",
+                                                                        X1, X2, T1, T2, N, M, h, tau, Epsilon, Beta0, MethodForBeta);
         }
 
         public void Solve()
@@ -46,13 +48,13 @@ namespace HeatEquationSolver
             var y = new double[N + 1];
             for (int n = 0; n <= N; n++)
                 y[n] = Equation.u(x[n], 0);
+            Logger.Debug("Layer 0, y='{0}'", ArrayToString(y));
 
             double t = T1;
             for (int m = 1; m <= M; m++)
             {
-                logger.Debug("Layer: {0} -----------------------", m);
                 t += tau;
-                y = SolveSystem(y, t);
+                y = SolveNonlinearSystem(y, t);
             }
 
             double sum = 0;
@@ -63,18 +65,21 @@ namespace HeatEquationSolver
                 sum += Math.Pow(y[n] - sol, 2);
             }
             Norm = Math.Sqrt(sum);
+            Logger.Debug("Answer='{0}', Norm={1}", ArrayToString(y), Norm);
         }
 
-        double[] SolveSystem(double[] y, double t)
+        private double[] SolveNonlinearSystem(double[] y, double t)
         {
             var yK = (double[])y.Clone();
             var f = SubstituteInSystem(t, y, yK);
             double norm = CalculateNorm(f);
-            betaCalculator.Init(norm);
+            betaCalculator.Init(Beta0, norm);
+            int iterations = 0;
 
             while (norm > Epsilon)
             {
-                //logger.Debug("norm = {0}, beta = {1}", norm, beta);
+                if (++iterations > MaxIterations)
+                    throw new Exception("Exceeded max number of iterations");
 
                 var answer = MakeAndSolveSystem(t, y, yK, f);
 
@@ -84,13 +89,9 @@ namespace HeatEquationSolver
                 f = SubstituteInSystem(t, y, yK);
                 norm = CalculateNorm(f);
                 betaCalculator.NextBeta(norm);
-
-                //if (++iterations > MaxIterations)
-                //    throw new Exception("Exceeded max number of iterations");
             }
-            //    for (int n = 0; n <= N; n++)
-            //        File.AppendAllText(reportFile, yK[n] + "\t" + u(x[n], t).ToString() + Environment.NewLine);
 
+            Logger.Debug("t={0}, {1} iterations, yK='{2}'", t, iterations, ArrayToString(yK));
             return yK;
         }
 
@@ -133,6 +134,17 @@ namespace HeatEquationSolver
             f[N] *= betaCalculator.Multiplier;
 
             return ResolvingSystem.TridiagonalMatrixAlgorithm(a, c, b, f);
+        }
+
+        private string ArrayToString(double[] array)
+        {
+            var sb = new StringBuilder();
+            foreach (double t in array)
+            {
+                sb.Append(t);
+                sb.Append("; ");
+            }
+            return sb.ToString();
         }
     }
 }

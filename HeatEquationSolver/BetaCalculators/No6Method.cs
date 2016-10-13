@@ -9,15 +9,11 @@ namespace HeatEquationSolver.BetaCalculators
         protected double norm0;
         protected double gamma;
 
-        public No6Method(double beta0, bool onlyUp = true) : base(beta0, onlyUp)
+        public override void Init(double beta0, double firstNorm)
         {
             gamma = beta0 * beta0;
-        }
-
-        public override void Init(double firstNorm)
-        {
             norm0 = firstNorm;
-            base.Init(firstNorm);
+            base.Init(beta0, firstNorm);
         }
 
         protected override double CalculateBeta(double norm)

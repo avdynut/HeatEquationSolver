@@ -54,5 +54,11 @@ namespace HeatEquationSolver
         /// Heat eqaution
         /// </summary>
         public static HeatEquation Equation { get; set; } = new HeatEquation(OldEquation.u, OldEquation.K, OldEquation.g, OldEquation.KDy);
+
+        /// <summary>
+        /// Max number of iterations in calculating nonlinear systems
+        /// If exceed, then throw Exception
+        /// </summary>
+        public static int MaxIterations { get; set; } = 50000;
     }
 }

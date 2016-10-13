@@ -4,18 +4,13 @@
     {
         public double Beta;
         protected double predNorm;
-        protected bool onlyUp;
+        protected bool onlyUp = true;
         protected bool notRecalculate;
         public abstract double Multiplier { get; }
 
-        public BetaCalculator(double beta0, bool onlyUp = true)
+        public virtual void Init(double beta0, double firstNorm)
         {
             Beta = beta0;
-            this.onlyUp = onlyUp;
-        }
-
-        public virtual void Init(double firstNorm)
-        {
             predNorm = firstNorm;
         }
 

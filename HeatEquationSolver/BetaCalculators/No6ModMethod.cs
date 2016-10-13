@@ -6,10 +6,6 @@ namespace HeatEquationSolver.BetaCalculators
     {
         public override double Multiplier => -Math.Sqrt(Beta);
 
-        public No6ModMethod(double beta0, bool onlyUp = true) : base(beta0, onlyUp)
-        {
-        }
-
         protected override double CalculateBeta(double norm)
         {
             double nextBeta = Math.Min(1, norm0 * norm0 * gamma / (norm * norm * Beta));
