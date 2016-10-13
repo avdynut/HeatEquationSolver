@@ -136,6 +136,27 @@ namespace HeatEquationSolver
             return ResolvingSystem.TridiagonalMatrixAlgorithm(a, c, b, f);
         }
 
+        private double[] ReqularizedMethod(double t, double[] y, double[] yK, double[] f, double norm)
+        {
+            double alphaBetaNorm = Alpha * betaCalculator.Beta * norm;
+            var jacobian = new double[N + 1, N + 1];     // f'(xn)
+            jacobian[0, 0] = jacobian[N, N] = 1;
+            for (int n = 1; n < N; n++)
+            {
+                double l = Equation.dK_dy(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
+                double r = Equation.K(x[n], t, y[n]) / (h * h);
+                //jacobian[n - 1] = l + r;
+                //b[n - 1] = -l + r;
+                //c[n] = -2 * r - 1 / tau;
+                f[n] *= betaCalculator.Multiplier;
+            }
+            var a = Matrix.Transpose(jacobian);             // transposed f'(xn) 
+            a = Matrix.AddDiag(a, alphaBetaNorm);
+            var matrix = Matrix.AddDiag(Matrix.Multiply(a, jacobian), alphaBetaNorm);
+            var freeMembers = Vector.MultiplyConst(betaCalculator.Multiplier, Matrix.Multiply(a, f));
+            return ResolvingSystem.Gauss(matrix, freeMembers);
+        }
+
         private string ArrayToString(double[] array)
         {
             var sb = new StringBuilder();

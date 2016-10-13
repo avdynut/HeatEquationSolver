@@ -41,6 +41,11 @@ namespace HeatEquationSolver
         public static double Epsilon { get; set; } = 1e-3;
 
         /// <summary>
+        /// Multiplier in regularized method
+        /// </summary>
+        public static double Alpha { get; set; } = 1e-10;
+
+        /// <summary>
         /// The first multiplier 'beta'
         /// </summary>
         public static double Beta0 { get; set; } = 0.01;
