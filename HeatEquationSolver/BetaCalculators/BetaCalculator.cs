@@ -1,4 +1,4 @@
-﻿namespace HeatEquationSolver.NonlinearSystemSolver.BetaCalculators
+﻿namespace HeatEquationSolver.BetaCalculators
 {
     public abstract class BetaCalculator
     {

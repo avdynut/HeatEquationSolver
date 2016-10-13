@@ -42,22 +42,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Equation.cs" />
-    <Compile Include="NonlinearSystemSolver\BetaCalculators\BetaCalculator.cs" />
-    <Compile Include="NonlinearSystemSolver\BetaCalculators\No6Method.cs" />
-    <Compile Include="NonlinearSystemSolver\BetaCalculators\No6ModMethod.cs" />
-    <Compile Include="NonlinearSystemSolver\BetaCalculators\PuzyninMethod.cs" />
-    <Compile Include="NonlinearSystemSolver\Solver.cs" />
-    <Compile Include="QuasiNewton.cs" />
+    <Compile Include="HeatEquation.cs" />
+    <Compile Include="BetaCalculators\BetaCalculator.cs" />
+    <Compile Include="BetaCalculators\No6Method.cs" />
+    <Compile Include="BetaCalculators\No6ModMethod.cs" />
+    <Compile Include="BetaCalculators\PuzyninMethod.cs" />
     <Compile Include="Samples\CurrentEq.cs" />
     <Compile Include="Samples\OldEquation.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Solver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemWorker\NonRegularized.cs" />
-    <Compile Include="SystemWorker\Regularized.cs" />
-    <Compile Include="SystemWorker\ResolvingSystem.cs" />
-    <Compile Include="SystemWorker\SystemWorker.cs" />
+    <Compile Include="ResolvingSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">

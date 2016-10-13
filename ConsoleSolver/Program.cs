@@ -13,7 +13,7 @@ namespace ConsoleSolver
             //var solver = new Solver();
             //solver.Solve();
 
-            QuasiNewton qn = new QuasiNewton(1, 10, 1, 400, 0.01, 1e-3);
+            var qn = new Solver();
             qn.Solve();
         }
 

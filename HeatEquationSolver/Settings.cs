@@ -1,4 +1,4 @@
-﻿using HeatEquationSolver.NonlinearSystemSolver.BetaCalculators;
+﻿using HeatEquationSolver.BetaCalculators;
 using HeatEquationSolver.Samples;
 
 namespace HeatEquationSolver
@@ -53,6 +53,6 @@ namespace HeatEquationSolver
         /// <summary>
         /// Heat eqaution
         /// </summary>
-        public static Equation Equation { get; set; } = new Equation(CurrentEq.u, CurrentEq.K, CurrentEq.g, CurrentEq.KDy);
+        public static HeatEquation Equation { get; set; } = new HeatEquation(OldEquation.u, OldEquation.K, OldEquation.g, OldEquation.KDy);
     }
 }

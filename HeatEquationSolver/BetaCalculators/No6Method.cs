@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HeatEquationSolver.NonlinearSystemSolver.BetaCalculators
+namespace HeatEquationSolver.BetaCalculators
 {
     public class No6Method : BetaCalculator
     {

@@ -1,28 +1,21 @@
-﻿using HeatEquationSolver.NonlinearSystemSolver.BetaCalculators;
-using HeatEquationSolver.Samples;
-using HeatEquationSolver.SystemWorker;
+﻿using HeatEquationSolver.Samples;
 using NUnit.Framework;
 
 namespace HeatEquationSolver.Tests
 {
     public class SolverTests
     {
-        private QuasiNewton solver;
+        private Solver solver;
         //private Solver solver;
 
         [OneTimeSetUp]
         public void Init()
         {
-            var equation = new Equation(OldEquation.u, OldEquation.K, OldEquation.g, OldEquation.KDy);
+            var equation = new HeatEquation(OldEquation.u, OldEquation.K, OldEquation.g, OldEquation.KDy);
             equation.CheckEquation(OldEquation.du_dx, OldEquation.d2u_dx2, OldEquation.du_dt);
-            EntryPoint.equation = equation;
-            EntryPoint.SetUp(MethodBeta.Puzynin);
-            solver = new QuasiNewton(1, 10, 1, 400, 0.01, 1e-3, new NonRegularized());
+            Settings.Equation = equation;
+            solver = new Solver();
             solver.Solve();
-            //EntryPoint.equation = equation;
-            //EntryPoint.SetUp(NonlinearSystemSolver.BetaCalculators.MethodBeta.Puzynin);
-            //solver = new Solver();
-            //solver.Solve();
         }
 
         [Test]
