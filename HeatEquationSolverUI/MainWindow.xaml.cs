@@ -20,6 +20,7 @@ namespace HeatEquationSolverUI
             {
                 AnswerTextBlock.Text = "";
                 var qn = new Solver();
+                qn.Solve();
                 AnswerTextBlock.Text = qn.Answer;
                 Norm.Content = qn.Norm;
             }
