@@ -33,12 +33,12 @@ namespace HeatEquationSolver
         /// <summary>
         /// The number of segments in 't'
         /// </summary>
-        public static int M { get; set; } = 400;
+        public static int M { get; set; } = 10;
 
         /// <summary>
         /// Precision in calculating nonlinear systems
         /// </summary>
-        public static double Epsilon { get; set; } = 1e-3;
+        public static double Epsilon { get; set; } = 1e-5;
 
         /// <summary>
         /// Multiplier in regularized method

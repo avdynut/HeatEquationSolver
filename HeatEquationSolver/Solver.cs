@@ -72,23 +72,23 @@ namespace HeatEquationSolver
         {
             var yK = (double[])y.Clone();
             var f = SubstituteInSystem(t, y, yK);
-            double norm = CalculateNorm(f);
-            betaCalculator.Init(Beta0, norm);
+            Norm = CalculateNorm(f);
+            betaCalculator.Init(Beta0, Norm);
             int iterations = 0;
 
-            while (norm > Epsilon)
+            while (Norm > Epsilon)
             {
                 if (++iterations > MaxIterations)
                     throw new Exception("Exceeded max number of iterations");
 
-                var answer = MakeAndSolveSystem(t, y, yK, f);
+                var answer = ReqularizedMethod(t, y, yK, (double[])f.Clone());
 
                 for (int i = 0; i <= N; i++)
                     yK[i] += answer[i];
 
                 f = SubstituteInSystem(t, y, yK);
-                norm = CalculateNorm(f);
-                betaCalculator.NextBeta(norm);
+                Norm = CalculateNorm(f);
+                betaCalculator.NextBeta(Norm);
             }
 
             Logger.Debug("t={0}, {1} iterations, yK='{2}'", t, iterations, ArrayToString(yK));
@@ -125,7 +125,7 @@ namespace HeatEquationSolver
             {
                 double l = Equation.dK_dy(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
                 double r = Equation.K(x[n], t, y[n]) / (h * h);
-                a[n - 1] = l + r;
+                a[n - 1] = l + r;       // or a[n],b[n]?
                 b[n - 1] = -l + r;
                 c[n] = -2 * r - 1 / tau;
                 f[n] *= betaCalculator.Multiplier;
@@ -136,21 +136,40 @@ namespace HeatEquationSolver
             return ResolvingSystem.TridiagonalMatrixAlgorithm(a, c, b, f);
         }
 
-        private double[] ReqularizedMethod(double t, double[] y, double[] yK, double[] f, double norm)
+        private double[] FullMatrix(double t, double[] y, double[] yK, double[] f)
         {
-            double alphaBetaNorm = Alpha * betaCalculator.Beta * norm;
-            var jacobian = new double[N + 1, N + 1];     // f'(xn)
+            double alphaBetaNorm = Alpha * betaCalculator.Beta * Norm;
+            var jacobian = new double[N + 1, N + 1];     // f'(Xn)
             jacobian[0, 0] = jacobian[N, N] = 1;
             for (int n = 1; n < N; n++)
             {
                 double l = Equation.dK_dy(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
                 double r = Equation.K(x[n], t, y[n]) / (h * h);
-                //jacobian[n - 1] = l + r;
-                //b[n - 1] = -l + r;
-                //c[n] = -2 * r - 1 / tau;
+                jacobian[n, n - 1] = l + r;
+                jacobian[n, n + 1] = -l + r;
+                jacobian[n, n] = -2 * r - 1 / tau;
                 f[n] *= betaCalculator.Multiplier;
             }
-            var a = Matrix.Transpose(jacobian);             // transposed f'(xn) 
+            f[0] *= betaCalculator.Multiplier;
+            f[N] *= betaCalculator.Multiplier;
+            return ResolvingSystem.Gauss(jacobian, f);
+        }
+
+        private double[] ReqularizedMethod(double t, double[] y, double[] yK, double[] f)
+        {
+            double alphaBetaNorm = Alpha * betaCalculator.Beta * Norm;
+            var jacobian = new double[N + 1, N + 1];     // f'(Xn)
+            jacobian[0, 0] = jacobian[N, N] = 1;
+            for (int n = 1; n < N; n++)
+            {
+                double l = Equation.dK_dy(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
+                double r = Equation.K(x[n], t, y[n]) / (h * h);
+                jacobian[n, n - 1] = l + r;
+                jacobian[n, n + 1] = -l + r;
+                jacobian[n, n] = -2 * r - 1 / tau;
+            }
+
+            var a = Matrix.Transpose(jacobian);
             a = Matrix.AddDiag(a, alphaBetaNorm);
             var matrix = Matrix.AddDiag(Matrix.Multiply(a, jacobian), alphaBetaNorm);
             var freeMembers = Vector.MultiplyConst(betaCalculator.Multiplier, Matrix.Multiply(a, f));
