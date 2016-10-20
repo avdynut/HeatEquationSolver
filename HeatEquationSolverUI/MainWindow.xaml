@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HeatEquationSolverUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="HeatEquationSolver" Height="507" Width="591">
     <Window.Resources>
         <local:AppSettings x:Key="Settings"/>
     </Window.Resources>
@@ -25,7 +25,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.Resources>
@@ -56,10 +56,12 @@
                 <StackPanel Grid.Row="3" Grid.Column="0">
                     <Label Content="Beta0"/>
                     <TextBox Name="Beta0" Text="{Binding Beta0}"/>
-                    <CheckBox Name="NeedReport" Content="Записывать данные" Margin="3,5" FontSize="12" Visibility="Hidden"/>
+                    <Label Content="Alpha"/>
+                    <TextBox Name="Alhpa" Text="{Binding Alpha}"/>
                 </StackPanel>
-                <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="4">
-                    <!--<Image Source="ur.PNG" Height="100" Margin="10,0"></Image>-->
+                <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Orientation="Vertical">
+                    <Image Source="Images/equation.PNG" Stretch="None"/>
+                    <Image Source="Images/concrete_functions.PNG" Stretch="None"/>
                 </StackPanel>
                 <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
             </Grid>

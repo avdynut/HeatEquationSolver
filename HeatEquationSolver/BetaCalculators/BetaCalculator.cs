@@ -4,8 +4,7 @@
     {
         public double Beta;
         protected double predNorm;
-        protected bool onlyUp = true;
-        protected bool notRecalculate;
+        protected bool onlyUp = false;
         public abstract double Multiplier { get; }
 
         public virtual void Init(double beta0, double firstNorm)
@@ -16,13 +15,8 @@
 
         public double NextBeta(double norm)
         {
-            if (notRecalculate)
-                return Beta;
-            //if (norm < predNorm)
-            //{
-            //    notRecalculate = true;
-            //    return Beta = 1;
-            //}
+            if (norm < predNorm)
+                return Beta = 1;
             return CalculateBeta(norm);
         }
 
