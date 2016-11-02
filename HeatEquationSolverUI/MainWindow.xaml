@@ -2,77 +2,92 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HeatEquationSolverUI"
-        mc:Ignorable="d"
-        Title="HeatEquationSolver" Height="507" Width="591">
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="HeatEquationSolver"
+        Width="591"
+        Height="507"
+        mc:Ignorable="d">
     <Window.Resources>
-        <local:AppSettings x:Key="Settings"/>
+        <local:AppSettings x:Key="Settings" />
     </Window.Resources>
     <Grid DataContext="{StaticResource Settings}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <GroupBox Grid.Row="0" Header="Настройки">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Grid.Resources>
                     <Style TargetType="StackPanel">
-                        <Setter Property="Orientation" Value="Horizontal"/>
+                        <Setter Property="Orientation" Value="Horizontal" />
                     </Style>
                     <Style TargetType="TextBox">
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                        <Setter Property="Width" Value="70"/>
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="Width" Value="70" />
                     </Style>
                 </Grid.Resources>
                 <StackPanel Grid.Row="0" Grid.Column="0">
-                    <Label Content="a"/>
-                    <TextBox Name="a" Text="{Binding X2}"/>
-                    <Label Content="N"/>
-                    <TextBox Name="N" Text="{Binding N}"/>
+                    <Label Content="a" />
+                    <TextBox Name="a" Text="{Binding X2}" />
+                    <Label Content="N" />
+                    <TextBox Name="N" Text="{Binding N}" />
                 </StackPanel>
-                <StackPanel Grid.Row="2" Grid.Column="0">
-                    <Label Content="Eps"/>
-                    <TextBox Name="Eps" Text="{Binding Epsilon}"/>
+                <StackPanel Grid.Row="0"
+                            Grid.RowSpan="4"
+                            Grid.Column="1"
+                            Orientation="Vertical">
+                    <Image Source="Images/equation.PNG" Stretch="None" />
+                    <Image Source="Images/concrete_functions.PNG" Stretch="None" />
+                    <Image Source="Images/conditions.PNG" Stretch="Fill" />
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="0">
-                    <Label Content="T"/>
-                    <TextBox Name="T" Text="{Binding T2}"/>
-                    <Label Content="M"/>
-                    <TextBox Name="M" Text="{Binding M}"/>
+                    <Label Content="T" />
+                    <TextBox Name="T" Text="{Binding T2}" />
+                    <Label Content="M" />
+                    <TextBox Name="M" Text="{Binding M}" />
+                </StackPanel>
+                <StackPanel Grid.Row="2" Grid.Column="0">
+                    <Label Content="Eps" />
+                    <TextBox Name="Eps" Text="{Binding Epsilon}" />
                 </StackPanel>
                 <StackPanel Grid.Row="3" Grid.Column="0">
-                    <Label Content="Beta0"/>
-                    <TextBox Name="Beta0" Text="{Binding Beta0}"/>
-                    <Label Content="Alpha"/>
-                    <TextBox Name="Alhpa" Text="{Binding Alpha}"/>
+                    <Label Content="Beta0" />
+                    <TextBox Name="Beta0" Text="{Binding Beta0}" />
+                    <Label Content="Alpha" />
+                    <TextBox Name="Alhpa" Text="{Binding Alpha}" />
                 </StackPanel>
-                <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Orientation="Vertical">
-                    <Image Source="Images/equation.PNG" Stretch="None"/>
-                    <Image Source="Images/concrete_functions.PNG" Stretch="None"/>
-                </StackPanel>
-                <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
+                <StackPanel Grid.Row="3"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            HorizontalAlignment="Center" />
             </Grid>
         </GroupBox>
-        <Button Grid.Row="1" Content="Решить" Click="SolveButton_Click" Width="400"/>
+        <Button Grid.Row="1"
+                Width="400"
+                Click="SolveButton_Click"
+                Content="Решить" />
         <GroupBox Grid.Row="2" Header="Ответ">
             <StackPanel>
-                <TextBox Name="AnswerTextBlock" Height="260" VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
+                <TextBox Name="AnswerTextBlock"
+                         Height="260"
+                         IsReadOnly="True"
+                         VerticalScrollBarVisibility="Auto" />
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="Норма невязки:"/>
-                    <Label Name="Norm"/>
+                    <Label Content="Норма невязки:" />
+                    <Label Name="Norm" />
                     <!--<Button Content="Посмотреть процесс" Width="130" HorizontalAlignment="Left"/>-->
                 </StackPanel>
             </StackPanel>
