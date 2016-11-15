@@ -11,17 +11,18 @@ namespace HeatEquationSolver
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly double h;
-        private readonly double tau;
+        private readonly double Tau;
         private readonly double[] x;
         private readonly BetaCalculator betaCalculator;
 
         public string Answer;
         public double Norm;
+        private double tau;
 
         public Solver()
         {
             h = (X2 - X1) / N;
-            tau = (T2 - T1) / M;
+            Tau = (T2 - T1) / M;
 
             x = new double[N + 1];
             for (int i = 0; i <= N; i++)
@@ -39,33 +40,45 @@ namespace HeatEquationSolver
                     betaCalculator = new No6ModMethod();
                     break;
             }
-            Logger.Debug("X1={0}, X2={1}, T1={2}, T2={3}, N={4}, M={5}, h={6}, tau={7}, Epsilon={8}, Beta0={9}, MethodForBeta={10}",
-                                                                        X1, X2, T1, T2, N, M, h, tau, Epsilon, Beta0, MethodForBeta);
+            Logger.Debug("X1={0}, X2={1}, T1={2}, T2={3}, N={4}, M={5}, h={6}, Tau={7}, Epsilon={8}, Beta0={9}, MethodForBeta={10}",
+                                                                        X1, X2, T1, T2, N, M, h, Tau, Epsilon, Beta0, MethodForBeta);
         }
 
         public void Solve()
         {
-            var y = new double[N + 1];
+            var y0 = new double[N + 1];
             for (int n = 0; n <= N; n++)
-                y[n] = Equation.u(x[n], 0);
-            Logger.Debug("Layer 0, y='{0}'", ArrayToString(y));
+                y0[n] = Equation.u(x[n], 0);
+            Logger.Debug("Layer 0, y='{0}'", ArrayToString(y0));
 
-            double t = T1;
-            for (int m = 1; m <= M; m++)
+            for (int m = 0; m < M; m++)
             {
-                t += tau;
-                y = SolveNonlinearSystem(y, t);
+                double[] yWithPredTau, yWithNextTau;                
+                tau = Tau;
+                yWithPredTau = SolveNonlinearSystem(y0, T1 + m * Tau + Tau);
+                int k = 1;
+                do
+                {
+                    k *= 2;
+                    tau = Tau / k;
+                    double t0 = T1 + m * Tau;                    
+                    yWithNextTau = (double[])y0.Clone();
+                    for (int i = 0; i < k; i++)
+                        yWithNextTau = SolveNonlinearSystem(yWithNextTau, t0 += tau);
+
+                } while (CalculateNorm(yWithPredTau, yWithNextTau) > 1e-4);
+                y0 = yWithNextTau;
             }
 
             double sum = 0;
             for (int n = 0; n <= N; n++)
             {
                 double sol = Equation.u(x[n], T2);
-                Answer += y[n] + "\t" + sol + Environment.NewLine;
-                sum += Math.Pow(y[n] - sol, 2);
+                Answer += y0[n] + "\t" + sol + Environment.NewLine;
+                sum += Math.Pow(y0[n] - sol, 2);
             }
             Norm = Math.Sqrt(sum);
-            Logger.Debug("Answer='{0}', Norm={1}", ArrayToString(y), Norm);
+            Logger.Debug("Answer='{0}', Norm={1}", ArrayToString(y0), Norm);
         }
 
         private double[] SolveNonlinearSystem(double[] y, double t)
@@ -112,6 +125,14 @@ namespace HeatEquationSolver
         {
             double sum = f.Sum(e => e * e);
             return Math.Sqrt(sum);  // sum / N
+        }
+
+        private double CalculateNorm(double[] a, double[] b)
+        {
+            double sum = 0;
+            for (int i = 0; i < a.Length; i++)
+                sum += Math.Pow(a[i] - b[i], 2);
+            return Math.Sqrt(sum / N);
         }
 
         private double[] MakeAndSolveSystem(double t, double[] y, double[] yK, double[] f)
