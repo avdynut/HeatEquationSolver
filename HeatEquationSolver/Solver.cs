@@ -51,13 +51,26 @@ namespace HeatEquationSolver
             Logger.Debug("Layer 0, y='{0}'", ArrayToString(y));
 
             double t = T1;
+            double norm = 1;
+            double sum = 0;
             for (int m = 1; m <= M; m++)
             {
                 t += tau;
-                y = SolveNonlinearSystem(y, t);
+                double currentTau = tau;
+                do
+                {
+
+                    var yTau = SolveNonlinearSystem(y, t);
+                    var yHalfTau = SolveNonlinearSystem(y, t);
+
+                    sum = 0;
+                    for (int n = 0; n <= N; n++)
+                        sum += Math.Pow(yTau[n] - yHalfTau[n], 2);
+                    norm = Math.Sqrt(sum);
+                } while (norm > 1e-4);
             }
 
-            double sum = 0;
+            sum = 0;
             for (int n = 0; n <= N; n++)
             {
                 double sol = Equation.u(x[n], T2);
