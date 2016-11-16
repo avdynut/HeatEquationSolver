@@ -4,6 +4,7 @@ using System.Text;
 using HeatEquationSolver.BetaCalculators;
 using NLog;
 using static HeatEquationSolver.Settings;
+using System.Threading;
 
 namespace HeatEquationSolver
 {
@@ -44,7 +45,7 @@ namespace HeatEquationSolver
                                                                         X1, X2, T1, T2, N, M, h, Tau, Epsilon, Beta0, MethodForBeta);
         }
 
-        public void Solve()
+        public void Solve(CancellationToken cancellationToken, IProgress<int> progress = null)
         {
             var y0 = new double[N + 1];
             for (int n = 0; n <= N; n++)
@@ -67,10 +68,14 @@ namespace HeatEquationSolver
                     for (int i = 0; i < k; i++)
                         yWithNextTau = SolveNonlinearSystem(yWithNextTau, t0 += tau);
                     norm = CalculateNorm(yWithPredTau, yWithNextTau);
+                    Logger.Debug("norm={0}", norm);
 
                 } while (norm > Epsilon2);
                 y0 = yWithNextTau;
                 Logger.Debug("m={0}, tau=Tau/{1}, norm={2}", m, k, norm);
+
+                cancellationToken.ThrowIfCancellationRequested();
+                progress?.Report(m);
             }
 
             double sum = 0;
