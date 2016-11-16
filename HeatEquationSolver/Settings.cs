@@ -41,6 +41,11 @@ namespace HeatEquationSolver
         public static double Epsilon { get; set; } = 1e-5;
 
         /// <summary>
+        /// Precision in calculating with different steps by 't' axie
+        /// </summary>
+        public static double Epsilon2 { get; set; } = 1e-4;
+
+        /// <summary>
         /// Multiplier in regularized method
         /// </summary>
         public static double Alpha { get; set; } = 1e-10;

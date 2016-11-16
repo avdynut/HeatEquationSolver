@@ -53,21 +53,24 @@ namespace HeatEquationSolver
 
             for (int m = 0; m < M; m++)
             {
-                double[] yWithPredTau, yWithNextTau;                
+                double[] yWithPredTau, yWithNextTau;
                 tau = Tau;
                 yWithPredTau = SolveNonlinearSystem(y0, T1 + m * Tau + Tau);
                 int k = 1;
+                double norm;
                 do
                 {
                     k *= 2;
                     tau = Tau / k;
-                    double t0 = T1 + m * Tau;                    
+                    double t0 = T1 + m * Tau;
                     yWithNextTau = (double[])y0.Clone();
                     for (int i = 0; i < k; i++)
                         yWithNextTau = SolveNonlinearSystem(yWithNextTau, t0 += tau);
+                    norm = CalculateNorm(yWithPredTau, yWithNextTau);
 
-                } while (CalculateNorm(yWithPredTau, yWithNextTau) > 1e-4);
+                } while (norm > Epsilon2);
                 y0 = yWithNextTau;
+                Logger.Debug("m={0}, tau=Tau/{1}, norm={2}", m, k, norm);
             }
 
             double sum = 0;

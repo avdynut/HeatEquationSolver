@@ -17,7 +17,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <GroupBox Grid.Row="0" Header="Настройки">
+        <GroupBox Grid.Row="0" Header="Параметры">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -41,9 +41,9 @@
                 </Grid.Resources>
                 <StackPanel Grid.Row="0" Grid.Column="0">
                     <Label Content="a" />
-                    <TextBox Name="a" Text="{Binding X2}" />
+                    <TextBox Text="{Binding X2}" />
                     <Label Content="N" />
-                    <TextBox Name="N" Text="{Binding N}" />
+                    <TextBox Text="{Binding N}" />
                 </StackPanel>
                 <StackPanel Grid.Row="0"
                             Grid.RowSpan="4"
@@ -55,19 +55,21 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="0">
                     <Label Content="T" />
-                    <TextBox Name="T" Text="{Binding T2}" />
+                    <TextBox Text="{Binding T2}" />
                     <Label Content="M" />
-                    <TextBox Name="M" Text="{Binding M}" />
+                    <TextBox Text="{Binding M}" />
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="0">
                     <Label Content="Eps" />
-                    <TextBox Name="Eps" Text="{Binding Epsilon}" />
+                    <TextBox Text="{Binding Epsilon}" />
+                    <Label Content="Eps2" />
+                    <TextBox Text="{Binding Epsilon2}" />
                 </StackPanel>
                 <StackPanel Grid.Row="3" Grid.Column="0">
                     <Label Content="Beta0" />
-                    <TextBox Name="Beta0" Text="{Binding Beta0}" />
+                    <TextBox Text="{Binding Beta0}" />
                     <Label Content="Alpha" />
-                    <TextBox Name="Alhpa" Text="{Binding Alpha}" />
+                    <TextBox Text="{Binding Alpha}" />
                 </StackPanel>
                 <StackPanel Grid.Row="3"
                             Grid.Column="0"
@@ -88,7 +90,6 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Норма невязки:" />
                     <Label Name="Norm" />
-                    <!--<Button Content="Посмотреть процесс" Width="130" HorizontalAlignment="Left"/>-->
                 </StackPanel>
             </StackPanel>
         </GroupBox>

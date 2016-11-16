@@ -12,6 +12,7 @@ namespace HeatEquationSolverUI
         public int N { get { return Settings.N; } set { Settings.N = value; } }
         public int M { get { return Settings.M; } set { Settings.M = value; } }
         public double Epsilon { get { return Settings.Epsilon; } set { Settings.Epsilon = value; } }
+        public double Epsilon2 { get { return Settings.Epsilon2; } set { Settings.Epsilon2 = value; } }
         public double Alpha { get { return Settings.Alpha; } set { Settings.Alpha = value; } }
         public double Beta0 { get { return Settings.Beta0; } set { Settings.Beta0 = value; } }
         public MethodBeta MethodForBeta { get { return Settings.MethodForBeta; } set { Settings.MethodForBeta = value; } }
