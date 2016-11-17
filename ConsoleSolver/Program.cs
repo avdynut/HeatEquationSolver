@@ -1,20 +1,31 @@
 ﻿using HeatEquationSolver;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ConsoleSolver
 {
     class Program
     {
+        private static CancellationTokenSource source = new CancellationTokenSource();
+
         static void Main(string[] args)
         {
             //var eq = new Equation(u, k, g, (x, t) => 2 * x * t, (x, t) => 2 * t, (x, t) => x * x, (x, t, u) => 2 * u);
 
-            //EntryPoint.equation = new Equation(QuasiNewton.u, QuasiNewton.K, QuasiNewton.g, QuasiNewton.KDy);
-            //EntryPoint.SetUp(HeatEquationSolver.NonlinearSystemSolver.BetaCalculators.MethodBeta.Puzynin);
-            //var solver = new Solver();
-            //solver.Solve();
+            Settings.M = 100;
+            double t = 0;
+            for (int i = 0; i < 20; i++)
+                Run(t += 1);
+            Console.Read();
+        }
 
+        private async static void Run(double t)
+        {
+            Settings.T2 = t;
             var qn = new Solver();
-            qn.Solve();
+            qn.Solve(source.Token);
+            Console.WriteLine($"{t}\t{qn.Norm}");
         }
 
         private static double u(double x, double t)

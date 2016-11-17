@@ -1,10 +1,10 @@
-﻿using System;
+﻿using HeatEquationSolver.BetaCalculators;
+using NLog;
+using System;
 using System.Linq;
 using System.Text;
-using HeatEquationSolver.BetaCalculators;
-using NLog;
-using static HeatEquationSolver.Settings;
 using System.Threading;
+using static HeatEquationSolver.Settings;
 
 namespace HeatEquationSolver
 {
@@ -55,13 +55,14 @@ namespace HeatEquationSolver
             for (int m = 0; m < M; m++)
             {
                 progress?.Report(m);
-                double[] yWithPredTau, yWithNextTau;
                 tau = Tau;
-                yWithPredTau = SolveNonlinearSystem(y0, T1 + m * Tau + Tau);
+                var yWithPredTau = SolveNonlinearSystem(y0, T1 + m * Tau + Tau);
                 int k = 1;
                 double norm;
+                double[] yWithNextTau;
                 do
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     k *= 2;
                     tau = Tau / k;
                     double t0 = T1 + m * Tau;
@@ -70,7 +71,8 @@ namespace HeatEquationSolver
                         yWithNextTau = SolveNonlinearSystem(yWithNextTau, t0 += tau);
                     norm = CalculateNorm(yWithPredTau, yWithNextTau);
                     Logger.Debug("norm={0}", norm);
-                    cancellationToken.ThrowIfCancellationRequested();
+                    yWithPredTau = (double[])yWithNextTau.Clone();
+
                 } while (norm > Epsilon2);
                 y0 = yWithNextTau;
                 Logger.Debug("m={0}, tau=Tau/{1}, norm={2}", m, k, norm);

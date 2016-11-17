@@ -5,7 +5,7 @@
         xmlns:local="clr-namespace:HeatEquationSolverUI"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         Title="HeatEquationSolver"
-        Width="647.038"
+        Width="647"
         Height="507"
         mc:Ignorable="d">
     <Window.Resources>
@@ -43,7 +43,8 @@
                     <Label Content="a" />
                     <TextBox Text="{Binding X2}" />
                     <Label Content="N" />
-                    <TextBox Text="{Binding N}" />
+                    <TextBox Text="{Binding N, UpdateSourceTrigger=PropertyChanged}" />
+                    <Label Content="{Binding H}" />
                 </StackPanel>
                 <StackPanel Grid.Row="0"
                             Grid.RowSpan="4"
@@ -57,7 +58,8 @@
                     <Label Content="T" />
                     <TextBox Text="{Binding T2}" />
                     <Label Content="M" />
-                    <TextBox Text="{Binding M}" />
+                    <TextBox Text="{Binding M, UpdateSourceTrigger=PropertyChanged}" />
+                    <Label Content="{Binding Tau}" />
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="0">
                     <Label Content="Eps" />
@@ -78,10 +80,16 @@
             </Grid>
         </GroupBox>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button Name="SolveButton" Width="400"
-                Click="SolveButton_Click"
-                Content="Решить" Margin="10,0"/>
-            <Button Name="StopButton" Content="Stop" Click="StopButton_OnClick" Margin="10,0" IsEnabled="False"/>
+            <Button Name="SolveButton"
+                    Width="400"
+                    Margin="10,0"
+                    Click="SolveButton_Click"
+                    Content="Решить" />
+            <Button Name="StopButton"
+                    Margin="10,0"
+                    Click="StopButton_OnClick"
+                    Content="Stop"
+                    IsEnabled="False" />
         </StackPanel>
         <GroupBox Grid.Row="2" Header="Ответ">
             <StackPanel>
@@ -90,12 +98,15 @@
                          IsReadOnly="True"
                          VerticalScrollBarVisibility="Auto" />
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="m = " />
-                    <Label Name="LayerT" />
                     <Label Content="Норма невязки:" />
                     <Label Name="Norm" />
                 </StackPanel>
-                <ProgressBar Name="ProgressBar" Height="10" Width="500" Value="{Binding ElementName=LayerT, Path=Content}" Maximum="{Binding M}"/>
+                <ProgressBar Name="ProgressBar"
+                             Width="500"
+                             Height="10"
+                             Maximum="{Binding M}"
+                             ToolTip="{Binding ElementName=ProgressBar,
+                                               Path=Value}" />
             </StackPanel>
         </GroupBox>
         <!--<Label Content="Developer: Andrey Arekhva"/>-->

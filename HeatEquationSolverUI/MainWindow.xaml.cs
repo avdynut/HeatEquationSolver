@@ -1,8 +1,8 @@
 ﻿using HeatEquationSolver;
 using System;
-using System.Windows;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace HeatEquationSolverUI
 {
@@ -11,8 +11,7 @@ namespace HeatEquationSolverUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        Task task;
-        CancellationTokenSource source;
+        private CancellationTokenSource source;
 
         public MainWindow()
         {
@@ -26,11 +25,11 @@ namespace HeatEquationSolverUI
             source = new CancellationTokenSource();
             try
             {
-                AnswerTextBlock.Text = "";
+                Norm.Content = AnswerTextBlock.Text = "";
                 var qn = new Solver();                
 
                 var progressIndicator = new Progress<int>(ReportProgress);
-                task = Task.Run(() => qn.Solve(source.Token, progressIndicator));
+                var task = Task.Run(() => qn.Solve(source.Token, progressIndicator));
                 await task;
                 
                 AnswerTextBlock.Text = qn.Answer; //actual.Solution.Aggregate("", (current, xi) => current + (xi + "\n")).TrimEnd();
@@ -47,7 +46,7 @@ namespace HeatEquationSolverUI
 
         void ReportProgress(int value)
         {
-            LayerT.Content = ProgressBar.Value = value + 1;
+            ProgressBar.Value = value + 1;
         }
 
         private void StopButton_OnClick(object sender, RoutedEventArgs e)

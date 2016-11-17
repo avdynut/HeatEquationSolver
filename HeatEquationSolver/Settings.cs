@@ -36,6 +36,16 @@ namespace HeatEquationSolver
         public static int M { get; set; } = 10;
 
         /// <summary>
+        /// Value of step by axie 'x'
+        /// </summary>
+        public static double H { get { return (X2 - X1) / N; } }
+
+        /// <summary>
+        /// Value of step by axie 't'
+        /// </summary>
+        public static double Tau { get { return (T2 - T1) / M; } }
+
+        /// <summary>
         /// Precision in calculating nonlinear systems
         /// </summary>
         public static double Epsilon { get; set; } = 1e-5;
