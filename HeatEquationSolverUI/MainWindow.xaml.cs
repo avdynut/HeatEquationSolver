@@ -12,7 +12,7 @@ namespace HeatEquationSolverUI
     public partial class MainWindow : Window
     {
         Task task;
-        CancellationTokenSource source = new CancellationTokenSource();
+        CancellationTokenSource source;
 
         public MainWindow()
         {
@@ -21,11 +21,13 @@ namespace HeatEquationSolverUI
 
         private async void SolveButton_Click(object sender, RoutedEventArgs e)
         {
+            SolveButton.IsEnabled = false;
+            StopButton.IsEnabled = true;
+            source = new CancellationTokenSource();
             try
             {
                 AnswerTextBlock.Text = "";
-                var qn = new Solver();
-                
+                var qn = new Solver();                
 
                 var progressIndicator = new Progress<int>(ReportProgress);
                 task = Task.Run(() => qn.Solve(source.Token, progressIndicator));
@@ -39,13 +41,13 @@ namespace HeatEquationSolverUI
                 MessageBox.Show(ex.Message);
             }
 
-            //StartButton.IsEnabled = RecountButton.IsEnabled = true;
-            //StopButton.IsEnabled = false;
+            SolveButton.IsEnabled = true;
+            StopButton.IsEnabled = false;
         }
 
         void ReportProgress(int value)
         {
-            //NumberOfIterations.Content = value;
+            LayerT.Content = ProgressBar.Value = value + 1;
         }
 
         private void StopButton_OnClick(object sender, RoutedEventArgs e)

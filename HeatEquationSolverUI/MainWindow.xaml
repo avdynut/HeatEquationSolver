@@ -5,7 +5,7 @@
         xmlns:local="clr-namespace:HeatEquationSolverUI"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         Title="HeatEquationSolver"
-        Width="591"
+        Width="647.038"
         Height="507"
         mc:Ignorable="d">
     <Window.Resources>
@@ -51,7 +51,7 @@
                             Orientation="Vertical">
                     <Image Source="Images/equation.PNG" Stretch="None" />
                     <Image Source="Images/concrete_functions.PNG" Stretch="None" />
-                    <Image Source="Images/conditions.PNG" Stretch="Fill" />
+                    <Image Source="Images/conditions.PNG" Stretch="None" />
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="0">
                     <Label Content="T" />
@@ -77,20 +77,25 @@
                             HorizontalAlignment="Center" />
             </Grid>
         </GroupBox>
-        <Button Grid.Row="1"
-                Width="400"
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button Name="SolveButton" Width="400"
                 Click="SolveButton_Click"
-                Content="Решить" />
+                Content="Решить" Margin="10,0"/>
+            <Button Name="StopButton" Content="Stop" Click="StopButton_OnClick" Margin="10,0" IsEnabled="False"/>
+        </StackPanel>
         <GroupBox Grid.Row="2" Header="Ответ">
             <StackPanel>
                 <TextBox Name="AnswerTextBlock"
-                         Height="260"
+                         Height="229"
                          IsReadOnly="True"
                          VerticalScrollBarVisibility="Auto" />
                 <StackPanel Orientation="Horizontal">
+                    <Label Content="m = " />
+                    <Label Name="LayerT" />
                     <Label Content="Норма невязки:" />
                     <Label Name="Norm" />
                 </StackPanel>
+                <ProgressBar Name="ProgressBar" Height="10" Width="500" Value="{Binding ElementName=LayerT, Path=Content}" Maximum="{Binding M}"/>
             </StackPanel>
         </GroupBox>
         <!--<Label Content="Developer: Andrey Arekhva"/>-->

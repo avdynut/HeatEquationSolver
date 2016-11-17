@@ -54,6 +54,7 @@ namespace HeatEquationSolver
 
             for (int m = 0; m < M; m++)
             {
+                progress?.Report(m);
                 double[] yWithPredTau, yWithNextTau;
                 tau = Tau;
                 yWithPredTau = SolveNonlinearSystem(y0, T1 + m * Tau + Tau);
@@ -69,13 +70,10 @@ namespace HeatEquationSolver
                         yWithNextTau = SolveNonlinearSystem(yWithNextTau, t0 += tau);
                     norm = CalculateNorm(yWithPredTau, yWithNextTau);
                     Logger.Debug("norm={0}", norm);
-
+                    cancellationToken.ThrowIfCancellationRequested();
                 } while (norm > Epsilon2);
                 y0 = yWithNextTau;
                 Logger.Debug("m={0}, tau=Tau/{1}, norm={2}", m, k, norm);
-
-                cancellationToken.ThrowIfCancellationRequested();
-                progress?.Report(m);
             }
 
             double sum = 0;
@@ -132,7 +130,7 @@ namespace HeatEquationSolver
         private double CalculateNorm(double[] f)
         {
             double sum = f.Sum(e => e * e);
-            return Math.Sqrt(sum);  // sum / N
+            return Math.Sqrt(sum / N);
         }
 
         private double CalculateNorm(double[] a, double[] b)
