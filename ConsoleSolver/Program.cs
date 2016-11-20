@@ -1,7 +1,6 @@
 ﻿using HeatEquationSolver;
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ConsoleSolver
 {
@@ -20,7 +19,7 @@ namespace ConsoleSolver
             Console.Read();
         }
 
-        private async static void Run(double t)
+        private static void Run(double t)
         {
             Settings.T2 = t;
             var qn = new Solver();
@@ -28,17 +27,17 @@ namespace ConsoleSolver
             Console.WriteLine($"{t}\t{qn.Norm}");
         }
 
-        private static double u(double x, double t)
+        private static double U(double x, double t)
         {
             return x * x * t;
         }
 
-        private static double k(double x, double t, double u)
+        private static double K(double x, double t, double u)
         {
             return u * u;
         }
 
-        private static double g(double x, double t, double u)
+        private static double G(double x, double t, double u)
         {
             return x * x - 8 * x * x * t * t * u - 2 * t * u * u;
         }

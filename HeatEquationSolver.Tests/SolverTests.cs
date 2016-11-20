@@ -1,6 +1,7 @@
 ﻿using System;
 using HeatEquationSolver.Samples;
 using NUnit.Framework;
+using System.Threading;
 
 namespace HeatEquationSolver.Tests
 {
@@ -15,7 +16,7 @@ namespace HeatEquationSolver.Tests
             equation.CheckEquation(OldEquation.du_dx, OldEquation.d2u_dx2, OldEquation.du_dt);
             Settings.Equation = equation;
             solver = new Solver();
-            solver.Solve();
+            solver.Solve(new CancellationToken());
         }
 
         [Test]

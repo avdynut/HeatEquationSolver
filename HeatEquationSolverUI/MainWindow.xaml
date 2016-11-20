@@ -83,7 +83,7 @@
             <Button Name="SolveButton"
                     Width="400"
                     Margin="10,0"
-                    Click="SolveButton_Click"
+                    Click="SolveButton_ClickAsync"
                     Content="Решить" />
             <Button Name="StopButton"
                     Margin="10,0"

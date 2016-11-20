@@ -18,7 +18,7 @@ namespace HeatEquationSolverUI
             InitializeComponent();
         }
 
-        private async void SolveButton_Click(object sender, RoutedEventArgs e)
+        private async void SolveButton_ClickAsync(object sender, RoutedEventArgs e)
         {
             SolveButton.IsEnabled = false;
             StopButton.IsEnabled = true;
