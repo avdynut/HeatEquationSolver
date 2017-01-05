@@ -49,7 +49,7 @@ namespace HeatEquationSolver
         {
             var y0 = new double[N + 1];
             for (int n = 0; n <= N; n++)
-                y0[n] = Equation.u(x[n], 0);
+                y0[n] = Equation.InitCond(x[n]);
             Logger.Debug("Layer 0, y='{0}'", ArrayToString(y0));
 
             for (int m = 0; m < M; m++)
@@ -119,8 +119,8 @@ namespace HeatEquationSolver
         private double[] SubstituteInSystem(double t, double[] y, double[] yK)
         {
             var f = new double[N + 1];
-            f[0] = yK[0] - Equation.u(0, t);
-            f[N] = yK[N] - Equation.u(X2, t);
+            f[0] = yK[0] - Equation.LeftBoundCond(t);
+            f[N] = yK[N] - Equation.RightBoundCond(t);
 
             for (int n = 1; n < N; n++)
                 f[n] = Equation.dK_dy(x[n], t, y[n]) * Math.Pow((yK[n + 1] - yK[n - 1]) / (2 * h), 2) +

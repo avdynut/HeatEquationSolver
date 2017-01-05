@@ -6,8 +6,6 @@ namespace ConsoleSolver
 {
     class Program
     {
-        private static CancellationTokenSource source = new CancellationTokenSource();
-
         static void Main(string[] args)
         {
             //var eq = new Equation(u, k, g, (x, t) => 2 * x * t, (x, t) => 2 * t, (x, t) => x * x, (x, t, u) => 2 * u);
@@ -23,7 +21,7 @@ namespace ConsoleSolver
         {
             Settings.T2 = t;
             var qn = new Solver();
-            qn.Solve(source.Token);
+            qn.Solve(new CancellationToken());
             Console.WriteLine($"{t}\t{qn.Norm}");
         }
 
