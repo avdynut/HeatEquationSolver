@@ -5,7 +5,7 @@ namespace HeatEquationSolver
 	public delegate double InitialCondition(double x);
 	public delegate double BoundaryCondtion(double t);
 	public delegate double Function(double x, double t);
-	public delegate double ComplexFunction(double x, double t, double y);
+	public delegate double ComplexFunction(double x, double t, double u);
 
 	public class HeatEquation
 	{

@@ -73,7 +73,7 @@ namespace HeatEquationSolver
 		/// <summary>
 		/// Heat eqaution
 		/// </summary>
-		public static HeatEquation Equation { get; set; } = new HeatEquation(OldEquation.u, OldEquation.K, OldEquation.g, OldEquation.KDy, OldEquation.InitCond, OldEquation.LeftBoundCond, OldEquation.RightBoundCond);
+		public static HeatEquation Equation { get; set; } = new HeatEquation(OldEquation.u, OldEquation.K, OldEquation.g, OldEquation.dK_du, OldEquation.InitCond, OldEquation.LeftBoundCond, OldEquation.RightBoundCond);
 
 		/// <summary>
 		/// Max number of iterations in calculating nonlinear systems
