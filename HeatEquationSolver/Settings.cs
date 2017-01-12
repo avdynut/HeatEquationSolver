@@ -36,12 +36,12 @@ namespace HeatEquationSolver
 		public static int M { get; set; } = 10;
 
 		/// <summary>
-		/// Value of step by axie 'x'
+		/// Value of step by axis 'x'
 		/// </summary>
 		public static double H { get { return (X2 - X1) / N; } }
 
 		/// <summary>
-		/// Value of step by axie 't'
+		/// Value of step by axis 't'
 		/// </summary>
 		public static double Tau { get { return (T2 - T1) / M; } }
 
@@ -51,7 +51,7 @@ namespace HeatEquationSolver
 		public static double Epsilon { get; set; } = 1e-5;
 
 		/// <summary>
-		/// Precision in calculating with different steps by 't' axie
+		/// Precision in calculating with different steps by 't' axis
 		/// </summary>
 		public static double Epsilon2 { get; set; } = 1e-4;
 

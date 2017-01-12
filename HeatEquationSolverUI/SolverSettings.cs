@@ -4,7 +4,7 @@ using HeatEquationSolverUI.Base;
 
 namespace HeatEquationSolverUI
 {
-    public class AppSettings : ViewModelBase
+    public class SolverSettings : ViewModelBase
     {
         public double X1 { get { return Settings.X1; } set { Settings.X1 = value; } }
         public double X2 { get { return Settings.X2; } set { Settings.X2 = value; OnPropertyChanged(nameof(H)); } }

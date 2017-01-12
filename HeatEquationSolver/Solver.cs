@@ -22,8 +22,8 @@ namespace HeatEquationSolver
 
         public Solver()
         {
-            h = (X2 - X1) / N;
-            Tau = (T2 - T1) / M;
+            h = H;
+			Tau = Settings.Tau;
 
             x = new double[N + 1];
             for (int i = 0; i <= N; i++)

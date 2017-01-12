@@ -20,8 +20,13 @@ namespace HeatEquationSolverUI
 
         private async void SolveButton_ClickAsync(object sender, RoutedEventArgs e)
         {
-            SolveButton.IsEnabled = false;
-            StopButton.IsEnabled = true;
+			if(SolveButton.Content.ToString() == "Отмена")
+			{
+				SolveButton.IsEnabled = false;
+				source.Cancel();
+				return;
+			}
+
             source = new CancellationTokenSource();
             try
             {
@@ -30,7 +35,8 @@ namespace HeatEquationSolverUI
 
                 var progressIndicator = new Progress<int>(ReportProgress);
                 var task = Task.Run(() => qn.Solve(source.Token, progressIndicator));
-                await task;
+				SolveButton.Content = "Отмена";
+				await task;
                 
                 AnswerTextBlock.Text = qn.Answer; //actual.Solution.Aggregate("", (current, xi) => current + (xi + "\n")).TrimEnd();
                 Norm.Content = qn.Norm;
@@ -40,18 +46,13 @@ namespace HeatEquationSolverUI
                 MessageBox.Show(ex.Message);
             }
 
+			SolveButton.Content = "Решить";
             SolveButton.IsEnabled = true;
-            StopButton.IsEnabled = false;
         }
 
         void ReportProgress(int value)
         {
-            ProgressBar.Value = value + 1;
-        }
-
-        private void StopButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            source.Cancel();
+            ProgressBar.Value = ++value;
         }
     }
 }

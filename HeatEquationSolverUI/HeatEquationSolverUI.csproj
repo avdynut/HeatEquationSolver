@@ -53,7 +53,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AppSettings.cs" />
+    <Compile Include="SolverSettings.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -100,13 +100,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\concrete_functions.PNG" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\equation.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\conditions.PNG" />
+    <Resource Include="Images\ModelEquation\g.PNG" />
+    <Resource Include="Images\ModelEquation\K.PNG" />
+    <Resource Include="Images\ModelEquation\u.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ModelEquation\u_0_t.PNG" />
+    <Resource Include="Images\ModelEquation\u_1_t.PNG" />
+    <Resource Include="Images\ModelEquation\u_x_0.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
