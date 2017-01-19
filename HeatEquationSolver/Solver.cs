@@ -14,7 +14,6 @@ namespace HeatEquationSolver
         private readonly double h;
         private readonly double Tau;
         private readonly double[] x;
-        private readonly BetaCalculator betaCalculator;
 
         public string Answer;
         public double Norm;
@@ -23,26 +22,14 @@ namespace HeatEquationSolver
         public Solver()
         {
             h = H;
-			Tau = Settings.Tau;
+            Tau = Settings.Tau;
 
             x = new double[N + 1];
             for (int i = 0; i <= N; i++)
                 x[i] = X1 + i * h;
 
-            switch (MethodForBeta)
-            {
-                case MethodBeta.Puzynin:
-                    betaCalculator = new PuzyninMethod();
-                    break;
-                case MethodBeta.No6:
-                    betaCalculator = new No6Method();
-                    break;
-                case MethodBeta.ModNo6:
-                    betaCalculator = new No6ModMethod();
-                    break;
-            }
             Logger.Debug("X1={0}, X2={1}, T1={2}, T2={3}, N={4}, M={5}, h={6}, Tau={7}, Epsilon={8}, Beta0={9}, MethodForBeta={10}",
-                                                                        X1, X2, T1, T2, N, M, h, Tau, Epsilon, Beta0, MethodForBeta);
+                                                                        X1, X2, T1, T2, N, M, h, Tau, Epsilon, Beta0, nameof(BetaCalculator));
         }
 
         public void Solve(CancellationToken cancellationToken, IProgress<int> progress = null)
@@ -94,7 +81,7 @@ namespace HeatEquationSolver
             var yK = (double[])y.Clone();
             var f = SubstituteInSystem(t, y, yK);
             Norm = CalculateNorm(f);
-            betaCalculator.Init(Beta0, Norm);
+            BetaCalculator.Init(Beta0, Norm);
             int iterations = 0;
 
             while (Norm > Epsilon)
@@ -109,7 +96,7 @@ namespace HeatEquationSolver
 
                 f = SubstituteInSystem(t, y, yK);
                 Norm = CalculateNorm(f);
-                betaCalculator.NextBeta(Norm);
+                BetaCalculator.NextBeta(Norm);
             }
 
             Logger.Debug("t={0}, {1} iterations, yK='{2}'", t, iterations, ArrayToString(yK));
@@ -157,17 +144,17 @@ namespace HeatEquationSolver
                 a[n - 1] = l + r;       // or a[n],b[n]?
                 b[n - 1] = -l + r;
                 c[n] = -2 * r - 1 / tau;
-                f[n] *= betaCalculator.Multiplier;
+                f[n] *= BetaCalculator.Multiplier;
             }
-            f[0] *= betaCalculator.Multiplier;
-            f[N] *= betaCalculator.Multiplier;
+            f[0] *= BetaCalculator.Multiplier;
+            f[N] *= BetaCalculator.Multiplier;
 
             return ResolvingSystem.TridiagonalMatrixAlgorithm(a, c, b, f);
         }
 
         private double[] FullMatrix(double t, double[] y, double[] yK, double[] f)
         {
-            double alphaBetaNorm = Alpha * betaCalculator.Beta * Norm;
+            double alphaBetaNorm = Alpha * BetaCalculator.Beta * Norm;
             var jacobian = new double[N + 1, N + 1];     // f'(Xn)
             jacobian[0, 0] = jacobian[N, N] = 1;
             for (int n = 1; n < N; n++)
@@ -177,16 +164,16 @@ namespace HeatEquationSolver
                 jacobian[n, n - 1] = l + r;
                 jacobian[n, n + 1] = -l + r;
                 jacobian[n, n] = -2 * r - 1 / tau;
-                f[n] *= betaCalculator.Multiplier;
+                f[n] *= BetaCalculator.Multiplier;
             }
-            f[0] *= betaCalculator.Multiplier;
-            f[N] *= betaCalculator.Multiplier;
+            f[0] *= BetaCalculator.Multiplier;
+            f[N] *= BetaCalculator.Multiplier;
             return ResolvingSystem.Gauss(jacobian, f);
         }
 
         private double[] ReqularizedMethod(double t, double[] y, double[] yK, double[] f)
         {
-            double alphaBetaNorm = Alpha * betaCalculator.Beta * Norm;
+            double alphaBetaNorm = Alpha * BetaCalculator.Beta * Norm;
             var jacobian = new double[N + 1, N + 1];     // f'(Xn)
             jacobian[0, 0] = jacobian[N, N] = 1;
             for (int n = 1; n < N; n++)
@@ -201,7 +188,7 @@ namespace HeatEquationSolver
             var a = Matrix.Transpose(jacobian);
             a = Matrix.AddDiag(a, alphaBetaNorm);
             var matrix = Matrix.AddDiag(Matrix.Multiply(a, jacobian), alphaBetaNorm);
-            var freeMembers = Vector.MultiplyConst(betaCalculator.Multiplier, Matrix.Multiply(a, f));
+            var freeMembers = Vector.MultiplyConst(BetaCalculator.Multiplier, Matrix.Multiply(a, f));
             return ResolvingSystem.Gauss(matrix, freeMembers);
         }
 

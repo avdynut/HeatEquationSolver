@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("HeatEquationSolver")]
-[assembly: AssemblyDescription("Solvign heat equations")]
+[assembly: AssemblyDescription("Solving heat equations")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("AvdyNut")]
+[assembly: AssemblyCompany("AvdyNSoft")]
 [assembly: AssemblyProduct("HeatEquationSolver")]
 [assembly: AssemblyCopyright("Copyright © Andrei Arekhva 2017")]
 [assembly: AssemblyTrademark("AvdyNut")]

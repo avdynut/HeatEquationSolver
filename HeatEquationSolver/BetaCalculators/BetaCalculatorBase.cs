@@ -1,6 +1,6 @@
 ﻿namespace HeatEquationSolver.BetaCalculators
 {
-    public abstract class BetaCalculator
+    public abstract class BetaCalculatorBase
     {
         public double Beta;
         protected double predNorm;
@@ -31,12 +31,5 @@
             }
             return false;
         }
-    }
-
-    public enum MethodBeta
-    {
-        Puzynin,
-        No6,
-        ModNo6
     }
 }

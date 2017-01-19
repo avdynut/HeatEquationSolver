@@ -18,7 +18,7 @@ namespace HeatEquationSolverUI
         public double Epsilon2 { get { return Settings.Epsilon2; } set { Settings.Epsilon2 = value; } }
         public double Alpha { get { return Settings.Alpha; } set { Settings.Alpha = value; } }
         public double Beta0 { get { return Settings.Beta0; } set { Settings.Beta0 = value; } }
-        public MethodBeta MethodForBeta { get { return Settings.MethodForBeta; } set { Settings.MethodForBeta = value; } }
+        public BetaCalculatorBase BetaCalculator { get { return Settings.BetaCalculator; } set { Settings.BetaCalculator = value; } }
         public HeatEquation Equation { get { return Settings.Equation; } set { Settings.Equation = value; } }
         public int MaxIterations { get { return Settings.MaxIterations; } set { Settings.MaxIterations = value; } }
     }

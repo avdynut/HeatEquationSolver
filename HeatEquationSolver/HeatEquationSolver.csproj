@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HeatEquation.cs" />
-    <Compile Include="BetaCalculators\BetaCalculator.cs" />
+    <Compile Include="BetaCalculators\BetaCalculatorBase.cs" />
     <Compile Include="BetaCalculators\No6Method.cs" />
     <Compile Include="BetaCalculators\No6ModMethod.cs" />
     <Compile Include="BetaCalculators\PuzyninMethod.cs" />

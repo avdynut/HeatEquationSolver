@@ -68,12 +68,12 @@ namespace HeatEquationSolver
 		/// <summary>
 		/// Method for calculating next beta on each step in iteration process
 		/// </summary>
-		public static MethodBeta MethodForBeta { get; set; } = MethodBeta.Puzynin;
+		public static BetaCalculatorBase BetaCalculator { get; set; } = new PuzyninMethod();
 
-		/// <summary>
-		/// Heat eqaution
-		/// </summary>
-		public static HeatEquation Equation { get; set; } = new HeatEquation(OldEquation.u, OldEquation.K, OldEquation.g, OldEquation.dK_du, OldEquation.InitCond, OldEquation.LeftBoundCond, OldEquation.RightBoundCond);
+        /// <summary>
+        /// Heat eqaution
+        /// </summary>
+        public static HeatEquation Equation { get; set; } = new HeatEquation(OldEquation.u, OldEquation.K, OldEquation.g, OldEquation.dK_du, OldEquation.InitCond, OldEquation.LeftBoundCond, OldEquation.RightBoundCond);
 
 		/// <summary>
 		/// Max number of iterations in calculating nonlinear systems

@@ -2,7 +2,7 @@
 
 namespace HeatEquationSolver.BetaCalculators
 {
-    public class No6Method : BetaCalculator
+    public class No6Method : BetaCalculatorBase
     {
         public override double Multiplier => -Beta;
 

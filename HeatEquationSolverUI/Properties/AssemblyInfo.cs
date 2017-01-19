@@ -8,7 +8,7 @@ using System.Windows;
 [assembly: AssemblyTitle("HeatEquationSolverUI")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("AvdyNut")]
+[assembly: AssemblyCompany("AvdyNSoft")]
 [assembly: AssemblyProduct("HeatEquationSolverUI")]
 [assembly: AssemblyCopyright("Copyright © Andrei Arekhva 2017")]
 [assembly: AssemblyTrademark("AvdyNut")]

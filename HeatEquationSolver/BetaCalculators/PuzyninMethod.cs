@@ -2,7 +2,7 @@
 
 namespace HeatEquationSolver.BetaCalculators
 {
-    public class PuzyninMethod : BetaCalculator
+    public class PuzyninMethod : BetaCalculatorBase
     {
         public override double Multiplier => -Beta;
 
