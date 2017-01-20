@@ -75,12 +75,14 @@
                     <TextBox Text="{Binding Epsilon2}" ToolTip="От слоя к слою" />
                 </StackPanel>
                 <StackPanel Grid.Row="7" Orientation="Horizontal">
-                    <!--  Добавить выбор метода пересчета бета  -->
+                    <ComboBox
+                        DisplayMemberPath="Name"
+                        ItemsSource="{Binding MethodsForBeta}"
+                        SelectedItem="{Binding CurrentMethodForBeta}" />
                     <Label Content="Beta0" />
                     <TextBox Text="{Binding Beta0}" />
                     <Label Content="Alpha" />
                     <TextBox Text="{Binding Alpha}" />
-                    <ComboBox />
                 </StackPanel>
             </Grid>
         </GroupBox>
