@@ -32,9 +32,6 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.Resources>
-                    <Style TargetType="Image">
-                        <Setter Property="Stretch" Value="None" />
-                    </Style>
                     <!--<Style TargetType="StackPanel">
 						<Setter Property="Orientation" Value="Horizontal" />
 					</Style>
@@ -43,19 +40,36 @@
 						<Setter Property="Width" Value="70" />
 					</Style>-->
                 </Grid.Resources>
-                <Image Grid.Row="0" Source="Images/equation.PNG" />
-                <Image Grid.Row="1" Source="Images/ModelEquation/u.PNG" />
-                <StackPanel Grid.Row="2">
-                    <Image Source="Images/ModelEquation/K.PNG" />
-                    <Image Source="pack://siteoforigin:,,,/Images/ModelEquation/g.PNG" />
-                </StackPanel>
-                <StackPanel Grid.Row="3">
-                    <Image Source="Images/ModelEquation/u_x_0.PNG" />
-                    <Image Source="Images/ModelEquation/u_0_t.PNG" />
-                    <Image Source="Images/ModelEquation/u_1_t.PNG" />
-                    <!--<Label Content="a" />
+                <Image Grid.Row="0" Source="pack://siteoforigin:,,,/Images/equation.PNG" />
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.Resources>
+                        <Style TargetType="Image">
+                            <Setter Property="Stretch" Value="None" />
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                            <Setter Property="Margin" Value="0,1" />
+                        </Style>
+                    </Grid.Resources>
+                    <Image Source="pack://siteoforigin:,,,/Images/ModelEquation/u.PNG" />
+                    <TextBox Margin="33,0,215,0" />
+                    <StackPanel Grid.Row="2">
+                        <Image Source="pack://siteoforigin:,,,/Images/ModelEquation/K.PNG" />
+                        <Image Source="pack://siteoforigin:,,,/Images/ModelEquation/g.PNG" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="3">
+                        <Image Source="pack://siteoforigin:,,,/Images/ModelEquation/u_x_0.PNG" />
+                        <Image Source="pack://siteoforigin:,,,/Images/ModelEquation/u_0_t.PNG" />
+                        <Image Source="pack://siteoforigin:,,,/Images/ModelEquation/u_1_t.PNG" />
+                        <!--<Label Content="a" />
 					<TextBox Text="{Binding X2}" />-->
-                </StackPanel>
+                    </StackPanel>
+                </Grid>
                 <StackPanel Grid.Row="4" Orientation="Horizontal">
                     <Label Content="T" />
                     <TextBox Text="{Binding T2}" />

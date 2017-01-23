@@ -101,17 +101,31 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\equation.PNG" />
+    <None Include="Images\equation.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\ModelEquation\g.PNG" />
-    <Resource Include="Images\ModelEquation\K.PNG" />
-    <Resource Include="Images\ModelEquation\u.PNG" />
+    <None Include="Images\ModelEquation\g.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Images\ModelEquation\K.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Images\ModelEquation\u.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\ModelEquation\u_0_t.PNG" />
-    <Resource Include="Images\ModelEquation\u_1_t.PNG" />
-    <Resource Include="Images\ModelEquation\u_x_0.PNG" />
+    <None Include="Images\ModelEquation\u_0_t.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Images\ModelEquation\u_1_t.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Images\ModelEquation\u_x_0.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
