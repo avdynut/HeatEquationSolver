@@ -28,21 +28,12 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Grid.Resources>
-                    <!--<Style TargetType="StackPanel">
-						<Setter Property="Orientation" Value="Horizontal" />
-					</Style>
-					<Style TargetType="TextBox">
-						<Setter Property="VerticalAlignment" Value="Center" />
-						<Setter Property="Width" Value="70" />
-					</Style>-->
-                </Grid.Resources>
                 <Image Grid.Row="0" Source="pack://siteoforigin:,,,/Images/equation.PNG" />
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -55,40 +46,88 @@
                             <Setter Property="HorizontalAlignment" Value="Left" />
                             <Setter Property="Margin" Value="0,1" />
                         </Style>
+                        <BooleanToVisibilityConverter x:Key="b2v" />
+                        <Style TargetType="TextBox">
+                            <Setter Property="Margin" Value="33,0,0,0" />
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                            <Setter Property="Visibility" Value="{Binding IsChecked, ElementName=UseModelEq, Converter={StaticResource b2v}}" />
+                        </Style>
                     </Grid.Resources>
-                    <Image Source="pack://siteoforigin:,,,/Images/ModelEquation/u.PNG" />
-                    <TextBox Margin="33,0,215,0" />
-                    <StackPanel Grid.Row="2">
-                        <Image Source="pack://siteoforigin:,,,/Images/ModelEquation/K.PNG" />
-                        <Image Source="pack://siteoforigin:,,,/Images/ModelEquation/g.PNG" />
-                    </StackPanel>
-                    <StackPanel Grid.Row="3">
-                        <Image Source="pack://siteoforigin:,,,/Images/ModelEquation/u_x_0.PNG" />
-                        <Image Source="pack://siteoforigin:,,,/Images/ModelEquation/u_0_t.PNG" />
-                        <Image Source="pack://siteoforigin:,,,/Images/ModelEquation/u_1_t.PNG" />
-                        <!--<Label Content="a" />
+                    <CheckBox
+                        Name="UseModelEq"
+                        Grid.Row="0"
+                        Content="Ввод данных"
+                        IsChecked="True" />
+                    <Image Grid.Row="1" Source="pack://siteoforigin:,,,/Images/ModelEquation/u.PNG" />
+                    <TextBox
+                        Grid.Row="1"
+                        MinWidth="100"
+                        Text="x*x*t+3*x*t*t" />
+                    <Image Grid.Row="2" Source="pack://siteoforigin:,,,/Images/ModelEquation/K.PNG" />
+                    <TextBox
+                        Grid.Row="2"
+                        MinWidth="100"
+                        Text="x*x*t+u*u" />
+                    <Image Grid.Row="3" Source="pack://siteoforigin:,,,/Images/ModelEquation/g.PNG" />
+                    <TextBox
+                        Grid.Row="3"
+                        MinWidth="295"
+                        Text="x*x+6*x*t-2*u*(2*x*t+3*t*t)^2-2*t*K" />
+                    <Image Grid.Row="4" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_x_0.PNG" />
+                    <TextBox
+                        Grid.Row="4"
+                        Width="15"
+                        Margin="40,0"
+                        Text="{Binding T1}" />
+                    <TextBox
+                        Grid.Row="4"
+                        MinWidth="50"
+                        Margin="78,0"
+                        Text="0" />
+                    <Image Grid.Row="5" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_0_t.PNG" />
+                    <TextBox
+                        Grid.Row="5"
+                        Width="15"
+                        Margin="20,0"
+                        Text="{Binding X1}" />
+                    <TextBox
+                        Grid.Row="5"
+                        MinWidth="50"
+                        Margin="78,0"
+                        Text="0" />
+                    <Image Grid.Row="6" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_1_t.PNG" />
+                    <TextBox
+                        Grid.Row="6"
+                        Width="15"
+                        Margin="20,0"
+                        Text="{Binding X2}" />
+                    <TextBox
+                        Grid.Row="6"
+                        MinWidth="50"
+                        Margin="78,0"
+                        Text="1+3*t*t" />
+                    <!--<Label Content="a" />
 					<TextBox Text="{Binding X2}" />-->
-                    </StackPanel>
                 </Grid>
-                <StackPanel Grid.Row="4" Orientation="Horizontal">
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
                     <Label Content="T" />
                     <TextBox Text="{Binding T2}" />
                     <Label Content="M" />
                     <TextBox Text="{Binding M, UpdateSourceTrigger=PropertyChanged}" />
                     <Label Content="{Binding Tau}" />
                 </StackPanel>
-                <StackPanel Grid.Row="5" Orientation="Horizontal">
+                <StackPanel Grid.Row="3" Orientation="Horizontal">
                     <Label Content="N" />
                     <TextBox Text="{Binding N, UpdateSourceTrigger=PropertyChanged}" />
                     <Label Content="{Binding H}" />
                 </StackPanel>
-                <StackPanel Grid.Row="6" Orientation="Horizontal">
+                <StackPanel Grid.Row="4" Orientation="Horizontal">
                     <Label Content="Eps" />
                     <TextBox Text="{Binding Epsilon}" ToolTip="В решении системы нелинейных уравнений" />
                     <Label Content="Eps2" />
                     <TextBox Text="{Binding Epsilon2}" ToolTip="От слоя к слою" />
                 </StackPanel>
-                <StackPanel Grid.Row="7" Orientation="Horizontal">
+                <StackPanel Grid.Row="5" Orientation="Horizontal">
                     <ComboBox
                         DisplayMemberPath="Name"
                         ItemsSource="{Binding MethodsForBeta}"
