@@ -51,8 +51,7 @@
     <Compile Include="BetaCalculators\No6ModMethod.cs" />
     <Compile Include="BetaCalculators\PuzyninMethod.cs" />
     <Compile Include="Matrix.cs" />
-    <Compile Include="Samples\CurrentEq.cs" />
-    <Compile Include="Samples\OldEquation.cs" />
+    <Compile Include="ModelEquation.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Solver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

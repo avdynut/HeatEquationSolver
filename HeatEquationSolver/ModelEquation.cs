@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace HeatEquationSolver.Samples
+namespace HeatEquationSolver
 {
-	public static class OldEquation
+	public static class ModelEquation
 	{
 		public static double K(double x, double t, double u)
 		{

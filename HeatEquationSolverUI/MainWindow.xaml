@@ -72,7 +72,7 @@
                     <TextBox
                         Grid.Row="3"
                         MinWidth="295"
-                        Text="x*x+6*x*t-2*u*(2*x*t+3*t*t)^2-2*t*K" />
+                        Text="x*x+6*x*t-2*u*Math.Pow(2*x*t+3*t*t,2)-2*t*K" />
                     <Image Grid.Row="4" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_x_0.PNG" />
                     <TextBox
                         Grid.Row="4"

@@ -1,6 +1,7 @@
 ﻿using HeatEquationSolver;
 using System;
 using System.Threading;
+using Z.Expressions;
 
 namespace ConsoleSolver
 {
@@ -10,10 +11,29 @@ namespace ConsoleSolver
         {
             //var eq = new Equation(u, k, g, (x, t) => 2 * x * t, (x, t) => 2 * t, (x, t) => x * x, (x, t, u) => 2 * u);
 
-            Settings.M = 100;
-            double t = 0;
-            for (int i = 0; i < 20; i++)
-                Run(t += 1);
+            //Settings.M = 100;
+            //double t = 0;
+            //for (int i = 0; i < 20; i++)
+            //    Run(t += 1);
+
+            string u_ = "x*x*t+3*x*t*t";
+            string K_ = "x*x*t+u*u";
+            string g_ = "x*x+6*x*t-2*u*Math.Pow(2*x*t+3*t*t,2)-2*t*K";
+            //string g_ = "x*x+6*x*t-2*u*(2*x*t+3*t*t)*(2*x*t+3*t*t)-2*t*K";
+            var x = 3;
+            var t = 5;
+            Function u = (a, b) => Eval.Compile<Func<double, double, double>>(u_, "x", "t")(a, b);
+            ComplexFunction K = (a, b, c) => Eval.Compile<Func<double, double, double, double>>(K_, "x", "t", "u")(a, b, c);
+            var g = Eval.Compile<Func<double, double, double, double, double>>(g_, "x", "t", "u", "K");
+            var result = g(x, t, u(x, t), K(x, t, u(x, t)));
+            var expected = ModelEquation.g(x, t, ModelEquation.u(x, t));
+            //var en = new ExpressionEvaluator();
+            //var uf = en.Compile(u_);
+            //var Kf = en.Compile(K_);
+            //var gf = en.Compile(g_);
+            //var u = uf(new { x, t });
+            //var K = Kf(new { x, t, u });
+            //var g = gf(new { x, t, u, K });
             Console.Read();
         }
 
@@ -25,19 +45,5 @@ namespace ConsoleSolver
             Console.WriteLine($"{t}\t{qn.Norm}");
         }
 
-        private static double U(double x, double t)
-        {
-            return x * x * t;
-        }
-
-        private static double K(double x, double t, double u)
-        {
-            return u * u;
-        }
-
-        private static double G(double x, double t, double u)
-        {
-            return x * x - 8 * x * x * t * t * u - 2 * t * u * u;
-        }
     }
 }

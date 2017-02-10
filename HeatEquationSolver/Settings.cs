@@ -1,5 +1,5 @@
 ﻿using HeatEquationSolver.BetaCalculators;
-using HeatEquationSolver.Samples;
+using HeatEquationSolver;
 
 namespace HeatEquationSolver
 {
@@ -73,7 +73,7 @@ namespace HeatEquationSolver
         /// <summary>
         /// Heat eqaution
         /// </summary>
-        public static HeatEquation Equation { get; set; } = new HeatEquation(OldEquation.u, OldEquation.K, OldEquation.g, OldEquation.dK_du, OldEquation.InitCond, OldEquation.LeftBoundCond, OldEquation.RightBoundCond);
+        public static HeatEquation Equation { get; set; } = new HeatEquation(ModelEquation.K, ModelEquation.g, ModelEquation.dK_du, ModelEquation.InitCond, ModelEquation.LeftBoundCond, ModelEquation.RightBoundCond);
 
 		/// <summary>
 		/// Max number of iterations in calculating nonlinear systems

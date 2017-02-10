@@ -1,5 +1,5 @@
 ﻿using System;
-using HeatEquationSolver.Samples;
+using HeatEquationSolver;
 using NUnit.Framework;
 using System.Threading;
 
@@ -12,8 +12,9 @@ namespace HeatEquationSolver.Tests
         [OneTimeSetUp]
         public void Init()
         {
-            var equation = new HeatEquation(OldEquation.u, OldEquation.K, OldEquation.g, OldEquation.dK_du, OldEquation.InitCond, OldEquation.LeftBoundCond, OldEquation.RightBoundCond);
-			equation.CheckEquation(OldEquation.du_dx, OldEquation.d2u_dx2, OldEquation.du_dt);
+            var equation = new HeatEquation(ModelEquation.K, ModelEquation.g, ModelEquation.dK_du, ModelEquation.InitCond, ModelEquation.LeftBoundCond, ModelEquation.RightBoundCond);
+            equation.u = ModelEquation.u;
+			equation.CheckEquation(ModelEquation.du_dx, ModelEquation.d2u_dx2, ModelEquation.du_dt);
             Settings.Equation = equation;
             solver = new Solver();
             solver.Solve(new CancellationToken());

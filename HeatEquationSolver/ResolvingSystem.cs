@@ -7,14 +7,14 @@ namespace HeatEquationSolver
     {
         public static double[] Gauss(double[,] system)
         {
-            double[,] m = (double[,]) system.Clone();
+            double[,] m = (double[,])system.Clone();
             int n = m.GetLength(0);
             for (int k = 0; k < n - 1; k++)
                 for (int i = k + 1; i < n; i++)
                 {
-                    double koef = -m[i, k]/m[k, k];
+                    double koef = -m[i, k] / m[k, k];
                     for (int j = 0; j < n + 1; j++)
-                        m[i, j] += m[k, j]*koef;
+                        m[i, j] += m[k, j] * koef;
                 }
 
             var deltaX = new double[n];
@@ -22,8 +22,8 @@ namespace HeatEquationSolver
             {
                 double sum = 0;
                 for (int j = i; j < n; j++)
-                    sum += deltaX[j]*m[i, j];
-                deltaX[i] = (m[i, n] - sum)/m[i, i];
+                    sum += deltaX[j] * m[i, j];
+                deltaX[i] = (m[i, n] - sum) / m[i, i];
             }
 
             if (deltaX.Any(x => double.IsInfinity(x) || double.IsNaN(x)))

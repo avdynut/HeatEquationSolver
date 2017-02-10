@@ -65,6 +65,8 @@ namespace HeatEquationSolver
                 Logger.Debug("m={0}, tau=Tau/{1}, norm={2}", m, k, norm);
             }
 
+            if (Equation.u == null) //TODO: separate y0 and exact solution
+                return;
             double sum = 0;
             for (int n = 0; n <= N; n++)
             {
