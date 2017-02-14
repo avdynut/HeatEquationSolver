@@ -41,12 +41,12 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.Resources>
+                        <BooleanToVisibilityConverter x:Key="b2v" />
                         <Style TargetType="Image">
                             <Setter Property="Stretch" Value="None" />
                             <Setter Property="HorizontalAlignment" Value="Left" />
                             <Setter Property="Margin" Value="0,1" />
                         </Style>
-                        <BooleanToVisibilityConverter x:Key="b2v" />
                         <Style TargetType="TextBox">
                             <Setter Property="Margin" Value="33,0,0,0" />
                             <Setter Property="HorizontalAlignment" Value="Left" />
@@ -68,6 +68,15 @@
                         Grid.Row="2"
                         MinWidth="100"
                         Text="x*x*t+u*u" />
+                    <Image
+                        Grid.Row="2"
+                        Margin="140,0"
+                        Source="Images/ModelEquation/dK_du.png" />
+                    <TextBox
+                        Grid.Row="2"
+                        MinWidth="100"
+                        Margin="182,0"
+                        Text="2*u" />
                     <Image Grid.Row="3" Source="pack://siteoforigin:,,,/Images/ModelEquation/g.PNG" />
                     <TextBox
                         Grid.Row="3"

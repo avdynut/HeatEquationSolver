@@ -1,5 +1,4 @@
 ﻿using System;
-using HeatEquationSolver;
 using NUnit.Framework;
 using System.Threading;
 
@@ -8,16 +7,22 @@ namespace HeatEquationSolver.Tests
     public class SolverTests
     {
         private Solver solver;
+        private HeatEquation equation;
 
         [OneTimeSetUp]
         public void Init()
         {
-            var equation = new HeatEquation(ModelEquation.K, ModelEquation.g, ModelEquation.dK_du, ModelEquation.InitCond, ModelEquation.LeftBoundCond, ModelEquation.RightBoundCond);
-            equation.u = ModelEquation.u;
-			equation.CheckEquation(ModelEquation.du_dx, ModelEquation.d2u_dx2, ModelEquation.du_dt);
+            equation = new HeatEquation(ModelEquation.K, ModelEquation.dK_du, ModelEquation.g, ModelEquation.InitCond, ModelEquation.LeftBoundCond, ModelEquation.RightBoundCond);
+            equation.u = ModelEquation.u;            
             Settings.Equation = equation;
             solver = new Solver();
             solver.Solve(new CancellationToken());
+        }
+
+        [Test]
+        public void CheckModelEquation()
+        {
+            Assert.That(equation.IsEquationCorrect(ModelEquation.du_dx, ModelEquation.d2u_dx2, ModelEquation.du_dt), "Incorrect equation");
         }
 
         [Test]

@@ -1,5 +1,4 @@
-﻿using HeatEquationSolver.BetaCalculators;
-using NLog;
+﻿using NLog;
 using System;
 using System.Linq;
 using System.Text;
@@ -112,7 +111,7 @@ namespace HeatEquationSolver
             f[N] = yK[N] - Equation.RightBoundCond(t);
 
             for (int n = 1; n < N; n++)
-                f[n] = Equation.dK_dy(x[n], t, y[n]) * Math.Pow((yK[n + 1] - yK[n - 1]) / (2 * h), 2) +
+                f[n] = Equation.dK_du(x[n], t, y[n]) * Math.Pow((yK[n + 1] - yK[n - 1]) / (2 * h), 2) +
                        Equation.K(x[n], t, y[n]) * (yK[n + 1] - 2 * yK[n] + yK[n - 1]) / (h * h) +
                        Equation.g(x[n], t, y[n]) - (yK[n] - y[n]) / tau;
             return f;
@@ -141,7 +140,7 @@ namespace HeatEquationSolver
 
             for (int n = 1; n < N; n++)
             {
-                double l = Equation.dK_dy(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
+                double l = Equation.dK_du(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
                 double r = Equation.K(x[n], t, y[n]) / (h * h);
                 a[n - 1] = l + r;       // or a[n],b[n]?
                 b[n - 1] = -l + r;
@@ -161,7 +160,7 @@ namespace HeatEquationSolver
             jacobian[0, 0] = jacobian[N, N] = 1;
             for (int n = 1; n < N; n++)
             {
-                double l = Equation.dK_dy(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
+                double l = Equation.dK_du(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
                 double r = Equation.K(x[n], t, y[n]) / (h * h);
                 jacobian[n, n - 1] = l + r;
                 jacobian[n, n + 1] = -l + r;
@@ -180,7 +179,7 @@ namespace HeatEquationSolver
             jacobian[0, 0] = jacobian[N, N] = 1;
             for (int n = 1; n < N; n++)
             {
-                double l = Equation.dK_dy(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
+                double l = Equation.dK_du(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
                 double r = Equation.K(x[n], t, y[n]) / (h * h);
                 jacobian[n, n - 1] = l + r;
                 jacobian[n, n + 1] = -l + r;
