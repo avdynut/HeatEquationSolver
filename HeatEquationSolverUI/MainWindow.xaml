@@ -71,7 +71,7 @@
                     <Image
                         Grid.Row="2"
                         Margin="140,0"
-                        Source="Images/ModelEquation/dK_du.png" />
+                        Source="pack://siteoforigin:,,,/Images/ModelEquation/dK_du.png" />
                     <TextBox
                         Grid.Row="2"
                         MinWidth="100"

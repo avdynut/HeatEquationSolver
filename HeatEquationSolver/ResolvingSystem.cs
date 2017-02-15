@@ -49,6 +49,8 @@ namespace HeatEquationSolver
             return Gauss(system);
         }
 
+        #region Unsused
+
         public static double[] TridiagonalMatrixAlgorithm(double[] a, double[] c, double[] b, double[] f)
         {
             int n = c.Length;
@@ -67,5 +69,7 @@ namespace HeatEquationSolver
 
             return x;
         }
+
+        #endregion
     }
 }

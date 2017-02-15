@@ -1,7 +1,6 @@
 ﻿using NLog;
 using System;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using static HeatEquationSolver.Settings;
 
@@ -14,7 +13,7 @@ namespace HeatEquationSolver
         private readonly double Tau;
         private readonly double[] x;
 
-        public string Answer;
+        public double[] Answer;
         public double Norm;
         private double tau;
 
@@ -36,7 +35,7 @@ namespace HeatEquationSolver
             var y0 = new double[N + 1];
             for (int n = 0; n <= N; n++)
                 y0[n] = Equation.InitCond(x[n]);
-            Logger.Debug("Layer 0, y='{0}'", ArrayToString(y0));
+            Logger.Debug("Layer 0, y='{0}'", Vector.ArrayToString(y0));
 
             for (int m = 0; m < M; m++)
             {
@@ -64,17 +63,16 @@ namespace HeatEquationSolver
                 Logger.Debug("m={0}, tau=Tau/{1}, norm={2}", m, k, norm);
             }
 
-            if (Equation.u == null) //TODO: separate y0 and exact solution
-                return;
-            double sum = 0;
-            for (int n = 0; n <= N; n++)
+            Answer = y0;
+            Logger.Debug("Answer='{0}', Norm={1}", Vector.ArrayToString(Answer), Norm);
+
+            if (Equation.u != null)
             {
-                double sol = Equation.u(x[n], T2);
-                Answer += y0[n] + "\t" + sol + Environment.NewLine;
-                sum += Math.Pow(y0[n] - sol, 2);
+                var exactSol = new double[N + 1];
+                for (int n = 0; n <= N; n++)
+                    exactSol[n] = Equation.u(x[n], T2);
+                Norm = CalculateNorm(y0, exactSol);
             }
-            Norm = Math.Sqrt(sum);
-            Logger.Debug("Answer='{0}', Norm={1}", ArrayToString(y0), Norm);
         }
 
         private double[] SolveNonlinearSystem(double[] y, double t)
@@ -100,7 +98,7 @@ namespace HeatEquationSolver
                 BetaCalculator.NextBeta(Norm);
             }
 
-            Logger.Debug("t={0}, {1} iterations, yK='{2}'", t, iterations, ArrayToString(yK));
+            Logger.Debug("t={0}, {1} iterations, yK='{2}'", t, iterations, Vector.ArrayToString(yK));
             return yK;
         }
 
@@ -130,6 +128,29 @@ namespace HeatEquationSolver
                 sum += Math.Pow(a[i] - b[i], 2);
             return Math.Sqrt(sum / N);
         }
+
+        private double[] ReqularizedMethod(double t, double[] y, double[] yK, double[] f)
+        {
+            double alphaBetaNorm = Alpha * BetaCalculator.Beta * Norm;
+            var jacobian = new double[N + 1, N + 1];     // f'(Xn)
+            jacobian[0, 0] = jacobian[N, N] = 1;
+            for (int n = 1; n < N; n++)
+            {
+                double l = Equation.dK_du(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
+                double r = Equation.K(x[n], t, y[n]) / (h * h);
+                jacobian[n, n - 1] = l + r;
+                jacobian[n, n + 1] = -l + r;
+                jacobian[n, n] = -2 * r - 1 / tau;
+            }
+
+            var a = Matrix.Transpose(jacobian);
+            a = Matrix.AddDiag(a, alphaBetaNorm);
+            var matrix = Matrix.AddDiag(Matrix.Multiply(a, jacobian), alphaBetaNorm);
+            var freeMembers = Vector.MultiplyConst(BetaCalculator.Multiplier, Matrix.Multiply(a, f));
+            return ResolvingSystem.Gauss(matrix, freeMembers);
+        }
+
+        #region Unused
 
         private double[] MakeAndSolveSystem(double t, double[] y, double[] yK, double[] f)
         {
@@ -172,36 +193,6 @@ namespace HeatEquationSolver
             return ResolvingSystem.Gauss(jacobian, f);
         }
 
-        private double[] ReqularizedMethod(double t, double[] y, double[] yK, double[] f)
-        {
-            double alphaBetaNorm = Alpha * BetaCalculator.Beta * Norm;
-            var jacobian = new double[N + 1, N + 1];     // f'(Xn)
-            jacobian[0, 0] = jacobian[N, N] = 1;
-            for (int n = 1; n < N; n++)
-            {
-                double l = Equation.dK_du(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
-                double r = Equation.K(x[n], t, y[n]) / (h * h);
-                jacobian[n, n - 1] = l + r;
-                jacobian[n, n + 1] = -l + r;
-                jacobian[n, n] = -2 * r - 1 / tau;
-            }
-
-            var a = Matrix.Transpose(jacobian);
-            a = Matrix.AddDiag(a, alphaBetaNorm);
-            var matrix = Matrix.AddDiag(Matrix.Multiply(a, jacobian), alphaBetaNorm);
-            var freeMembers = Vector.MultiplyConst(BetaCalculator.Multiplier, Matrix.Multiply(a, f));
-            return ResolvingSystem.Gauss(matrix, freeMembers);
-        }
-
-        private string ArrayToString(double[] array)
-        {
-            var sb = new StringBuilder();
-            foreach (double t in array)
-            {
-                sb.Append(t);
-                sb.Append("; ");
-            }
-            return sb.ToString();
-        }
+        #endregion
     }
 }

@@ -1,5 +1,6 @@
 ﻿using HeatEquationSolver;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,25 +21,25 @@ namespace HeatEquationSolverUI
 
         private async void SolveButton_ClickAsync(object sender, RoutedEventArgs e)
         {
-			if(SolveButton.Content.ToString() == "Отмена")
-			{
-				SolveButton.IsEnabled = false;
-				source.Cancel();
-				return;
-			}
+            if (SolveButton.Content.ToString() == "Отмена")
+            {
+                SolveButton.IsEnabled = false;
+                source.Cancel();
+                return;
+            }
 
             source = new CancellationTokenSource();
             try
             {
                 Norm.Content = AnswerTextBlock.Text = "";
-                var qn = new Solver();                
+                var qn = new Solver();
 
                 var progressIndicator = new Progress<int>(ReportProgress);
                 var task = Task.Run(() => qn.Solve(source.Token, progressIndicator));
-				SolveButton.Content = "Отмена";
-				await task;
-                
-                AnswerTextBlock.Text = qn.Answer; //actual.Solution.Aggregate("", (current, xi) => current + (xi + "\n")).TrimEnd();
+                SolveButton.Content = "Отмена";
+                await task;
+
+                AnswerTextBlock.Text = qn.Answer.Aggregate("", (current, xi) => current + (xi + "\n")).TrimEnd();
                 Norm.Content = qn.Norm;
             }
             catch (Exception ex)
@@ -46,7 +47,7 @@ namespace HeatEquationSolverUI
                 MessageBox.Show(ex.Message);
             }
 
-			SolveButton.Content = "Решить";
+            SolveButton.Content = "Решить";
             SolveButton.IsEnabled = true;
         }
 
