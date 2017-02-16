@@ -1,4 +1,5 @@
 ﻿using HeatEquationSolver;
+using HeatEquationSolver.Equations;
 using System;
 using System.Threading;
 using Z.Expressions;
@@ -26,7 +27,8 @@ namespace ConsoleSolver
             ComplexFunction K = (a, b, c) => Eval.Compile<Func<double, double, double, double>>(K_, "x", "t", "u")(a, b, c);
             var g = Eval.Compile<Func<double, double, double, double, double>>(g_, "x", "t", "u", "K");
             var result = g(x, t, u(x, t), K(x, t, u(x, t)));
-            var expected = ModelEquation.g(x, t, ModelEquation.u(x, t));
+            var eq = new ModelEquation();
+            var expected = eq.g(x, t, eq.u(x, t));
             //var en = new ExpressionEvaluator();
             //var uf = en.Compile(u_);
             //var Kf = en.Compile(K_);
@@ -44,6 +46,5 @@ namespace ConsoleSolver
             qn.Solve(new CancellationToken());
             Console.WriteLine($"{t}\t{qn.Norm}");
         }
-
     }
 }

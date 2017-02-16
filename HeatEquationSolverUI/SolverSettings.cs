@@ -1,5 +1,6 @@
 ﻿using HeatEquationSolver;
 using HeatEquationSolver.BetaCalculators;
+using HeatEquationSolver.Equations;
 using HeatEquationSolverUI.Base;
 
 namespace HeatEquationSolverUI

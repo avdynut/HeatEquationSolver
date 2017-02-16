@@ -34,8 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.3.11\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\NLog.4.4.2\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,20 +42,23 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Z.Expressions.Eval, Version=2.0.2.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.Expressions.Eval.2.0.2\lib\net45\Z.Expressions.Eval.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HeatEquation.cs" />
+    <Compile Include="Equations\HeatEquation.cs" />
     <Compile Include="BetaCalculators\BetaCalculatorBase.cs" />
     <Compile Include="BetaCalculators\No6Method.cs" />
     <Compile Include="BetaCalculators\No6ModMethod.cs" />
     <Compile Include="BetaCalculators\PuzyninMethod.cs" />
-    <Compile Include="Matrix.cs" />
-    <Compile Include="ModelEquation.cs" />
+    <Compile Include="Helpers\Matrix.cs" />
+    <Compile Include="Equations\ModelEquation.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Solver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResolvingSystem.cs" />
-    <Compile Include="Vector.cs" />
+    <Compile Include="Helpers\ResolvingSystem.cs" />
+    <Compile Include="Helpers\Vector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">

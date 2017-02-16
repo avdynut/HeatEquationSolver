@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using HeatEquationSolver.Helpers;
+using NLog;
 using System;
 using System.Linq;
 using System.Threading;

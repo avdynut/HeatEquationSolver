@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace HeatEquationSolver
+namespace HeatEquationSolver.Helpers
 {
     public static class ResolvingSystem
     {

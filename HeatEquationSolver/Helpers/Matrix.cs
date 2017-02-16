@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HeatEquationSolver
+namespace HeatEquationSolver.Helpers
 {
     public static class Matrix
     {

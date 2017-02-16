@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 
-namespace HeatEquationSolver
+namespace HeatEquationSolver.Helpers
 {
     public static class Vector
     {

@@ -1,7 +1,8 @@
-﻿using System;
+﻿using HeatEquationSolver.Equations;
 using NUnit.Framework;
-using System.Threading;
+using System;
 using System.Linq;
+using System.Threading;
 
 namespace HeatEquationSolver.Tests
 {
@@ -13,10 +14,7 @@ namespace HeatEquationSolver.Tests
         [OneTimeSetUp]
         public void Init()
         {
-            equation = new HeatEquation(ModelEquation.K, ModelEquation.dK_du, ModelEquation.g, ModelEquation.InitCond, ModelEquation.LeftBoundCond, ModelEquation.RightBoundCond)
-            {
-                u = ModelEquation.u
-            };
+            equation = new ModelEquation();
             Settings.Equation = equation;
             solver = new Solver();
             solver.Solve(new CancellationToken());
@@ -25,7 +23,7 @@ namespace HeatEquationSolver.Tests
         [Test]
         public void CheckModelEquation()
         {
-            Assert.That(equation.IsEquationCorrect(ModelEquation.du_dx, ModelEquation.d2u_dx2, ModelEquation.du_dt), "Incorrect equation");
+            Assert.That(equation.IsEquationCorrect(), "Incorrect equation");
         }
 
         [Test]
