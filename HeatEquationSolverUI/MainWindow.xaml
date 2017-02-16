@@ -114,7 +114,7 @@
                         Grid.Row="6"
                         MinWidth="50"
                         Margin="78,0"
-                        Text="1+3*t*t" />
+                        Text="t+3*t*t" />
                     <!--<Label Content="a" />
 					<TextBox Text="{Binding X2}" />-->
                 </Grid>

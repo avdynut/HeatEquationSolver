@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace HeatEquationSolver.Tests
 {
-    public class SolverTests
+    public class ModelEquationTests
     {
         private Solver solver;
         private HeatEquation equation;

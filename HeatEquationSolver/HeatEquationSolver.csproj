@@ -52,8 +52,15 @@
     <Compile Include="BetaCalculators\No6Method.cs" />
     <Compile Include="BetaCalculators\No6ModMethod.cs" />
     <Compile Include="BetaCalculators\PuzyninMethod.cs" />
+    <Compile Include="Equations\ParsedEquation.cs" />
     <Compile Include="Helpers\Matrix.cs" />
     <Compile Include="Equations\ModelEquation.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ResourcesHelper.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Solver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,6 +72,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
