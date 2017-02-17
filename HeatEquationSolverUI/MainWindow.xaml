@@ -11,7 +11,7 @@
     FontSize="14"
     mc:Ignorable="d">
     <Window.Resources>
-        <local:SolverSettings x:Key="Settings" />
+        <local:MainViewModel x:Key="Settings" />
     </Window.Resources>
     <Grid DataContext="{StaticResource Settings}">
         <Grid.ColumnDefinitions>
@@ -50,24 +50,24 @@
                         <Style TargetType="TextBox">
                             <Setter Property="Margin" Value="33,0,0,0" />
                             <Setter Property="HorizontalAlignment" Value="Left" />
-                            <Setter Property="Visibility" Value="{Binding IsChecked, ElementName=UseModelEq, Converter={StaticResource b2v}}" />
+                            <Setter Property="Visibility" Value="{Binding IsChecked, ElementName=UseOwnEq, Converter={StaticResource b2v}}" />
                         </Style>
                     </Grid.Resources>
                     <CheckBox
-                        Name="UseModelEq"
+                        Name="UseOwnEq"
                         Grid.Row="0"
                         Content="Ввод данных"
-                        IsChecked="True" />
+                        IsChecked="{Binding UseOwnEq}" />
                     <Image Grid.Row="1" Source="pack://siteoforigin:,,,/Images/ModelEquation/u.PNG" />
                     <TextBox
                         Grid.Row="1"
                         MinWidth="100"
-                        Text="x*x*t+3*x*t*t" />
+                        Text="{Binding Equation.u}" />
                     <Image Grid.Row="2" Source="pack://siteoforigin:,,,/Images/ModelEquation/K.PNG" />
                     <TextBox
                         Grid.Row="2"
                         MinWidth="100"
-                        Text="x*x*t+u*u" />
+                        Text="{Binding Equation.K}" />
                     <Image
                         Grid.Row="2"
                         Margin="140,0"
@@ -76,12 +76,12 @@
                         Grid.Row="2"
                         MinWidth="100"
                         Margin="182,0"
-                        Text="2*u" />
+                        Text="{Binding Equation.dK_du}" />
                     <Image Grid.Row="3" Source="pack://siteoforigin:,,,/Images/ModelEquation/g.PNG" />
                     <TextBox
                         Grid.Row="3"
                         MinWidth="295"
-                        Text="x*x+6*x*t-2*u*Math.Pow(2*x*t+3*t*t,2)-2*t*K" />
+                        Text="{Binding Equation.g}" />
                     <Image Grid.Row="4" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_x_0.PNG" />
                     <TextBox
                         Grid.Row="4"
@@ -92,7 +92,7 @@
                         Grid.Row="4"
                         MinWidth="50"
                         Margin="78,0"
-                        Text="0" />
+                        Text="{Binding Equation.InitCond}" />
                     <Image Grid.Row="5" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_0_t.PNG" />
                     <TextBox
                         Grid.Row="5"
@@ -103,7 +103,7 @@
                         Grid.Row="5"
                         MinWidth="50"
                         Margin="78,0"
-                        Text="0" />
+                        Text="{Binding Equation.LeftBoundCond}" />
                     <Image Grid.Row="6" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_1_t.PNG" />
                     <TextBox
                         Grid.Row="6"
@@ -114,9 +114,7 @@
                         Grid.Row="6"
                         MinWidth="50"
                         Margin="78,0"
-                        Text="t+3*t*t" />
-                    <!--<Label Content="a" />
-					<TextBox Text="{Binding X2}" />-->
+                        Text="{Binding Equation.RightBoundCond}" />
                 </Grid>
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
                     <Label Content="T" />
@@ -154,33 +152,33 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Button
-                Name="SolveButton"
                 Grid.Row="0"
                 Width="40"
                 Margin="5,10,5,0"
-                Click="SolveButton_ClickAsync"
-                Content="Решить"
+                Command="{Binding SolveCommand}"
+                Content="{Binding SolveButtonText}"
                 FontSize="10"
-                IsDefault="True" />
+                IsDefault="True"
+                IsEnabled="{Binding SolveButtonIsEnabled}" />
             <ProgressBar
-                Name="ProgressBar"
                 Grid.Row="1"
                 Width="40"
                 Margin="5"
                 Maximum="{Binding M}"
                 Orientation="Vertical"
-                ToolTip="{Binding ElementName=ProgressBar, Path=Value}" />
+                ToolTip="{Binding ProgressBarValue}"
+                Value="{Binding ProgressBarValue}" />
         </Grid>
         <GroupBox Grid.Column="2" Header="Ответ">
             <StackPanel>
                 <TextBox
-                    Name="AnswerTextBlock"
                     Height="229"
                     IsReadOnly="True"
+                    Text="{Binding Answer}"
                     VerticalScrollBarVisibility="Auto" />
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Норма невязки:" />
-                    <Label Name="Norm" />
+                    <Label Content="{Binding Norm}" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>

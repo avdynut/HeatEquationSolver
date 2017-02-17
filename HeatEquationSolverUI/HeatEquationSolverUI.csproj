@@ -53,8 +53,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Base\DelegateCommand.cs" />
+    <Compile Include="Equation.cs" />
     <Compile Include="MethodBeta.cs" />
-    <Compile Include="SolverSettings.cs" />
+    <Compile Include="MainViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
