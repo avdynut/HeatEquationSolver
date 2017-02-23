@@ -53,12 +53,16 @@
     <ProjectReference Include="..\HeatEquationSolver\HeatEquationSolver.csproj">
       <Project>{bd9c1151-54c7-4f86-9bad-0acb44cca252}</Project>
       <Name>HeatEquationSolver</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\HeatEquationSolver\App.config">
+      <Link>App.config</Link>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
