@@ -20,13 +20,13 @@ namespace HeatEquationSolverUI
         public Equation()
         {
             ParsedEq = new ParsedEquation();
-            K = ResourcesHelper.K;
-            dK_du = ResourcesHelper.dK_du;
-            g = ResourcesHelper.g;
-            InitCond = ResourcesHelper.InitCond;
-            LeftBoundCond = ResourcesHelper.LeftBoundCond;
-            RightBoundCond = ResourcesHelper.RightBoundCond;
-            u = ResourcesHelper.u;
+            K = ConfigHelper.K;
+            dK_du = ConfigHelper.dK_du;
+            g = ConfigHelper.g;
+            InitCond = ConfigHelper.InitCond;
+            LeftBoundCond = ConfigHelper.LeftBoundCond;
+            RightBoundCond = ConfigHelper.RightBoundCond;
+            u = ConfigHelper.u;
         }
     }
 }

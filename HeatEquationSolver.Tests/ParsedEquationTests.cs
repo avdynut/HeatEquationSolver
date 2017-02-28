@@ -22,16 +22,16 @@ namespace HeatEquationSolver.Tests
         public void CheckCorrectParsingFunctions()
         {
             var modelEq = new ModelEquation();
-            equation._K = ResourcesHelper.K;
-            equation._dK_du = ResourcesHelper.dK_du;
-            equation._g = ResourcesHelper.g;
-            equation._InitCond = ResourcesHelper.InitCond;
-            equation._LeftBoundCond = ResourcesHelper.LeftBoundCond;
-            equation._RightBoundCond = ResourcesHelper.RightBoundCond;
-            equation._u = ResourcesHelper.u;
-            equation._du_dx = ResourcesHelper.du_dx;
-            equation._d2u_dx2 = ResourcesHelper.d2u_dx2;
-            equation._du_dt = ResourcesHelper.du_dt;
+            equation._K = ConfigHelper.K;
+            equation._dK_du = ConfigHelper.dK_du;
+            equation._g = ConfigHelper.g;
+            equation._InitCond = ConfigHelper.InitCond;
+            equation._LeftBoundCond = ConfigHelper.LeftBoundCond;
+            equation._RightBoundCond = ConfigHelper.RightBoundCond;
+            equation._u = ConfigHelper.u;
+            equation._du_dx = ConfigHelper.du_dx;
+            equation._d2u_dx2 = ConfigHelper.d2u_dx2;
+            equation._du_dt = ConfigHelper.du_dt;
             equation.ParseFunctions();
 
             double x = NextRandomDouble;

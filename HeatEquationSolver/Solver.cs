@@ -74,6 +74,9 @@ namespace HeatEquationSolver
                     exactSol[n] = Equation.u(x[n], T2);
                 Norm = CalculateNorm(y0, exactSol);
             }
+
+            var cubicSpline = new CubicSpline();
+            cubicSpline.BuildSpline(new[] { X1, X2 }, new[] { Answer[0], Answer[N] }, 2);
         }
 
         private double[] SolveNonlinearSystem(double[] y, double t)

@@ -48,6 +48,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CubicSpline.cs" />
     <Compile Include="Equations\HeatEquation.cs" />
     <Compile Include="BetaCalculators\BetaCalculatorBase.cs" />
     <Compile Include="BetaCalculators\No6Method.cs" />
@@ -56,7 +57,7 @@
     <Compile Include="Equations\ParsedEquation.cs" />
     <Compile Include="Helpers\Matrix.cs" />
     <Compile Include="Equations\ModelEquation.cs" />
-    <Compile Include="ResourcesHelper.cs" />
+    <Compile Include="ConfigHelper.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Solver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

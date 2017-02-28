@@ -2,7 +2,7 @@
 
 namespace HeatEquationSolver
 {
-	public static class ResourcesHelper
+	public static class ConfigHelper
 	{
 		public static string K => ConfigurationManager.AppSettings[nameof(K)];
 		public static string dK_du => ConfigurationManager.AppSettings[nameof(dK_du)];
