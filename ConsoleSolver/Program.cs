@@ -1,8 +1,6 @@
 ﻿using HeatEquationSolver;
-using HeatEquationSolver.Equations;
 using System;
 using System.Threading;
-using Z.Expressions;
 
 namespace ConsoleSolver
 {
