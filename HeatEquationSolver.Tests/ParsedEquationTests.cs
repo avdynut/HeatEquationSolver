@@ -37,16 +37,24 @@ namespace HeatEquationSolver.Tests
             double x = NextRandomDouble;
             double t = NextRandomDouble;
             double u = equation.u(x, t);
-            Assert.That(u, Is.EqualTo(modelEq.u(x, t)));
-            Assert.That(equation.K(x, t, u), Is.EqualTo(modelEq.K(x, t, u)));
-            Assert.That(equation.dK_du(x, t, u), Is.EqualTo(modelEq.dK_du(x, t, u)));
-            Assert.That(equation.g(x, t, u), Is.EqualTo(modelEq.g(x, t, u)));
-            Assert.That(equation.InitCond(x), Is.EqualTo(modelEq.InitCond(x)));
-            Assert.That(equation.LeftBoundCond(t), Is.EqualTo(modelEq.LeftBoundCond(t)));
-            Assert.That(equation.RightBoundCond(t), Is.EqualTo(modelEq.RightBoundCond(t)));
-            Assert.That(equation.du_dx(x, t), Is.EqualTo(modelEq.du_dx(x, t)));
-            Assert.That(equation.d2u_dx2(x, t), Is.EqualTo(modelEq.d2u_dx2(x, t)));
-            Assert.That(equation.du_dt(x, t), Is.EqualTo(modelEq.du_dt(x, t)));
+            Assert.That(u.Round(), Is.EqualTo(modelEq.u(x, t).Round()));
+            Assert.That(equation.K(x, t, u).Round(), Is.EqualTo(modelEq.K(x, t, u).Round()));
+            Assert.That(equation.dK_du(x, t, u).Round(), Is.EqualTo(modelEq.dK_du(x, t, u).Round()));
+            Assert.That(equation.g(x, t, u).Round(), Is.EqualTo(modelEq.g(x, t, u).Round()));
+            Assert.That(equation.InitCond(x).Round(), Is.EqualTo(modelEq.InitCond(x).Round()));
+            Assert.That(equation.LeftBoundCond(t).Round(), Is.EqualTo(modelEq.LeftBoundCond(t).Round()));
+            Assert.That(equation.RightBoundCond(t).Round(), Is.EqualTo(modelEq.RightBoundCond(t).Round()));
+            Assert.That(equation.du_dx(x, t).Round(), Is.EqualTo(modelEq.du_dx(x, t).Round()));
+            Assert.That(equation.d2u_dx2(x, t).Round(), Is.EqualTo(modelEq.d2u_dx2(x, t).Round()));
+            Assert.That(equation.du_dt(x, t).Round(), Is.EqualTo(modelEq.du_dt(x, t).Round()));
+        }
+    }
+
+    public static class MathHelper
+    {
+        public static double Round(this double a)
+        {
+            return Math.Round(a, 5);
         }
     }
 }
