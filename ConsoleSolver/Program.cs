@@ -23,29 +23,29 @@ namespace ConsoleSolver
             string u_ = "x*x*t+3*x*t*t";
             string K_ = "x*x*t+u*u";
             string g_ = "x*x+6*x*t-2*u*(2*x*t+3*t*t)*(2*x*t+3*t*t)-2*t*K";
-            //var x = 3;
-            //var t = 5;
+            var x = 3;
+            var t = 5;
 
-            //var en = new ExpressionEvaluator();
-            //var uf = en.Compile(u_);
-            //var Kf = en.Compile(K_);
-            //var gf = en.Compile(g_);
-            //var u = uf(new { x, t });
-            //var K = Kf(new { x, t, u });
-            //var g = gf(new { x, t, u, K });
+            var en = new ExpressionEvaluator();
+            var uf = en.Compile(u_);
+            var Kf = en.Compile(K_);
+            var gf = en.Compile(g_);
+            var u = uf(new { x, t });
+            var K = Kf(new { x, t, u });
+            var g = gf(new { x, t, u, K });
 
-            //// var result = g(x, t, u(x, t), K(x, t, u(x, t)));
-            //var eq = new ModelEquation();
-            //var expected = eq.g(x, t, eq.u(x, t));
+            // var result = g(x, t, u(x, t), K(x, t, u(x, t)));
+            var eq = new ModelEquation();
+            var expected = eq.g(x, t, eq.u(x, t));
 
-            HeatEquationSolver.Equations.Function uFunc = (x, t) =>
-            {
-                var xx = new Argument("x", x);
-                var tt = new Argument("t", t);
-                var e = new Expression(u_, xx, tt);
-                return e.calculate();
-            };
-            var d = uFunc(3, 5);
+            //HeatEquationSolver.Equations.Function uFunc = (x, t) =>
+            //{
+            //    var xx = new Argument("x", x);
+            //    var tt = new Argument("t", t);
+            //    var e = new Expression(u_, xx, tt);
+            //    return e.calculate();
+            //};
+            //var d = uFunc(3, 5);
             //var processor = new Processor();
             //var d = processor.Parse(u_);
             Console.Read();

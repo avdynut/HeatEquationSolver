@@ -1,9 +1,11 @@
-﻿using org.mariuszgromada.math.mxparser;
+﻿using SimpleExpressionEvaluator;
 
 namespace HeatEquationSolver.Equations
 {
     public class ParsedEquation : HeatEquation
     {
+        private ExpressionEvaluator ev = new ExpressionEvaluator();
+
         public string _K { get; set; }
         private ComplexFunction k;
         public override ComplexFunction K => k;
@@ -50,21 +52,25 @@ namespace HeatEquationSolver.Equations
 
         public void ParseFunctions()
         {
-            k = (x, t, u) => new Expression(_K, new Argument("x", x), new Argument("t", t), new Argument("u", u)).calculate();
-            dK_duFunc = (x, t, u) => new Expression(_dK_du, new Argument("x", x), new Argument("t", t), new Argument("u", u)).calculate();
-            gFunc = (x, t, u) => new Expression(_g, new Argument("x", x), new Argument("t", t), new Argument("u", u), new Argument("K", K(x, t, u))).calculate();
-            initCond = x => new Expression(_InitCond, new Argument("x", x)).calculate();
-            leftBoundCond = t => new Expression(_LeftBoundCond, new Argument("t", t)).calculate();
-            rightBoundCond = t => new Expression(_RightBoundCond, new Argument("t", t)).calculate();
+            k = (x, t, u) => (double)ev.Evaluate(_K, new { x, t, u });
+            dK_duFunc = (x, t, u) => (double)ev.Evaluate(_dK_du, new { u });
+            gFunc = (x, t, u) =>
+            {
+                var K = k(x, t, u);
+                return (double)ev.Evaluate(_g, new { x, t, u, K });
+            };
+            initCond = x => (double)ev.Evaluate(_InitCond);
+            leftBoundCond = t => (double)ev.Evaluate(_LeftBoundCond);
+            rightBoundCond = t => (double)ev.Evaluate(_RightBoundCond, new { t });
 
             if (!string.IsNullOrEmpty(_u))
-                uFunc = (x, t) => new Expression(_u, new Argument("x", x), new Argument("t", t)).calculate();
+                uFunc = (x, t) => (double)ev.Evaluate(_u, new { x, t });
             if (!string.IsNullOrEmpty(_du_dx))
-                du_dxFunc = (x, t) => new Expression(_du_dx, new Argument("x", x), new Argument("t", t)).calculate();
+                du_dxFunc = (x, t) => (double)ev.Evaluate(_du_dx, new { x, t });
             if (!string.IsNullOrEmpty(_d2u_dx2))
-                d2u_dx2Func = (x, t) => new Expression(_d2u_dx2, new Argument("x", x), new Argument("t", t)).calculate();
+                d2u_dx2Func = (x, t) => (double)ev.Evaluate(_d2u_dx2, new { t });
             if (!string.IsNullOrEmpty(_du_dt))
-                du_dtFunc = (x, t) => new Expression(_du_dt, new Argument("x", x), new Argument("t", t)).calculate();
+                du_dtFunc = (x, t) => (double)ev.Evaluate(_du_dt, new { x, t });
         }
     }
 }

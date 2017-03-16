@@ -54,7 +54,8 @@ namespace HeatEquationSolver.Tests
     {
         public static double Round(this double a)
         {
-            return Math.Round(a, 5);
+            //return a;
+            return Math.Round(a, 8);
         }
     }
 }
