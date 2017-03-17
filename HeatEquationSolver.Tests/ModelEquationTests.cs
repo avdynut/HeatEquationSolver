@@ -29,7 +29,6 @@ namespace HeatEquationSolver.Tests
         [Test]
         public void SolverShouldFindCorrectApporximatedValues()
         {
-
             double[] expectedValues = { 0, 0.3102857914, 0.6401564002, 0.9901277839, 1.3601037514, 1.7500824502, 2.1600631799, 2.5900455358, 3.0400292471, 3.5100141182, 4 };
             var approximatedValues = solver.Answer.Select(x => Math.Round(x, 10));
             Assert.That(approximatedValues, Is.EqualTo(expectedValues), "Incorrect answer");
