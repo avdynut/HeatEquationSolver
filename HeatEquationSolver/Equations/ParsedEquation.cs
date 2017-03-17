@@ -1,10 +1,10 @@
-﻿using SimpleExpressionEvaluator;
+﻿using Mathos.Parser;
 
 namespace HeatEquationSolver.Equations
 {
     public class ParsedEquation : HeatEquation
     {
-        private ExpressionEvaluator ev = new ExpressionEvaluator();
+        private MathParser parser = new MathParser();
 
         public string _K { get; set; }
         private ComplexFunction k;
@@ -52,25 +52,51 @@ namespace HeatEquationSolver.Equations
 
         public void ParseFunctions()
         {
-            k = (x, t, u) => (double)ev.Evaluate(_K, new { x, t, u });
-            dK_duFunc = (x, t, u) => (double)ev.Evaluate(_dK_du, new { u });
-            gFunc = (x, t, u) =>
-            {
-                var K = k(x, t, u);
-                return (double)ev.Evaluate(_g, new { x, t, u, K });
-            };
-            initCond = x => (double)ev.Evaluate(_InitCond);
-            leftBoundCond = t => (double)ev.Evaluate(_LeftBoundCond);
-            rightBoundCond = t => (double)ev.Evaluate(_RightBoundCond, new { t });
+            k = (x, t, u) => ParseComplexFunc(_K, x, t, u);
+            dK_duFunc = (x, t, u) => ParseComplexFunc(_dK_du, x, t, u);
+            gFunc = (x, t, u) => ParseG(_g, x, t, u, K(x, t, u));
+            initCond = x => ParseCond(_InitCond, "x", x);
+            leftBoundCond = t => ParseCond(_LeftBoundCond, "t", t);
+            rightBoundCond = t => ParseCond(_RightBoundCond, "t", t);
 
             if (!string.IsNullOrEmpty(_u))
-                uFunc = (x, t) => (double)ev.Evaluate(_u, new { x, t });
+                uFunc = (x, t) => ParseFunc(_u, x, t);
             if (!string.IsNullOrEmpty(_du_dx))
-                du_dxFunc = (x, t) => (double)ev.Evaluate(_du_dx, new { x, t });
+                du_dxFunc = (x, t) => ParseFunc(_du_dx, x, t);
             if (!string.IsNullOrEmpty(_d2u_dx2))
-                d2u_dx2Func = (x, t) => (double)ev.Evaluate(_d2u_dx2, new { t });
+                d2u_dx2Func = (x, t) => ParseFunc(_d2u_dx2, x, t);
             if (!string.IsNullOrEmpty(_du_dt))
-                du_dtFunc = (x, t) => (double)ev.Evaluate(_du_dt, new { x, t });
+                du_dtFunc = (x, t) => ParseFunc(_du_dt, x, t);
+        }
+
+        private double ParseG(string function, double x, double t, double u, double K)
+        {
+            parser.LocalVariables["K"] = (decimal)K;
+            return ParseComplexFunc(function, x, t, u);
+        }
+
+        private double ParseComplexFunc(string function, double x, double t, double u)
+        {
+            parser.LocalVariables["u"] = (decimal)u;
+            return ParseFunc(function, x, t);
+        }
+
+        private double ParseFunc(string function, double x, double t)
+        {
+            parser.LocalVariables["x"] = (decimal)x;
+            parser.LocalVariables["t"] = (decimal)t;
+            return Parse(function);
+        }
+
+        private double ParseCond(string function, string variable, double a)
+        {
+            parser.LocalVariables[variable] = (decimal)a;
+            return Parse(function);
+        }
+
+        private double Parse(string function)
+        {
+            return (double)parser.ProgrammaticallyParse(function);
         }
     }
 }
