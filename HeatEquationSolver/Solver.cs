@@ -1,202 +1,213 @@
-﻿using HeatEquationSolver.Helpers;
+﻿using HeatEquationSolver.BetaCalculators;
+using HeatEquationSolver.Equations;
+using HeatEquationSolver.Helpers;
 using NLog;
 using System;
 using System.Linq;
 using System.Threading;
-using static HeatEquationSolver.Settings;
 
 namespace HeatEquationSolver
 {
-    public class Solver
-    {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly double h;
-        private readonly double Tau;
-        private readonly double[] x;
+	public class Solver
+	{
+		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public double[] Answer;
-        public double Norm;
-        private double tau;
+		private ISettings settings;
+		private int N;
+		private int M;
+		private double h;
+		private double Tau;
+		private double tau;
+		private BetaCalculatorBase betaCalculator;
+		private HeatEquation equation;
 
-        public Solver()
-        {
-            h = H;
-            Tau = Settings.Tau;
+		private readonly double[] x;
+		public double[] Answer;
+		public double Norm;
 
-            x = new double[N + 1];
-            for (int i = 0; i <= N; i++)
-                x[i] = X1 + i * h;
+		public Solver(Settings settings)
+		{
+			this.settings = settings;
+			N = settings.N;
+			M = settings.M;
+			h = settings.H;
+			Tau = settings.Tau;
+			betaCalculator = settings.BetaCalculator;
+			equation = settings.Equation;
 
-            Logger.Debug("X1={0}, X2={1}, T1={2}, T2={3}, N={4}, M={5}, h={6}, Tau={7}, Epsilon={8}, Beta0={9}, MethodForBeta={10}",
-                                                                        X1, X2, T1, T2, N, M, h, Tau, Epsilon, Beta0, nameof(BetaCalculator));
-        }
+			x = new double[N + 1];
+			for (int i = 0; i <= N; i++)
+				x[i] = settings.X1 + i * h;
 
-        public void Solve(CancellationToken cancellationToken, IProgress<int> progress = null)
-        {
-            var y0 = new double[N + 1];
-            for (int n = 0; n <= N; n++)
-                y0[n] = Equation.InitCond(x[n]);
-            Logger.Debug("Layer 0, y='{0}'", Vector.ArrayToString(y0));
+			Logger.Debug("X1={0}, X2={1}, T1={2}, T2={3}, N={4}, M={5}, h={6}, Tau={7}, Epsilon={8}, Beta0={9}, MethodForBeta={10}",
+																		settings.X1, settings.X2, settings.T1, settings.T2, N, M, h, Tau, settings.Epsilon, settings.Beta0, nameof(betaCalculator));
+		}
 
-            for (int m = 0; m < M; m++)
-            {
-                progress?.Report(m);
-                tau = Tau;
-                var yWithPredTau = SolveNonlinearSystem(y0, T1 + m * Tau + Tau);
-                int k = 1;
-                double norm;
-                double[] yWithNextTau;
-                do
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    k *= 2;
-                    tau = Tau / k;
-                    double t0 = T1 + m * Tau;
-                    yWithNextTau = (double[])y0.Clone();
-                    for (int i = 0; i < k; i++)
-                        yWithNextTau = SolveNonlinearSystem(yWithNextTau, t0 += tau);
-                    norm = CalculateNorm(yWithPredTau, yWithNextTau);
-                    Logger.Debug("norm={0}", norm);
-                    yWithPredTau = (double[])yWithNextTau.Clone();
+		public void Solve(CancellationToken cancellationToken, IProgress<int> progress = null)
+		{
+			var y0 = new double[N + 1];
+			for (int n = 0; n <= N; n++)
+				y0[n] = equation.InitCond(x[n]);
+			Logger.Debug("Layer 0, y='{0}'", Vector.ArrayToString(y0));
 
-                } while (norm > Epsilon2);
-                y0 = yWithNextTau;
-                Logger.Debug("m={0}, tau=Tau/{1}, norm={2}", m, k, norm);
-            }
+			for (int m = 0; m < M; m++)
+			{
+				progress?.Report(m);
+				tau = Tau;
+				var yWithPredTau = SolveNonlinearSystem(y0, settings.T1 + m * Tau + Tau);
+				int k = 1;
+				double norm;
+				double[] yWithNextTau;
+				do
+				{
+					cancellationToken.ThrowIfCancellationRequested();
+					k *= 2;
+					tau = Tau / k;
+					double t0 = settings.T1 + m * Tau;
+					yWithNextTau = (double[])y0.Clone();
+					for (int i = 0; i < k; i++)
+						yWithNextTau = SolveNonlinearSystem(yWithNextTau, t0 += tau);
+					norm = CalculateNorm(yWithPredTau, yWithNextTau);
+					Logger.Debug("norm={0}", norm);
+					yWithPredTau = (double[])yWithNextTau.Clone();
 
-            Answer = y0;
-            Logger.Debug("Answer='{0}', Norm={1}", Vector.ArrayToString(Answer), Norm);
+				} while (norm > settings.Epsilon2);
+				y0 = yWithNextTau;
+				Logger.Debug("m={0}, tau=Tau/{1}, norm={2}", m, k, norm);
+			}
 
-            if (Equation.u != null)
-            {
-                var exactSol = new double[N + 1];
-                for (int n = 0; n <= N; n++)
-                    exactSol[n] = Equation.u(x[n], T2);
-                Norm = CalculateNorm(y0, exactSol);
-            }
+			Answer = y0;
+			Logger.Debug("Answer='{0}', Norm={1}", Vector.ArrayToString(Answer), Norm);
 
-            var cubicSpline = new CubicSpline();
-            cubicSpline.BuildSpline(new[] { X1, X2 }, new[] { Answer[0], Answer[N] }, 2);
-        }
+			if (equation.u != null)
+			{
+				var exactSol = new double[N + 1];
+				for (int n = 0; n <= N; n++)
+					exactSol[n] = equation.u(x[n], settings.T2);
+				Norm = CalculateNorm(y0, exactSol);
+			}
 
-        private double[] SolveNonlinearSystem(double[] y, double t)
-        {
-            var yK = (double[])y.Clone();
-            var f = SubstituteInSystem(t, y, yK);
-            Norm = CalculateNorm(f);
-            BetaCalculator.Init(Beta0, Norm);
-            int iterations = 0;
+			var cubicSpline = new CubicSpline();
+			cubicSpline.BuildSpline(new[] { settings.X1, settings.X2 }, new[] { Answer[0], Answer[N] }, 2);
+		}
 
-            while (Norm > Epsilon)
-            {
-                if (++iterations > MaxIterations)
-                    throw new Exception("Exceeded max number of iterations");
+		private double[] SolveNonlinearSystem(double[] y, double t)
+		{
+			var yK = (double[])y.Clone();
+			var f = SubstituteInSystem(t, y, yK);
+			Norm = CalculateNorm(f);
+			betaCalculator.Init(settings.Beta0, Norm);
+			int iterations = 0;
 
-                var answer = ReqularizedMethod(t, y, yK, (double[])f.Clone());
+			while (Norm > settings.Epsilon)
+			{
+				if (++iterations > settings.MaxIterations)
+					throw new Exception("Exceeded max number of iterations");
 
-                for (int i = 0; i <= N; i++)
-                    yK[i] += answer[i];
+				var answer = ReqularizedMethod(t, y, yK, (double[])f.Clone());
 
-                f = SubstituteInSystem(t, y, yK);
-                Norm = CalculateNorm(f);
-                BetaCalculator.NextBeta(Norm);
-            }
+				for (int i = 0; i <= N; i++)
+					yK[i] += answer[i];
 
-            Logger.Debug("t={0}, {1} iterations, yK='{2}'", t, iterations, Vector.ArrayToString(yK));
-            return yK;
-        }
+				f = SubstituteInSystem(t, y, yK);
+				Norm = CalculateNorm(f);
+				betaCalculator.NextBeta(Norm);
+			}
 
-        private double[] SubstituteInSystem(double t, double[] y, double[] yK)
-        {
-            var f = new double[N + 1];
-            f[0] = yK[0] - Equation.LeftBoundCond(t);
-            f[N] = yK[N] - Equation.RightBoundCond(t);
+			Logger.Debug("t={0}, {1} iterations, yK='{2}'", t, iterations, Vector.ArrayToString(yK));
+			return yK;
+		}
 
-            for (int n = 1; n < N; n++)
-                f[n] = Equation.dK_du(x[n], t, y[n]) * Math.Pow((yK[n + 1] - yK[n - 1]) / (2 * h), 2) +
-                       Equation.K(x[n], t, y[n]) * (yK[n + 1] - 2 * yK[n] + yK[n - 1]) / (h * h) +
-                       Equation.g(x[n], t, y[n]) - (yK[n] - y[n]) / tau;
-            return f;
-        }
+		private double[] SubstituteInSystem(double t, double[] y, double[] yK)
+		{
+			var f = new double[N + 1];
+			f[0] = yK[0] - equation.LeftBoundCond(t);
+			f[N] = yK[N] - equation.RightBoundCond(t);
 
-        private double CalculateNorm(double[] f)
-        {
-            double sum = f.Sum(e => e * e);
-            return Math.Sqrt(sum / N);
-        }
+			for (int n = 1; n < N; n++)
+				f[n] = equation.dK_du(x[n], t, y[n]) * Math.Pow((yK[n + 1] - yK[n - 1]) / (2 * h), 2) +
+					   equation.K(x[n], t, y[n]) * (yK[n + 1] - 2 * yK[n] + yK[n - 1]) / (h * h) +
+					   equation.g(x[n], t, y[n]) - (yK[n] - y[n]) / tau;
+			return f;
+		}
 
-        private double CalculateNorm(double[] a, double[] b)
-        {
-            double sum = 0;
-            for (int i = 0; i < a.Length; i++)
-                sum += Math.Pow(a[i] - b[i], 2);
-            return Math.Sqrt(sum / N);
-        }
+		private double CalculateNorm(double[] f)
+		{
+			double sum = f.Sum(e => e * e);
+			return Math.Sqrt(sum / N);
+		}
 
-        private double[] ReqularizedMethod(double t, double[] y, double[] yK, double[] f)
-        {
-            double alphaBetaNorm = Alpha * BetaCalculator.Beta * Norm;
-            var jacobian = new double[N + 1, N + 1];     // f'(Xn)
-            jacobian[0, 0] = jacobian[N, N] = 1;
-            for (int n = 1; n < N; n++)
-            {
-                double l = Equation.dK_du(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
-                double r = Equation.K(x[n], t, y[n]) / (h * h);
-                jacobian[n, n - 1] = l + r;
-                jacobian[n, n + 1] = -l + r;
-                jacobian[n, n] = -2 * r - 1 / tau;
-            }
+		private double CalculateNorm(double[] a, double[] b)
+		{
+			double sum = 0;
+			for (int i = 0; i < a.Length; i++)
+				sum += Math.Pow(a[i] - b[i], 2);
+			return Math.Sqrt(sum / N);
+		}
 
-            var a = Matrix.Transpose(jacobian);
-            a = Matrix.AddDiag(a, alphaBetaNorm);
-            var matrix = Matrix.AddDiag(Matrix.Multiply(a, jacobian), alphaBetaNorm);
-            var freeMembers = Vector.MultiplyConst(BetaCalculator.Multiplier, Matrix.Multiply(a, f));
-            return ResolvingSystem.Gauss(matrix, freeMembers);
-        }
+		private double[] ReqularizedMethod(double t, double[] y, double[] yK, double[] f)
+		{
+			double alphaBetaNorm = settings.Alpha * betaCalculator.Beta * Norm;
+			var jacobian = new double[N + 1, N + 1];     // f'(Xn)
+			jacobian[0, 0] = jacobian[N, N] = 1;
+			for (int n = 1; n < N; n++)
+			{
+				double l = equation.dK_du(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
+				double r = equation.K(x[n], t, y[n]) / (h * h);
+				jacobian[n, n - 1] = l + r;
+				jacobian[n, n + 1] = -l + r;
+				jacobian[n, n] = -2 * r - 1 / tau;
+			}
 
-        #region Unused
+			var a = Matrix.Transpose(jacobian);
+			a = Matrix.AddDiag(a, alphaBetaNorm);
+			var matrix = Matrix.AddDiag(Matrix.Multiply(a, jacobian), alphaBetaNorm);
+			var freeMembers = Vector.MultiplyConst(betaCalculator.Multiplier, Matrix.Multiply(a, f));
+			return ResolvingSystem.Gauss(matrix, freeMembers);
+		}
 
-        private double[] MakeAndSolveSystem(double t, double[] y, double[] yK, double[] f)
-        {
-            var a = new double[N + 1];
-            var c = new double[N + 1];
-            var b = new double[N + 1];
-            c[0] = c[N] = 1;
+		#region Unused
 
-            for (int n = 1; n < N; n++)
-            {
-                double l = Equation.dK_du(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
-                double r = Equation.K(x[n], t, y[n]) / (h * h);
-                a[n - 1] = l + r;       // or a[n],b[n]?
-                b[n - 1] = -l + r;
-                c[n] = -2 * r - 1 / tau;
-                f[n] *= BetaCalculator.Multiplier;
-            }
-            f[0] *= BetaCalculator.Multiplier;
-            f[N] *= BetaCalculator.Multiplier;
+		private double[] MakeAndSolveSystem(double t, double[] y, double[] yK, double[] f)
+		{
+			var a = new double[N + 1];
+			var c = new double[N + 1];
+			var b = new double[N + 1];
+			c[0] = c[N] = 1;
 
-            return ResolvingSystem.TridiagonalMatrixAlgorithm(a, c, b, f);
-        }
+			for (int n = 1; n < N; n++)
+			{
+				double l = equation.dK_du(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
+				double r = equation.K(x[n], t, y[n]) / (h * h);
+				a[n - 1] = l + r;       // or a[n],b[n]?
+				b[n - 1] = -l + r;
+				c[n] = -2 * r - 1 / tau;
+				f[n] *= betaCalculator.Multiplier;
+			}
+			f[0] *= betaCalculator.Multiplier;
+			f[N] *= betaCalculator.Multiplier;
 
-        private double[] FullMatrix(double t, double[] y, double[] yK, double[] f)
-        {
-            double alphaBetaNorm = Alpha * BetaCalculator.Beta * Norm;
-            var jacobian = new double[N + 1, N + 1];     // f'(Xn)
-            jacobian[0, 0] = jacobian[N, N] = 1;
-            for (int n = 1; n < N; n++)
-            {
-                double l = Equation.dK_du(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
-                double r = Equation.K(x[n], t, y[n]) / (h * h);
-                jacobian[n, n - 1] = l + r;
-                jacobian[n, n + 1] = -l + r;
-                jacobian[n, n] = -2 * r - 1 / tau;
-                f[n] *= BetaCalculator.Multiplier;
-            }
-            f[0] *= BetaCalculator.Multiplier;
-            f[N] *= BetaCalculator.Multiplier;
-            return ResolvingSystem.Gauss(jacobian, f);
-        }
+			return ResolvingSystem.TridiagonalMatrixAlgorithm(a, c, b, f);
+		}
 
-        #endregion
-    }
+		private double[] FullMatrix(double t, double[] y, double[] yK, double[] f)
+		{
+			var jacobian = new double[N + 1, N + 1];     // f'(Xn)
+			jacobian[0, 0] = jacobian[N, N] = 1;
+			for (int n = 1; n < N; n++)
+			{
+				double l = equation.dK_du(x[n], t, y[n]) * (yK[n - 1] - yK[n + 1]) / (2 * h * h);
+				double r = equation.K(x[n], t, y[n]) / (h * h);
+				jacobian[n, n - 1] = l + r;
+				jacobian[n, n + 1] = -l + r;
+				jacobian[n, n] = -2 * r - 1 / tau;
+				f[n] *= betaCalculator.Multiplier;
+			}
+			f[0] *= betaCalculator.Multiplier;
+			f[N] *= betaCalculator.Multiplier;
+			return ResolvingSystem.Gauss(jacobian, f);
+		}
+
+		#endregion
+	}
 }

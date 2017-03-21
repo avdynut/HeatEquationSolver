@@ -36,6 +36,9 @@
     <Reference Include="MathParser, Version=1.0.10.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MathosParser.1.0.10.1\lib\MathParser.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.4.4\lib\net45\NLog.dll</HintPath>
     </Reference>
@@ -49,6 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CubicSpline.cs" />
+    <Compile Include="DataManager.cs" />
+    <Compile Include="Equations\Functions.cs" />
     <Compile Include="Equations\HeatEquation.cs" />
     <Compile Include="BetaCalculators\BetaCalculatorBase.cs" />
     <Compile Include="BetaCalculators\No6Method.cs" />
@@ -57,7 +62,7 @@
     <Compile Include="Equations\ParsedEquation.cs" />
     <Compile Include="Helpers\Matrix.cs" />
     <Compile Include="Equations\ModelEquation.cs" />
-    <Compile Include="ConfigHelper.cs" />
+    <Compile Include="ISettings.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Solver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,9 +70,6 @@
     <Compile Include="Helpers\Vector.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

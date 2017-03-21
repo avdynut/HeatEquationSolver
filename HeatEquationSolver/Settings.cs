@@ -1,84 +1,56 @@
 ﻿using HeatEquationSolver.BetaCalculators;
 using HeatEquationSolver.Equations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 
 namespace HeatEquationSolver
 {
-    public static class Settings
-    {
-        /// <summary>
-        /// The first 'x' in the scope of the function
-        /// </summary>
-        public static double X1 { get; set; } = 0;
+	public class Settings : ISettings
+	{
+		public double X1 { get; set; } = 0;
+		public double X2 { get; set; } = 1;
 
-        /// <summary>
-        /// The second 'x' in the scope of the function
-        /// </summary>
-        public static double X2 { get; set; } = 1;
+		public double T1 { get; set; } = 0;
+		public double T2 { get; set; } = 1;
 
-        /// <summary>
-        /// The first 't' in the scope of the function
-        /// </summary>
-        public static double T1 { get; set; } = 0;
+		public int N { get; set; } = 10;
+		public int M { get; set; } = 10;
 
-        /// <summary>
-        /// The second 't' in the scope of the function
-        /// </summary>
-        public static double T2 { get; set; } = 1;
+		public double Epsilon { get; set; } = 1e-5;
+		public double Epsilon2 { get; set; } = 1e-4;
 
-        /// <summary>
-        /// The number of segments in 'x'
-        /// </summary>
-        public static int N { get; set; } = 10;
+		public double Alpha { get; set; } = 1e-10;
+		public double Beta0 { get; set; } = 0.01;
+		[JsonConverter(typeof(StringEnumConverter))] public BetaCalculator BetaCalculatorMethod { get; set; } = BetaCalculators.BetaCalculator.Puzynin;
 
-        /// <summary>
-        /// The number of segments in 't'
-        /// </summary>
-        public static int M { get; set; } = 10;
+		public int MaxIterations { get; set; } = 50000;
 
-        /// <summary>
-        /// Value of step by axis 'x'
-        /// </summary>
-        public static double H { get { return (X2 - X1) / N; } }
+		public bool UseParsedEquation { get; set; } = true;
+		public Functions Functions { get; set; } = new Functions();
 
-        /// <summary>
-        /// Value of step by axis 't'
-        /// </summary>
-        public static double Tau { get { return (T2 - T1) / M; } }
+		[JsonIgnore] public double H => (X2 - X1) / N;
+		[JsonIgnore] public double Tau => (T2 - T1) / M;
 
-        /// <summary>
-        /// Precision in calculating nonlinear systems
-        /// </summary>
-        public static double Epsilon { get; set; } = 1e-5;
+		[JsonIgnore]
+		public BetaCalculatorBase BetaCalculator
+		{
+			get
+			{
+				switch (BetaCalculatorMethod)
+				{
+					case BetaCalculators.BetaCalculator.Puzynin:
+						return new PuzyninMethod();
+					case BetaCalculators.BetaCalculator.No6:
+						return new No6Method();
+					case BetaCalculators.BetaCalculator.No6Mod:
+						return new No6ModMethod();
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+		}
 
-        /// <summary>
-        /// Precision in calculating with different steps by 't' axis
-        /// </summary>
-        public static double Epsilon2 { get; set; } = 1e-4;
-
-        /// <summary>
-        /// Multiplier in regularized method
-        /// </summary>
-        public static double Alpha { get; set; } = 1e-10;
-
-        /// <summary>
-        /// The first multiplier 'beta'
-        /// </summary>
-        public static double Beta0 { get; set; } = 0.01;
-
-        /// <summary>
-        /// Method for calculating next beta on each step in iteration process
-        /// </summary>
-        public static BetaCalculatorBase BetaCalculator { get; set; } = new PuzyninMethod();
-
-        /// <summary>
-        /// Heat eqaution
-        /// </summary>
-        public static HeatEquation Equation { get; set; } = new ModelEquation();
-
-        /// <summary>
-        /// Max number of iterations in calculating nonlinear systems
-        /// If exceed, then throw Exception
-        /// </summary>
-        public static int MaxIterations { get; set; } = 50000;
-    }
+		[JsonIgnore] public HeatEquation Equation => UseParsedEquation ? new ParsedEquation(Functions) : (HeatEquation)new ModelEquation();
+	}
 }

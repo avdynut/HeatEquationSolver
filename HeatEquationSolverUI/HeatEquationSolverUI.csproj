@@ -54,7 +54,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Base\DelegateCommand.cs" />
-    <Compile Include="Equation.cs" />
     <Compile Include="MethodBeta.cs" />
     <Compile Include="MainViewModel.cs" />
     <Page Include="MainWindow.xaml">
@@ -89,9 +88,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="..\HeatEquationSolver\App.config">
-      <Link>App.config</Link>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

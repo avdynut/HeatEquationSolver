@@ -10,148 +10,148 @@
     Height="507"
     FontSize="14"
     mc:Ignorable="d">
-    <Window.Resources>
-        <local:MainViewModel x:Key="Settings" />
-    </Window.Resources>
-    <Grid DataContext="{StaticResource Settings}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <GroupBox Grid.Column="0" Header="Параметры">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Image Grid.Row="0" Source="pack://siteoforigin:,,,/Images/equation.PNG" />
-                <Grid Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.Resources>
-                        <BooleanToVisibilityConverter x:Key="b2v" />
-                        <Style TargetType="Image">
-                            <Setter Property="Stretch" Value="None" />
-                            <Setter Property="HorizontalAlignment" Value="Left" />
-                            <Setter Property="Margin" Value="0,1" />
-                        </Style>
-                        <Style TargetType="TextBox">
-                            <Setter Property="Margin" Value="33,0,0,0" />
-                            <Setter Property="HorizontalAlignment" Value="Left" />
-                            <Setter Property="Visibility" Value="{Binding IsChecked, ElementName=UseOwnEq, Converter={StaticResource b2v}}" />
-                        </Style>
-                    </Grid.Resources>
-                    <CheckBox
-                        Name="UseOwnEq"
+	<Window.Resources>
+		<local:MainViewModel x:Key="Settings" />
+	</Window.Resources>
+	<Grid DataContext="{StaticResource Settings}">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto"/>
+		</Grid.ColumnDefinitions>
+		<GroupBox Grid.Column="0" Header="Параметры">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				<Image Grid.Row="0" Source="pack://siteoforigin:,,,/Images/equation.PNG" />
+				<Grid Grid.Row="1">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+					<Grid.Resources>
+						<BooleanToVisibilityConverter x:Key="b2v" />
+						<Style TargetType="Image">
+							<Setter Property="Stretch" Value="None" />
+							<Setter Property="HorizontalAlignment" Value="Left" />
+							<Setter Property="Margin" Value="0,1" />
+						</Style>
+						<Style TargetType="TextBox">
+							<Setter Property="Margin" Value="33,0,0,0" />
+							<Setter Property="HorizontalAlignment" Value="Left" />
+							<Setter Property="Visibility" Value="{Binding IsChecked, ElementName=UseParsedEquation, Converter={StaticResource b2v}}" />
+						</Style>
+					</Grid.Resources>
+					<CheckBox
+                        Name="UseParsedEquation"
                         Grid.Row="0"
                         Content="Ввод данных"
-                        IsChecked="{Binding UseOwnEq}" />
-                    <Image Grid.Row="1" Source="pack://siteoforigin:,,,/Images/ModelEquation/u.PNG" />
-                    <TextBox
+                        IsChecked="{Binding UseParsedEquation}" />
+					<Image Grid.Row="1" Source="pack://siteoforigin:,,,/Images/ModelEquation/u.PNG" />
+					<TextBox
                         Grid.Row="1"
                         MinWidth="100"
-                        Text="{Binding Equation.u}" />
-                    <Image Grid.Row="2" Source="pack://siteoforigin:,,,/Images/ModelEquation/K.PNG" />
-                    <TextBox
+                        Text="{Binding Functions.u}" />
+					<Image Grid.Row="2" Source="pack://siteoforigin:,,,/Images/ModelEquation/K.PNG" />
+					<TextBox
                         Grid.Row="2"
                         MinWidth="100"
-                        Text="{Binding Equation.K}" />
-                    <Image
+                        Text="{Binding Functions.K}" />
+					<Image
                         Grid.Row="2"
                         Margin="140,0"
                         Source="pack://siteoforigin:,,,/Images/ModelEquation/dK_du.png" />
-                    <TextBox
+					<TextBox
                         Grid.Row="2"
                         MinWidth="100"
                         Margin="182,0"
-                        Text="{Binding Equation.dK_du}" />
-                    <Image Grid.Row="3" Source="pack://siteoforigin:,,,/Images/ModelEquation/g.PNG" />
-                    <TextBox
+                        Text="{Binding Functions.dK_du}" />
+					<Image Grid.Row="3" Source="pack://siteoforigin:,,,/Images/ModelEquation/g.PNG" />
+					<TextBox
                         Grid.Row="3"
                         MinWidth="295"
-                        Text="{Binding Equation.g}" />
-                    <Image Grid.Row="4" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_x_0.PNG" />
-                    <TextBox
+                        Text="{Binding Functions.g}" />
+					<Image Grid.Row="4" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_x_0.PNG" />
+					<TextBox
                         Grid.Row="4"
                         Width="15"
                         Margin="40,0"
                         Text="{Binding T1}" />
-                    <TextBox
+					<TextBox
                         Grid.Row="4"
                         MinWidth="50"
                         Margin="78,0"
-                        Text="{Binding Equation.InitCond}" />
-                    <Image Grid.Row="5" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_0_t.PNG" />
-                    <TextBox
+                        Text="{Binding Functions.InitCond}" />
+					<Image Grid.Row="5" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_0_t.PNG" />
+					<TextBox
                         Grid.Row="5"
                         Width="15"
                         Margin="20,0"
                         Text="{Binding X1}" />
-                    <TextBox
+					<TextBox
                         Grid.Row="5"
                         MinWidth="50"
                         Margin="78,0"
-                        Text="{Binding Equation.LeftBoundCond}" />
-                    <Image Grid.Row="6" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_1_t.PNG" />
-                    <TextBox
+                        Text="{Binding Functions.LeftBoundCond}" />
+					<Image Grid.Row="6" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_1_t.PNG" />
+					<TextBox
                         Grid.Row="6"
                         Width="15"
                         Margin="20,0"
                         Text="{Binding X2}" />
-                    <TextBox
+					<TextBox
                         Grid.Row="6"
                         MinWidth="50"
                         Margin="78,0"
-                        Text="{Binding Equation.RightBoundCond}" />
-                </Grid>
-                <StackPanel Grid.Row="2" Orientation="Horizontal">
-                    <Label Content="T" />
-                    <TextBox Text="{Binding T2}" />
-                    <Label Content="M" />
-                    <TextBox Text="{Binding M, UpdateSourceTrigger=PropertyChanged}" />
-                    <Label Content="{Binding Tau}" />
-                </StackPanel>
-                <StackPanel Grid.Row="3" Orientation="Horizontal">
-                    <Label Content="N" />
-                    <TextBox Text="{Binding N, UpdateSourceTrigger=PropertyChanged}" />
-                    <Label Content="{Binding H}" />
-                </StackPanel>
-                <StackPanel Grid.Row="4" Orientation="Horizontal">
-                    <Label Content="Eps" />
-                    <TextBox Text="{Binding Epsilon}" ToolTip="В решении системы нелинейных уравнений" />
-                    <Label Content="Eps2" />
-                    <TextBox Text="{Binding Epsilon2}" ToolTip="От слоя к слою" />
-                </StackPanel>
-                <StackPanel Grid.Row="5" Orientation="Horizontal">
-                    <ComboBox
+                        Text="{Binding Functions.RightBoundCond}" />
+				</Grid>
+				<StackPanel Grid.Row="2" Orientation="Horizontal">
+					<Label Content="T" />
+					<TextBox Text="{Binding T2}" />
+					<Label Content="M" />
+					<TextBox Text="{Binding M, UpdateSourceTrigger=PropertyChanged}" />
+					<Label Content="{Binding Tau}" />
+				</StackPanel>
+				<StackPanel Grid.Row="3" Orientation="Horizontal">
+					<Label Content="N" />
+					<TextBox Text="{Binding N, UpdateSourceTrigger=PropertyChanged}" />
+					<Label Content="{Binding H}" />
+				</StackPanel>
+				<StackPanel Grid.Row="4" Orientation="Horizontal">
+					<Label Content="Eps" />
+					<TextBox Text="{Binding Epsilon}" ToolTip="В решении системы нелинейных уравнений" />
+					<Label Content="Eps2" />
+					<TextBox Text="{Binding Epsilon2}" ToolTip="От слоя к слою" />
+				</StackPanel>
+				<StackPanel Grid.Row="5" Orientation="Horizontal">
+					<ComboBox
                         DisplayMemberPath="Name"
                         ItemsSource="{Binding MethodsForBeta}"
                         SelectedItem="{Binding CurrentMethodForBeta}" />
-                    <Label Content="Beta0" />
-                    <TextBox Text="{Binding Beta0}" />
-                    <Label Content="Alpha" />
-                    <TextBox Text="{Binding Alpha}" />
-                </StackPanel>
-            </Grid>
-        </GroupBox>
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Button
+					<Label Content="Beta0" />
+					<TextBox Text="{Binding Beta0}" />
+					<Label Content="Alpha" />
+					<TextBox Text="{Binding Alpha}" />
+				</StackPanel>
+			</Grid>
+		</GroupBox>
+		<Grid Grid.Column="1">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			<Button
                 Grid.Row="0"
                 Width="40"
                 Margin="5,10,5,0"
@@ -160,7 +160,7 @@
                 FontSize="10"
                 IsDefault="True"
                 IsEnabled="{Binding SolveButtonIsEnabled}" />
-            <ProgressBar
+			<ProgressBar
                 Grid.Row="1"
                 Width="40"
                 Margin="5"
@@ -168,20 +168,20 @@
                 Orientation="Vertical"
                 ToolTip="{Binding ProgressBarValue}"
                 Value="{Binding ProgressBarValue}" />
-        </Grid>
-        <GroupBox Grid.Column="2" Header="Ответ">
-            <StackPanel>
-                <TextBox
+		</Grid>
+		<GroupBox Grid.Column="2" Header="Ответ">
+			<StackPanel>
+				<TextBox
                     Height="229"
                     IsReadOnly="True"
                     Text="{Binding Answer}"
                     VerticalScrollBarVisibility="Auto" />
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Норма невязки:" />
-                    <Label Content="{Binding Norm}" />
-                </StackPanel>
-            </StackPanel>
-        </GroupBox>
-        <!--<Label Content="Developer: Andrey Arekhva, 2016-2017"/>-->
-    </Grid>
+				<StackPanel Orientation="Horizontal">
+					<Label Content="Норма невязки:" />
+					<Label Content="{Binding Norm}" />
+				</StackPanel>
+			</StackPanel>
+		</GroupBox>
+		<!--<Label Content="Developer: Andrey Arekhva, 2016-2017"/>-->
+	</Grid>
 </Window>
