@@ -5,16 +5,24 @@ namespace HeatEquationSolver
 {
 	public class DataManager
 	{
-		//JsonSerializerSettings jsonSet = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
+		private const string FilePath = "settings.json";
+		public static Settings Settings;
 
-		public void SaveToJson()
+		static DataManager()
 		{
-			File.WriteAllText("settings.json",JsonConvert.SerializeObject(new Settings(), Formatting.Indented));
+			try
+			{
+				Settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(FilePath));
+			}
+			catch
+			{
+				Settings = new Settings();
+			}
 		}
 
-		//public IEnumerable<T> LoadFromJson(string path)
-		//{
-		//	return JsonConvert.DeserializeObject<IEnumerable<T>>(File.ReadAllText(path));
-		//}
+		public static void SaveSettingsToFile()
+		{
+			File.WriteAllText(FilePath, JsonConvert.SerializeObject(Settings, Formatting.Indented));
+		}
 	}
 }

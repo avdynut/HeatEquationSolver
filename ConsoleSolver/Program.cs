@@ -8,8 +8,7 @@ namespace ConsoleSolver
 	{
 		static void Main(string[] args)
 		{
-			var dm = new DataManager();
-			dm.SaveToJson();
+			DataManager.SaveSettingsToFile();
 			//var solver = new Solver(new Settings { M = 100 });
 			//solver.Solve(new CancellationToken());
 

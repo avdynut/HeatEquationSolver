@@ -92,7 +92,7 @@ namespace HeatEquationSolverUI
 
 		public MainViewModel()
 		{
-			_settings = new Settings();
+			_settings = DataManager.Settings;
 			solveCommand = new DelegateCommand(SolveEquation);
 
 			MethodsForBeta = new[] {
@@ -125,6 +125,7 @@ namespace HeatEquationSolverUI
 
 				Answer = qn.Answer.Aggregate("", (current, xi) => current + (xi + "\n")).TrimEnd();
 				Norm = qn.Norm.ToString();
+				DataManager.SaveSettingsToFile();
 			}
 			catch (Exception ex)
 			{

@@ -18,7 +18,7 @@ namespace HeatEquationSolver.Tests
 		[OneTimeSetUp]
 		public void Init()
 		{
-			settings = new Settings();
+			settings = DataManager.Settings;
 			equation = (ParsedEquation)settings.Equation;
 			modelEq = new ModelEquation();
 		}
@@ -47,7 +47,8 @@ namespace HeatEquationSolver.Tests
 			var pSolver = new Solver(settings);
 			pSolver.Solve(new CancellationToken());
 
-			var mSolver = new Solver(new Settings { UseParsedEquation = true });
+			settings.UseParsedEquation = false;
+			var mSolver = new Solver(settings);
 			mSolver.Solve(new CancellationToken());
 
 			Assert.That(pSolver.Norm.Round(), Is.EqualTo(mSolver.Norm.Round()), "Incorrect norm");
