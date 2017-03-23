@@ -99,7 +99,7 @@ namespace HeatEquationSolverUI
 				new MethodBeta(BetaCalculator.Puzynin, "Метод Пузынина", ""),
 				new MethodBeta(BetaCalculator.No6, "Нерегуляризованный одношаговый метод", ""),
 				new MethodBeta(BetaCalculator.No6Mod, "Модифицированный НО метод", "") };
-			currentMethodForBeta = MethodsForBeta[0];
+			currentMethodForBeta = MethodsForBeta.First(m => m.BetaCalculator.Equals(_settings.BetaCalculatorMethod));
 		}
 
 		private async void SolveEquation()

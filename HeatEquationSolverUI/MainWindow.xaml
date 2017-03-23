@@ -6,8 +6,9 @@
     xmlns:local="clr-namespace:HeatEquationSolverUI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="HeatEquationSolver"
-    Width="647"
-    Height="507"
+	SizeToContent="WidthAndHeight"
+	MinWidth="591"
+	MinHeight="448"
     FontSize="14"
 	Icon="he.ico"
     mc:Ignorable="d">
@@ -23,6 +24,7 @@
 		<GroupBox Grid.Column="0" Header="Параметры">
 			<Grid>
 				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
@@ -46,9 +48,10 @@
 						<Style TargetType="Image">
 							<Setter Property="Stretch" Value="None" />
 							<Setter Property="HorizontalAlignment" Value="Left" />
-							<Setter Property="Margin" Value="0,1" />
+							<Setter Property="Margin" Value="0,3" />
 						</Style>
 						<Style TargetType="TextBox">
+							<Setter Property="Height" Value="22"/>
 							<Setter Property="Margin" Value="33,0,0,0" />
 							<Setter Property="HorizontalAlignment" Value="Left" />
 							<Setter Property="Visibility" Value="{Binding IsChecked, ElementName=UseParsedEquation, Converter={StaticResource b2v}}" />
@@ -71,12 +74,12 @@
                         Text="{Binding Functions.K}" />
 					<Image
                         Grid.Row="2"
-                        Margin="140,0"
+                        Margin="140,0,0,0"
                         Source="pack://siteoforigin:,,,/Images/ModelEquation/dK_du.png" />
 					<TextBox
                         Grid.Row="2"
                         MinWidth="100"
-                        Margin="182,0"
+                        Margin="182,0,0,0"
                         Text="{Binding Functions.dK_du}" />
 					<Image Grid.Row="3" Source="pack://siteoforigin:,,,/Images/ModelEquation/g.PNG" />
 					<TextBox
@@ -87,64 +90,85 @@
 					<TextBox
                         Grid.Row="4"
                         Width="15"
-                        Margin="40,0"
+                        Margin="40,0,0,0"
                         Text="{Binding T1}" />
 					<TextBox
                         Grid.Row="4"
                         MinWidth="50"
-                        Margin="78,0"
+                        Margin="78,0,0,0"
                         Text="{Binding Functions.InitCond}" />
 					<Image Grid.Row="5" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_0_t.PNG" />
 					<TextBox
                         Grid.Row="5"
                         Width="15"
-                        Margin="20,0"
+                        Margin="20,0,0,0"
                         Text="{Binding X1}" />
 					<TextBox
                         Grid.Row="5"
                         MinWidth="50"
-                        Margin="78,0"
+                        Margin="78,0,0,0"
                         Text="{Binding Functions.LeftBoundCond}" />
 					<Image Grid.Row="6" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_1_t.PNG" />
 					<TextBox
                         Grid.Row="6"
                         Width="15"
-                        Margin="20,0"
+                        Margin="20,0,0,0"
                         Text="{Binding X2}" />
 					<TextBox
                         Grid.Row="6"
                         MinWidth="50"
-                        Margin="78,0"
+                        Margin="78,0,0,0"
                         Text="{Binding Functions.RightBoundCond}" />
 				</Grid>
-				<StackPanel Grid.Row="2" Orientation="Horizontal">
-					<Label Content="T" />
-					<TextBox Text="{Binding T2}" />
-					<Label Content="M" />
-					<TextBox Text="{Binding M, UpdateSourceTrigger=PropertyChanged}" />
-					<Label Content="{Binding Tau}" />
-				</StackPanel>
-				<StackPanel Grid.Row="3" Orientation="Horizontal">
-					<Label Content="N" />
-					<TextBox Text="{Binding N, UpdateSourceTrigger=PropertyChanged}" />
-					<Label Content="{Binding H}" />
-				</StackPanel>
-				<StackPanel Grid.Row="4" Orientation="Horizontal">
-					<Label Content="Eps" />
-					<TextBox Text="{Binding Epsilon}" ToolTip="В решении системы нелинейных уравнений" />
-					<Label Content="Eps2" />
-					<TextBox Text="{Binding Epsilon2}" ToolTip="От слоя к слою" />
-				</StackPanel>
-				<StackPanel Grid.Row="5" Orientation="Horizontal">
-					<ComboBox
+				<Grid Grid.Row="2">
+					<Grid.RowDefinitions>
+						<RowDefinition/>
+						<RowDefinition/>
+						<RowDefinition/>
+						<RowDefinition/>
+						<RowDefinition/>
+						<RowDefinition/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="Auto"/>
+					</Grid.ColumnDefinitions>
+					<Grid.Resources>
+						<Style TargetType="TextBox">
+							<Setter Property="Height" Value="22"/>
+							<Setter Property="Width" Value="50"/>
+							<Setter Property="HorizontalAlignment" Value="Left"/>
+						</Style>
+						<Style TargetType="Label">
+							<Setter Property="HorizontalAlignment" Value="Right"/>
+						</Style>
+					</Grid.Resources>
+					<Label Grid.Row="0" Grid.Column="2" Content="N" />
+					<TextBox Grid.Row="0" Grid.Column="3" Text="{Binding N, UpdateSourceTrigger=PropertyChanged}" />
+					<Label Grid.Row="0" Grid.Column="4" Content="{Binding H}" HorizontalAlignment="Left" ToolTip="h"/>
+					<Label Grid.Row="1" Grid.Column="0" Content="T" />
+					<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding T2}"/>
+					<Label Grid.Row="1" Grid.Column="2" Content="M" />
+					<TextBox Grid.Row="1" Grid.Column="3" Text="{Binding M, UpdateSourceTrigger=PropertyChanged}" />
+					<Label Grid.Row="1" Grid.Column="4" Content="{Binding Tau}" HorizontalAlignment="Left" ToolTip="tau"/>
+					<Label Grid.Row="2" Grid.Column="0" Content="Eps" />
+					<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Epsilon}" ToolTip="В решении системы нелинейных уравнений" />
+					<Label Grid.Row="2" Grid.Column="2" Content="Eps2" />
+					<TextBox Grid.Row="2" Grid.Column="3" Text="{Binding Epsilon2}" ToolTip="От слоя к слою" />
+					<ComboBox Grid.Row="3" Grid.ColumnSpan="5"
                         DisplayMemberPath="Name"
                         ItemsSource="{Binding MethodsForBeta}"
-                        SelectedItem="{Binding CurrentMethodForBeta}" />
-					<Label Content="Beta0" />
-					<TextBox Text="{Binding Beta0}" />
-					<Label Content="Alpha" />
-					<TextBox Text="{Binding Alpha}" />
-				</StackPanel>
+                        SelectedItem="{Binding CurrentMethodForBeta}" Width="310" HorizontalAlignment="Left"/>
+					<Label Grid.Row="4" Grid.Column="0" Content="Beta0" />
+					<TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Beta0}" />
+					<Label Grid.Row="4" Grid.Column="2" Content="Alpha" />
+					<TextBox Grid.Row="4" Grid.Column="3" Text="{Binding Alpha}" />
+					<Label Grid.Row="5" Grid.ColumnSpan="3" Content="max количество итераций"/>
+					<TextBox Grid.Row="5" Grid.Column="3" Text="{Binding MaxIterations}"/>
+				</Grid>
 			</Grid>
 		</GroupBox>
 		<Grid Grid.Column="1">
@@ -173,14 +197,13 @@
 		<GroupBox Grid.Column="2" Header="Ответ">
 			<StackPanel>
 				<TextBox
-                    Height="229"
+                    Height="310"
+					Width="180"
                     IsReadOnly="True"
                     Text="{Binding Answer}"
                     VerticalScrollBarVisibility="Auto" />
-				<StackPanel Orientation="Horizontal">
-					<Label Content="Норма невязки:" />
-					<Label Content="{Binding Norm}" />
-				</StackPanel>
+				<Label Content="Норма невязки:" />
+				<Label Content="{Binding Norm}" />
 			</StackPanel>
 		</GroupBox>
 		<!--<Label Content="Developer: Andrey Arekhva, 2016-2017"/>-->
