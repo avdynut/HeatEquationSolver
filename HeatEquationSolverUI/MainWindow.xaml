@@ -9,6 +9,7 @@
     Width="647"
     Height="507"
     FontSize="14"
+	Icon="he.ico"
     mc:Ignorable="d">
 	<Window.Resources>
 		<local:MainViewModel x:Key="Settings" />

@@ -3,10 +3,10 @@ using System.IO;
 
 namespace HeatEquationSolver
 {
-	public class DataManager
+	public static class DataManager
 	{
 		private const string FilePath = "settings.json";
-		public static Settings Settings;
+		public static readonly Settings Settings;
 
 		static DataManager()
 		{
