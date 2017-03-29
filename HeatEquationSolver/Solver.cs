@@ -48,7 +48,7 @@ namespace HeatEquationSolver
 			var y0 = new double[N + 1];
 			for (int n = 0; n <= N; n++)
 				y0[n] = equation.InitCond(x[n]);
-			Logger.Debug("Layer 0, y='{0}'", Vector.ArrayToString(y0));
+			Logger.Debug("Layer 0, y='{0}'", y0.AsString());
 
 			for (int m = 0; m < M; m++)
 			{
@@ -77,7 +77,7 @@ namespace HeatEquationSolver
 			}
 
 			Answer = y0;
-			Logger.Debug("Answer='{0}', Norm={1}", Vector.ArrayToString(Answer), Norm);
+			Logger.Debug("Answer='{0}', Norm={1}", Answer.AsString(), Norm);
 
 			if (equation.u != null)
 			{
@@ -114,7 +114,7 @@ namespace HeatEquationSolver
 				betaCalculator.NextBeta(Norm);
 			}
 
-			Logger.Debug("t={0}, {1} iterations, yK='{2}'", t, iterations, Vector.ArrayToString(yK));
+			Logger.Debug("t={0}, {1} iterations, yK='{2}'", t, iterations, yK.AsString());
 			return yK;
 		}
 
@@ -159,11 +159,11 @@ namespace HeatEquationSolver
 				jacobian[n, n] = -2 * r - 1 / tau;
 			}
 
-			var a = Matrix.Transpose(jacobian);
-			a = Matrix.AddDiag(a, alphaBetaNorm);
-			var matrix = Matrix.AddDiag(Matrix.Multiply(a, jacobian), alphaBetaNorm);
-			var freeMembers = Vector.MultiplyConst(betaCalculator.Multiplier, Matrix.Multiply(a, f));
-			return ResolvingSystem.Gauss(matrix, freeMembers);
+			var a = jacobian.Transpose();
+			a = a.AddDiag(alphaBetaNorm);
+			var matrix = a.Multiply(jacobian).AddDiag(alphaBetaNorm);
+			var freeMembers = a.Multiply(f).MultiplyConst(betaCalculator.Multiplier);
+			return ResolvingSystem.Gauss(matrix, freeMembers.ToArray());
 		}
 
 		#region Unused
