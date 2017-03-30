@@ -25,7 +25,8 @@ namespace HeatEquationSolver.Tests
 		[Test]
 		public void CheckModelEquation()
 		{
-			Assert.That(equation.IsEquationCorrect(), "Incorrect equation");
+			var r = new Random();
+			Assert.That(equation.SubstituteValues(r.NextDouble(), r.NextDouble()).Round(12), Is.EqualTo(0), "Incorrect equation");
 		}
 
 		[Test]

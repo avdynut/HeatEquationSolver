@@ -23,7 +23,10 @@ namespace HeatEquationSolver
 
 		private readonly double[] x;
 		public double[] Answer;
+		public double[] PredY;
 		public double Norm;
+		public CubicSpline CubicSpline;
+		public CubicSpline PredCubicSpline;
 
 		public Solver(Settings settings)
 		{
@@ -40,7 +43,7 @@ namespace HeatEquationSolver
 				x[i] = settings.X1 + i * h;
 
 			Logger.Debug("X1={0}, X2={1}, T1={2}, T2={3}, N={4}, M={5}, h={6}, Tau={7}, Epsilon={8}, Beta0={9}, MethodForBeta={10}",
-																		settings.X1, settings.X2, settings.T1, settings.T2, N, M, h, Tau, settings.Epsilon, settings.Beta0, nameof(betaCalculator));
+																		settings.X1, settings.X2, settings.T1, settings.T2, N, M, h, Tau, settings.Epsilon, settings.Beta0, settings.BetaCalculatorMethod);
 		}
 
 		public void Solve(CancellationToken cancellationToken, IProgress<int> progress = null)
@@ -72,12 +75,13 @@ namespace HeatEquationSolver
 					yWithPredTau = (double[])yWithNextTau.Clone();
 
 				} while (norm > settings.Epsilon2);
+				PredY = (double[])y0.Clone();
 				y0 = yWithNextTau;
 				Logger.Debug("m={0}, tau=Tau/{1}, norm={2}", m, k, norm);
 			}
 
 			Answer = y0;
-			Logger.Debug("Answer='{0}', Norm={1}", Answer.AsString(), Norm);
+			Norm = 0;
 
 			if (equation.u != null)
 			{
@@ -86,9 +90,27 @@ namespace HeatEquationSolver
 					exactSol[n] = equation.u(x[n], settings.T2);
 				Norm = CalculateNorm(y0, exactSol);
 			}
+			else
+			{
+				CubicSpline = new CubicSpline();
+				CubicSpline.BuildSpline(x, Answer, N + 1);
+				PredCubicSpline = new CubicSpline();
+				PredCubicSpline.BuildSpline(x, PredY, N + 1);
 
-			var cubicSpline = new CubicSpline();
-			cubicSpline.BuildSpline(new[] { settings.X1, settings.X2 }, new[] { Answer[0], Answer[N] }, 2);
+				double sum = 0;
+				foreach (var currentX in x)
+				{
+					var dx = 1e-5;
+					double u = CubicSpline.Interpolate(currentX);
+					double du_dt = (u - PredCubicSpline.Interpolate(currentX)) / Tau;
+					double du_dx = (CubicSpline.Interpolate(currentX + dx) - u) / dx;
+					double d2u_dx2 = ((CubicSpline.Interpolate(currentX + 2 * dx) - CubicSpline.Interpolate(currentX + dx)) / dx - du_dx) / dx;
+					var value = equation.SubstituteValues(currentX, settings.T2, u, du_dt, du_dx, d2u_dx2);
+					sum += value * value;
+				}
+				Norm = Math.Sqrt(sum / N);
+			}
+			Logger.Debug("Answer='{0}', Norm={1}", Answer.AsString(), Norm);
 		}
 
 		private double[] SolveNonlinearSystem(double[] y, double t)
