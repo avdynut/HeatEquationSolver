@@ -15,35 +15,88 @@ namespace HeatEquationSolverUI
 	{
 		#region Settings
 
-		private Settings _settings;
+		private readonly Settings _settings;
 
-		public double X1 { get { return _settings.X1; } set { _settings.X1 = value; } }
-		public double X2 { get { return _settings.X2; } set { _settings.X2 = value; OnPropertyChanged(nameof(H)); } }
-		public double T1 { get { return _settings.T1; } set { _settings.T1 = value; } }
-		public double T2 { get { return _settings.T2; } set { _settings.T2 = value; OnPropertyChanged(nameof(Tau)); } }
-		public int N { get { return _settings.N; } set { _settings.N = value; OnPropertyChanged(nameof(H)); } }
-		public int M { get { return _settings.M; } set { _settings.M = value; OnPropertyChanged(nameof(Tau)); OnPropertyChanged(nameof(M)); } }
-		public double Epsilon { get { return _settings.Epsilon; } set { _settings.Epsilon = value; } }
-		public double Epsilon2 { get { return _settings.Epsilon2; } set { _settings.Epsilon2 = value; } }
-		public double Alpha { get { return _settings.Alpha; } set { _settings.Alpha = value; } }
-		public double Beta0 { get { return _settings.Beta0; } set { _settings.Beta0 = value; } }
-		public BetaCalculator BetaCalculatorMethod { get { return _settings.BetaCalculatorMethod; } set { _settings.BetaCalculatorMethod = value; } }
-		public int MaxIterations { get { return _settings.MaxIterations; } set { _settings.MaxIterations = value; } }
-		public bool UseParsedEquation { get { return _settings.UseParsedEquation; } set { _settings.UseParsedEquation = value; } }
-		public Functions Functions { get { return _settings.Functions; } set { _settings.Functions = value; } }
+		public double X1
+		{
+			get => _settings.X1;
+			set => _settings.X1 = value;
+		}
+		public double X2
+		{
+			get => _settings.X2;
+			set { _settings.X2 = value; OnPropertyChanged(nameof(H)); }
+		}
+		public double T1
+		{
+			get => _settings.T1;
+			set => _settings.T1 = value;
+		}
+		public double T2
+		{
+			get => _settings.T2;
+			set { _settings.T2 = value; OnPropertyChanged(nameof(Tau)); }
+		}
+		public int N
+		{
+			get => _settings.N;
+			set { _settings.N = value; OnPropertyChanged(nameof(H)); }
+		}
+		public int M
+		{
+			get => _settings.M;
+			set { _settings.M = value; OnPropertyChanged(nameof(Tau)); OnPropertyChanged(nameof(M)); }
+		}
+		public double Epsilon
+		{
+			get => _settings.Epsilon;
+			set => _settings.Epsilon = value;
+		}
+		public double Epsilon2
+		{
+			get => _settings.Epsilon2;
+			set => _settings.Epsilon2 = value;
+		}
+		public double Alpha
+		{
+			get => _settings.Alpha;
+			set => _settings.Alpha = value;
+		}
+		public double Beta0
+		{
+			get => _settings.Beta0;
+			set => _settings.Beta0 = value;
+		}
+		public BetaCalculator BetaCalculatorMethod
+		{
+			get => _settings.BetaCalculatorMethod;
+			set => _settings.BetaCalculatorMethod = value;
+		}
+		public int MaxIterations
+		{
+			get => _settings.MaxIterations;
+			set => _settings.MaxIterations = value;
+		}
+		public bool UseParsedEquation
+		{
+			get => _settings.UseParsedEquation;
+			set => _settings.UseParsedEquation = value;
+		}
+		public Functions Functions
+		{
+			get => _settings.Functions;
+			set => _settings.Functions = value;
+		}
 
 		public double H => _settings.H;
 		public double Tau => _settings.Tau;
-		public MethodBeta[] MethodsForBeta { get; }
-		private MethodBeta currentMethodForBeta;
+		private MethodBeta _currentMethodForBeta;
+		public MethodBeta[] MethodsForBeta => MethodBeta.Methods;
+
 		public MethodBeta CurrentMethodForBeta
 		{
-			get { return currentMethodForBeta; }
-			set
-			{
-				currentMethodForBeta = value;
-				_settings.BetaCalculatorMethod = currentMethodForBeta.BetaCalculator;
-			}
+			get => _currentMethodForBeta;
+			set { _currentMethodForBeta = value; OnPropertyChanged(nameof(CurrentMethodForBeta)); _settings.BetaCalculatorMethod = _currentMethodForBeta.BetaCalculator; }
 		}
 
 		#endregion
@@ -52,32 +105,32 @@ namespace HeatEquationSolverUI
 
 		private const string SolveText = "Решить";
 		private const string CancelText = "Отмена";
-		private string solveButtonText = SolveText;
+		private string _solveButtonText = SolveText;
 		public string SolveButtonText
 		{
-			get { return solveButtonText; }
-			set { solveButtonText = value; OnPropertyChanged(nameof(SolveButtonText)); }
+			get => _solveButtonText;
+			set { _solveButtonText = value; OnPropertyChanged(nameof(SolveButtonText)); }
 		}
 
-		private bool solveButtonIsEnabled = true;
+		private bool _solveButtonIsEnabled = true;
 		public bool SolveButtonIsEnabled
 		{
-			get { return solveButtonIsEnabled; }
-			set { solveButtonIsEnabled = value; OnPropertyChanged(nameof(SolveButtonIsEnabled)); }
+			get => _solveButtonIsEnabled;
+			set { _solveButtonIsEnabled = value; OnPropertyChanged(nameof(SolveButtonIsEnabled)); }
 		}
 
-		private string norm;
+		private string _norm;
 		public string Norm
 		{
-			get { return norm; }
-			set { norm = value; OnPropertyChanged(nameof(Norm)); }
+			get => _norm;
+			set { _norm = value; OnPropertyChanged(nameof(Norm)); }
 		}
 
-		private string answer;
+		private string _answer;
 		public string Answer
 		{
-			get { return answer; }
-			set { answer = value; OnPropertyChanged(nameof(Answer)); }
+			get => _answer;
+			set { _answer = value; OnPropertyChanged(nameof(Answer)); }
 		}
 
 		public int ProgressBarValue { get; set; }
@@ -85,21 +138,16 @@ namespace HeatEquationSolverUI
 
 		#endregion
 
-		private readonly DelegateCommand solveCommand;
-		public ICommand SolveCommand => solveCommand;
+		private readonly DelegateCommand _solveCommand;
+		public ICommand SolveCommand => _solveCommand;
 
-		private CancellationTokenSource cancellation;
+		private CancellationTokenSource _cancellation;
 
 		public MainViewModel()
 		{
 			_settings = DataManager.Settings;
-			solveCommand = new DelegateCommand(SolveEquation);
-
-			MethodsForBeta = new[] {
-				new MethodBeta(BetaCalculator.Puzynin, "Метод Пузынина", ""),
-				new MethodBeta(BetaCalculator.No6, "Нерегуляризованный одношаговый метод", ""),
-				new MethodBeta(BetaCalculator.No6Mod, "Модифицированный НО метод", "") };
-			currentMethodForBeta = MethodsForBeta.First(m => m.BetaCalculator.Equals(_settings.BetaCalculatorMethod));
+			_solveCommand = new DelegateCommand(SolveEquation);
+			_currentMethodForBeta = MethodBeta.Methods.First(m => m.BetaCalculator.Equals(_settings.BetaCalculatorMethod));
 		}
 
 		private async void SolveEquation()
@@ -107,11 +155,11 @@ namespace HeatEquationSolverUI
 			if (SolveButtonText == CancelText)
 			{
 				SolveButtonIsEnabled = false;
-				cancellation.Cancel();
+				_cancellation.Cancel();
 				return;
 			}
 
-			cancellation = new CancellationTokenSource();
+			_cancellation = new CancellationTokenSource();
 			try
 			{
 				Norm = Answer = string.Empty;
@@ -119,7 +167,7 @@ namespace HeatEquationSolverUI
 				var qn = new Solver(_settings);
 
 				var progressIndicator = new Progress<int>(ReportProgress);
-				var task = Task.Run(() => qn.Solve(cancellation.Token, progressIndicator));
+				var task = Task.Run(() => qn.Solve(_cancellation.Token, progressIndicator));
 				SolveButtonText = CancelText;
 				await task;
 

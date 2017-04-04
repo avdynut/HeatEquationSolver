@@ -86,7 +86,7 @@ namespace HeatEquationSolver.Equations
 
 		private double Parse(string function)
 		{
-			return (double)parser.ProgrammaticallyParse(function);
+			return (double)parser.Parse(function);
 		}
 	}
 }

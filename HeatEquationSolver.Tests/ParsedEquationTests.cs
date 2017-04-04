@@ -59,6 +59,7 @@ namespace HeatEquationSolver.Tests
 		public void SubstituteSolutionInEquation()
 		{
 			settings.UseParsedEquation = true;
+			settings.Functions.u = "";
 			var pSolver = new Solver(settings);
 			pSolver.Solve(new CancellationToken());
 

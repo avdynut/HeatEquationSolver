@@ -121,6 +121,11 @@
   <ItemGroup>
     <Resource Include="he.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MethodsForBeta\no6.PNG" />
+    <Resource Include="Images\MethodsForBeta\no6_mod.PNG" />
+    <Resource Include="Images\MethodsForBeta\puzynin.PNG" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

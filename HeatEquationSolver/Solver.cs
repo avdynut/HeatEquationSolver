@@ -43,7 +43,7 @@ namespace HeatEquationSolver
 				x[i] = settings.X1 + i * h;
 
 			Logger.Debug("X1={0}, X2={1}, T1={2}, T2={3}, N={4}, M={5}, h={6}, Tau={7}, Epsilon={8}, Beta0={9}, MethodForBeta={10}",
-																		settings.X1, settings.X2, settings.T1, settings.T2, N, M, h, Tau, settings.Epsilon, settings.Beta0, settings.BetaCalculatorMethod);
+				settings.X1, settings.X2, settings.T1, settings.T2, N, M, h, Tau, settings.Epsilon, settings.Beta0, settings.BetaCalculatorMethod);
 		}
 
 		public void Solve(CancellationToken cancellationToken, IProgress<int> progress = null)
@@ -185,7 +185,7 @@ namespace HeatEquationSolver
 			a = a.AddDiag(alphaBetaNorm);
 			var matrix = a.Multiply(jacobian).AddDiag(alphaBetaNorm);
 			var freeMembers = a.Multiply(f).MultiplyConst(betaCalculator.Multiplier);
-			return ResolvingSystem.Gauss(matrix, freeMembers.ToArray());
+			return ResolvingSystem.Gauss(matrix, freeMembers);
 		}
 
 		#region Unused
