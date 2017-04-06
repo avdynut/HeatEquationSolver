@@ -54,25 +54,6 @@ namespace HeatEquationSolver.Tests
 			Assert.That(pSolver.Norm.Round(), Is.EqualTo(mSolver.Norm.Round()), "Incorrect norm");
 			Assert.That(pSolver.Answer.Select(a => a.Round()), Is.EqualTo(mSolver.Answer.Select(a => a.Round())), "Incorrect answer");
 		}
-
-		[Test]
-		public void SubstituteSolutionInEquation()
-		{
-			settings.UseParsedEquation = true;
-			settings.Functions.u = "";
-			var pSolver = new Solver(settings);
-			pSolver.Solve(new CancellationToken());
-
-			var dx = 1e-5;
-			double x = settings.X1 + (settings.X2 - settings.X1) / 2;
-			double t = settings.T2;
-			double u = pSolver.CubicSpline.Interpolate(x);
-			double du_dt = (u - pSolver.PredCubicSpline.Interpolate(x)) / settings.Tau;
-			double du_dx = (pSolver.CubicSpline.Interpolate(x + dx) - u) / dx;
-			double d2u_dx2 = ((pSolver.CubicSpline.Interpolate(x + 2 * dx) - pSolver.CubicSpline.Interpolate(x + dx)) / dx - du_dx) / dx;
-			var actualValue = settings.Equation.SubstituteValues(x, t, u, du_dt, du_dx, d2u_dx2);
-			Assert.That(actualValue.Round(0), Is.EqualTo(0), "Incorrect solution");
-		}
 	}
 
 	public static class MathHelper

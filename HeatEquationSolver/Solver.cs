@@ -25,8 +25,6 @@ namespace HeatEquationSolver
 		public double[] Answer;
 		public double[] PredY;
 		public double Norm;
-		public CubicSpline CubicSpline;
-		public CubicSpline PredCubicSpline;
 
 		public Solver(Settings settings)
 		{
@@ -83,33 +81,16 @@ namespace HeatEquationSolver
 			Answer = y0;
 			Norm = 0;
 
-			if (equation.u != null)
+			if (equation.u == null)
+				Norm = settings.Epsilon2;
+			else
 			{
 				var exactSol = new double[N + 1];
 				for (int n = 0; n <= N; n++)
 					exactSol[n] = equation.u(x[n], settings.T2);
 				Norm = CalculateNorm(y0, exactSol);
 			}
-			else
-			{
-				CubicSpline = new CubicSpline();
-				CubicSpline.BuildSpline(x, Answer, N + 1);
-				PredCubicSpline = new CubicSpline();
-				PredCubicSpline.BuildSpline(x, PredY, N + 1);
 
-				double sum = 0;
-				foreach (var currentX in x)
-				{
-					var dx = 1e-5;
-					double u = CubicSpline.Interpolate(currentX);
-					double du_dt = (u - PredCubicSpline.Interpolate(currentX)) / Tau;
-					double du_dx = (CubicSpline.Interpolate(currentX + dx) - u) / dx;
-					double d2u_dx2 = ((CubicSpline.Interpolate(currentX + 2 * dx) - CubicSpline.Interpolate(currentX + dx)) / dx - du_dx) / dx;
-					var value = equation.SubstituteValues(currentX, settings.T2, u, du_dt, du_dx, d2u_dx2);
-					sum += value * value;
-				}
-				Norm = Math.Sqrt(sum / N);
-			}
 			Logger.Debug("Answer='{0}', Norm={1}", Answer.AsString(), Norm);
 		}
 

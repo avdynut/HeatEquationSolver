@@ -51,7 +51,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CubicSpline.cs" />
     <Compile Include="DataManager.cs" />
     <Compile Include="Equations\Functions.cs" />
     <Compile Include="Equations\HeatEquation.cs" />
