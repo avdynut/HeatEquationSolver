@@ -1,6 +1,7 @@
 ﻿using HeatEquationSolver.Settings;
 using StringToExpression.LanguageDefinitions;
 using System;
+using System.Linq.Expressions;
 
 namespace HeatEquationSolver.Equations
 {
@@ -51,22 +52,23 @@ namespace HeatEquationSolver.Equations
 			leftBoundCond = Compile(functions.LeftBoundCond);
 			rightBoundCond = Compile(functions.RightBoundCond);
 
-			if (!string.IsNullOrEmpty(functions.u))
-				uFunc = Compile(functions.u);
-			if (!string.IsNullOrEmpty(functions.du_dx))
-				du_dxFunc = Compile(functions.du_dx);
-			if (!string.IsNullOrEmpty(functions.d2u_dx2))
-				d2u_dx2Func = Compile(functions.d2u_dx2);
-			if (!string.IsNullOrEmpty(functions.du_dt))
-				du_dtFunc = Compile(functions.du_dt);
+			uFunc = Compile(functions.u);
+			du_dxFunc = Compile(functions.du_dx);
+			d2u_dx2Func = Compile(functions.d2u_dx2);
+			du_dtFunc = Compile(functions.du_dt);
 		}
 
-		private Func<Variables, decimal> Compile(string func)
+		public Expression<Func<Variables, decimal>> Parse(string func)
 		{
-			return language.Parse<Variables>(func).Compile();
+			return string.IsNullOrEmpty(func) ? null : language.Parse<Variables>(func);
 		}
 
-		private struct Variables
+		public Func<Variables, decimal> Compile(string func)
+		{
+			return Parse(func).Compile();
+		}
+
+		public struct Variables
 		{
 			public double x { get; set; }
 			public double t { get; set; }

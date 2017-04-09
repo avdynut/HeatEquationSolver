@@ -5,6 +5,7 @@ namespace HeatEquationSolverUI
 {
 	public class FunctionsViewModel : ViewModelBase, IFunctions
 	{
+		private ISettings settings;
 		private IFunctions functions;
 
 		public string K { get => functions.K; set => functions.K = value; }
@@ -18,9 +19,15 @@ namespace HeatEquationSolverUI
 		public string d2u_dx2 { get => functions.d2u_dx2; set => functions.d2u_dx2 = value; }
 		public string du_dt { get => functions.du_dt; set => functions.du_dt = value; }
 
-		public FunctionsViewModel(IFunctions functions)
+		public FunctionsViewModel(Settings settings)
 		{
-			this.functions = functions;
+			this.settings = settings;
+			functions = settings.Functions;
+		}
+
+		private string CleanExpression(string expression)
+		{
+			return expression.Replace("Convert", "").Replace("Param_0.", "").Replace("(", "").Replace(")", "").Replace(" ", "");
 		}
 	}
 }

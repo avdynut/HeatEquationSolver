@@ -153,7 +153,7 @@ namespace HeatEquationSolverUI
 		public MainViewModel()
 		{
 			_settings = DataManager.Settings;
-			Functions = new FunctionsViewModel(_settings.Functions);
+			Functions = new FunctionsViewModel(_settings);
 			_solveCommand = new DelegateCommand(SolveEquation);
 			_currentMethodForBeta = MethodBeta.Methods.First(m => m.BetaCalculator.Equals(_settings.BetaCalculatorMethod));
 		}
