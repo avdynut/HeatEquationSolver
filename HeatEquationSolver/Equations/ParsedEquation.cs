@@ -1,92 +1,76 @@
-﻿using Mathos.Parser;
+﻿using StringToExpression.LanguageDefinitions;
+using System;
 
 namespace HeatEquationSolver.Equations
 {
 	public class ParsedEquation : HeatEquation
 	{
-		private MathParser parser = new MathParser();
+		private readonly ArithmeticLanguage language = new ArithmeticLanguage();
 
-		private ComplexFunction k;
-		public override ComplexFunction K => k;
+		private Func<Variables, decimal> k;
+		public override ComplexFunction K => (x, t, u) => (double)k(new Variables { x = x, t = t, u = u });
 
-		private ComplexFunction dK_duFunc;
-		public override ComplexFunction dK_du => dK_duFunc;
+		private Func<Variables, decimal> dK_duFunc;
+		public override ComplexFunction dK_du => (x, t, u) => (double)dK_duFunc(new Variables { x = x, t = t, u = u });
 
-		private ComplexFunction gFunc;
-		public override ComplexFunction g => gFunc;
+		private Func<Variables, decimal> gFunc;
+		public override ComplexFunction g => (x, t, u) => (double)gFunc(new Variables { x = x, t = t, u = u, K = K(x, t, u) });
 
-		private InitialCondition initCond;
-		public override InitialCondition InitCond => initCond;
+		private Func<Variables, decimal> initCond;
+		public override InitialCondition InitCond => x => (double)initCond(new Variables { x = x });
 
-		private BoundaryCondtion leftBoundCond;
-		public override BoundaryCondtion LeftBoundCond => leftBoundCond;
+		private Func<Variables, decimal> leftBoundCond;
+		public override BoundaryCondtion LeftBoundCond => t => (double)leftBoundCond(new Variables { t = t });
 
-		private BoundaryCondtion rightBoundCond;
-		public override BoundaryCondtion RightBoundCond => rightBoundCond;
+		private Func<Variables, decimal> rightBoundCond;
+		public override BoundaryCondtion RightBoundCond => t => (double)rightBoundCond(new Variables { t = t });
 
 		#region Optional
 
-		private Function uFunc;
-		public override Function u => uFunc;
+		private Func<Variables, decimal> uFunc;
+		public override Function u => (x, t) => (double)uFunc(new Variables { x = x, t = t });
 
-		private Function du_dxFunc;
-		public override Function du_dx => du_dxFunc;
+		private Func<Variables, decimal> du_dxFunc;
+		public override Function du_dx => (x, t) => (double)du_dxFunc(new Variables { x = x, t = t });
 
-		private Function d2u_dx2Func;
-		public override Function d2u_dx2 => d2u_dx2Func;
+		private Func<Variables, decimal> d2u_dx2Func;
+		public override Function d2u_dx2 => (x, t) => (double)d2u_dx2Func(new Variables { x = x, t = t });
 
-		private Function du_dtFunc;
-		public override Function du_dt => du_dtFunc;
+		private Func<Variables, decimal> du_dtFunc;
+		public override Function du_dt => (x, t) => (double)du_dtFunc(new Variables { x = x, t = t });
 
 		#endregion
 
 		public ParsedEquation(Functions functions)
 		{
-			k = (x, t, u) => ParseComplexFunc(functions.K, x, t, u);
-			dK_duFunc = (x, t, u) => ParseComplexFunc(functions.dK_du, x, t, u);
-			gFunc = (x, t, u) => ParseG(functions.g, x, t, u, K(x, t, u));
-			initCond = x => ParseCond(functions.InitCond, "x", x);
-			leftBoundCond = t => ParseCond(functions.LeftBoundCond, "t", t);
-			rightBoundCond = t => ParseCond(functions.RightBoundCond, "t", t);
+			k = Compile(functions.K);
+			dK_duFunc = Compile(functions.dK_du);
+			gFunc = Compile(functions.g);
+			initCond = Compile(functions.InitCond);
+			leftBoundCond = Compile(functions.LeftBoundCond);
+			rightBoundCond = Compile(functions.RightBoundCond);
 
 			if (!string.IsNullOrEmpty(functions.u))
-				uFunc = (x, t) => ParseFunc(functions.u, x, t);
+				uFunc = Compile(functions.u);
 			if (!string.IsNullOrEmpty(functions.du_dx))
-				du_dxFunc = (x, t) => ParseFunc(functions.du_dx, x, t);
+				du_dxFunc = Compile(functions.du_dx);
 			if (!string.IsNullOrEmpty(functions.d2u_dx2))
-				d2u_dx2Func = (x, t) => ParseFunc(functions.d2u_dx2, x, t);
+				d2u_dx2Func = Compile(functions.d2u_dx2);
 			if (!string.IsNullOrEmpty(functions.du_dt))
-				du_dtFunc = (x, t) => ParseFunc(functions.du_dt, x, t);
+				du_dtFunc = Compile(functions.du_dt);
 		}
 
-		private double ParseG(string function, double x, double t, double u, double K)
+		private Func<Variables, decimal> Compile(string func)
 		{
-			parser.LocalVariables["K"] = (decimal)K;
-			return ParseComplexFunc(function, x, t, u);
+			return language.Parse<Variables>(func).Compile();
 		}
 
-		private double ParseComplexFunc(string function, double x, double t, double u)
+		private struct Variables
 		{
-			parser.LocalVariables["u"] = (decimal)u;
-			return ParseFunc(function, x, t);
-		}
-
-		private double ParseFunc(string function, double x, double t)
-		{
-			parser.LocalVariables["x"] = (decimal)x;
-			parser.LocalVariables["t"] = (decimal)t;
-			return Parse(function);
-		}
-
-		private double ParseCond(string function, string variable, double a)
-		{
-			parser.LocalVariables[variable] = (decimal)a;
-			return Parse(function);
-		}
-
-		private double Parse(string function)
-		{
-			return (double)parser.Parse(function);
+			public double x { get; set; }
+			public double t { get; set; }
+			public double u { get; set; }
+			public double K { get; set; }
 		}
 	}
 }

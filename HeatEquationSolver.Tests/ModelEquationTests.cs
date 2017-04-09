@@ -16,7 +16,7 @@ namespace HeatEquationSolver.Tests
 		public void Init()
 		{
 			settings = DataManager.Settings;
-			settings.UseParsedEquation = true;
+			settings.UseParsedEquation = false;
 			equation = new ModelEquation();
 			solver = new Solver(settings);
 			solver.Solve(new CancellationToken());

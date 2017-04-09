@@ -7,18 +7,18 @@
 
 	public abstract class HeatEquation
 	{
-		public abstract ComplexFunction K { get; }
-		public abstract ComplexFunction dK_du { get; }
-		public abstract ComplexFunction g { get; }
-		public abstract InitialCondition InitCond { get; }
-		public abstract BoundaryCondtion LeftBoundCond { get; }
-		public abstract BoundaryCondtion RightBoundCond { get; }
+		public virtual ComplexFunction K { get; private set; }
+		public virtual ComplexFunction dK_du { get; private set; }
+		public virtual ComplexFunction g { get; private set; }
+		public virtual InitialCondition InitCond { get; private set; }
+		public virtual BoundaryCondtion LeftBoundCond { get; private set; }
+		public virtual BoundaryCondtion RightBoundCond { get; private set; }
 
 		#region Optional
-		public abstract Function u { get; }
-		public abstract Function du_dx { get; }
-		public abstract Function d2u_dx2 { get; }
-		public abstract Function du_dt { get; }
+		public virtual Function u { get; private set; }
+		public virtual Function du_dx { get; private set; }
+		public virtual Function d2u_dx2 { get; private set; }
+		public virtual Function du_dt { get; private set; }
 		#endregion
 
 		public double SubstituteValues(double x, double t)
