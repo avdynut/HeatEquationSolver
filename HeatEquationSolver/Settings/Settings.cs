@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 
-namespace HeatEquationSolver
+namespace HeatEquationSolver.Settings
 {
 	public class Settings : ISettings
 	{
@@ -22,12 +22,14 @@ namespace HeatEquationSolver
 
 		public double Alpha { get; set; } = 1e-10;
 		public double Beta0 { get; set; } = 0.01;
-		[JsonConverter(typeof(StringEnumConverter))] public BetaCalculator BetaCalculatorMethod { get; set; } = BetaCalculators.BetaCalculator.Puzynin;
+
+		[JsonConverter(typeof(StringEnumConverter))]
+		public BetaCalculator BetaCalculatorMethod { get; set; } = BetaCalculators.BetaCalculator.Puzynin;
 
 		public int MaxIterations { get; set; } = 50000;
 
 		public bool UseParsedEquation { get; set; } = true;
-		public Functions Functions { get; set; } = new Functions();
+		public IFunctions Functions { get; set; } = new Functions();
 
 		[JsonIgnore] public double H => (X2 - X1) / N;
 		[JsonIgnore] public double Tau => (T2 - T1) / M;
@@ -51,6 +53,7 @@ namespace HeatEquationSolver
 			}
 		}
 
-		[JsonIgnore] public HeatEquation Equation => UseParsedEquation ? new ParsedEquation(Functions) : (HeatEquation)new ModelEquation();
+		[JsonIgnore]
+		public HeatEquation Equation => UseParsedEquation ? new ParsedEquation(Functions) : (HeatEquation)new ModelEquation();
 	}
 }

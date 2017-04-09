@@ -1,7 +1,6 @@
 ﻿using HeatEquationSolver.BetaCalculators;
-using HeatEquationSolver.Equations;
 
-namespace HeatEquationSolver
+namespace HeatEquationSolver.Settings
 {
 	public interface ISettings
 	{
@@ -74,6 +73,6 @@ namespace HeatEquationSolver
 		/// <summary>
 		/// Necessary strings for parsing functions
 		/// </summary>
-		Functions Functions { get; set; }
+		IFunctions Functions { get; set; }
 	}
 }

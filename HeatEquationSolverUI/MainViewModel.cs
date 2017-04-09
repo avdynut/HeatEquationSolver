@@ -1,6 +1,6 @@
 ﻿using HeatEquationSolver;
 using HeatEquationSolver.BetaCalculators;
-using HeatEquationSolver.Equations;
+using HeatEquationSolver.Settings;
 using HeatEquationSolverUI.Base;
 using System;
 using System.Linq;
@@ -22,11 +22,13 @@ namespace HeatEquationSolverUI
 			get => _settings.X1;
 			set => _settings.X1 = value;
 		}
+
 		public double X2
 		{
 			get => _settings.X2;
 			set { _settings.X2 = value; OnPropertyChanged(nameof(H)); }
 		}
+
 		public double T1
 		{
 			get => _settings.T1;
@@ -37,11 +39,13 @@ namespace HeatEquationSolverUI
 			get => _settings.T2;
 			set { _settings.T2 = value; OnPropertyChanged(nameof(Tau)); }
 		}
+
 		public int N
 		{
 			get => _settings.N;
 			set { _settings.N = value; OnPropertyChanged(nameof(H)); }
 		}
+
 		public int M
 		{
 			get => _settings.M;
@@ -52,41 +56,44 @@ namespace HeatEquationSolverUI
 			get => _settings.Epsilon;
 			set => _settings.Epsilon = value;
 		}
+
 		public double Epsilon2
 		{
 			get => _settings.Epsilon2;
 			set => _settings.Epsilon2 = value;
 		}
+
 		public double Alpha
 		{
 			get => _settings.Alpha;
 			set => _settings.Alpha = value;
 		}
+
 		public double Beta0
 		{
 			get => _settings.Beta0;
 			set => _settings.Beta0 = value;
 		}
+
 		public BetaCalculator BetaCalculatorMethod
 		{
 			get => _settings.BetaCalculatorMethod;
 			set => _settings.BetaCalculatorMethod = value;
 		}
+
 		public int MaxIterations
 		{
 			get => _settings.MaxIterations;
 			set => _settings.MaxIterations = value;
 		}
+
 		public bool UseParsedEquation
 		{
 			get => _settings.UseParsedEquation;
 			set => _settings.UseParsedEquation = value;
 		}
-		public Functions Functions
-		{
-			get => _settings.Functions;
-			set => _settings.Functions = value;
-		}
+
+		public IFunctions Functions { get; set; }
 
 		public double H => _settings.H;
 		public double Tau => _settings.Tau;
@@ -146,6 +153,7 @@ namespace HeatEquationSolverUI
 		public MainViewModel()
 		{
 			_settings = DataManager.Settings;
+			Functions = new FunctionsViewModel(_settings.Functions);
 			_solveCommand = new DelegateCommand(SolveEquation);
 			_currentMethodForBeta = MethodBeta.Methods.First(m => m.BetaCalculator.Equals(_settings.BetaCalculatorMethod));
 		}

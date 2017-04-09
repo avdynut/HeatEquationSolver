@@ -1,4 +1,5 @@
-﻿using StringToExpression.LanguageDefinitions;
+﻿using HeatEquationSolver.Settings;
+using StringToExpression.LanguageDefinitions;
 using System;
 
 namespace HeatEquationSolver.Equations
@@ -41,7 +42,7 @@ namespace HeatEquationSolver.Equations
 
 		#endregion
 
-		public ParsedEquation(Functions functions)
+		public ParsedEquation(IFunctions functions)
 		{
 			k = Compile(functions.K);
 			dK_duFunc = Compile(functions.dK_du);

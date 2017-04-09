@@ -1,4 +1,5 @@
 ﻿using HeatEquationSolver.Equations;
+using HeatEquationSolver.Settings;
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace HeatEquationSolver.Tests
 {
 	public class ParsedEquationTests
 	{
-		private Settings settings;
+		private Settings.Settings settings;
 		private ParsedEquation equation;
 		private ModelEquation modelEq;
 

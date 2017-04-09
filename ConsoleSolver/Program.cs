@@ -1,4 +1,5 @@
 ﻿using HeatEquationSolver;
+using HeatEquationSolver.Settings;
 using System;
 using System.Threading;
 

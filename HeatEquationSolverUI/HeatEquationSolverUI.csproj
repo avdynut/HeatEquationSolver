@@ -57,6 +57,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Base\DelegateCommand.cs" />
+    <Compile Include="FunctionsViewModel.cs" />
     <Compile Include="MethodBeta.cs" />
     <Compile Include="MainViewModel.cs" />
     <Page Include="MainWindow.xaml">

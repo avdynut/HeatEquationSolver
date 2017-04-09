@@ -51,8 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataManager.cs" />
-    <Compile Include="Equations\Functions.cs" />
+    <Compile Include="Settings\DataManager.cs" />
+    <Compile Include="Settings\Functions.cs" />
     <Compile Include="Equations\HeatEquation.cs" />
     <Compile Include="BetaCalculators\BetaCalculatorBase.cs" />
     <Compile Include="BetaCalculators\No6Method.cs" />
@@ -61,8 +61,9 @@
     <Compile Include="Equations\ParsedEquation.cs" />
     <Compile Include="Helpers\Matrix.cs" />
     <Compile Include="Equations\ModelEquation.cs" />
-    <Compile Include="ISettings.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="Settings\IFunctions.cs" />
+    <Compile Include="Settings\ISettings.cs" />
+    <Compile Include="Settings\Settings.cs" />
     <Compile Include="Solver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\ResolvingSystem.cs" />
@@ -74,6 +75,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

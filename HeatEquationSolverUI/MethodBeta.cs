@@ -19,6 +19,5 @@ namespace HeatEquationSolverUI
 			new MethodBeta(BetaCalculator.Puzynin, "Метод Пузынина", "puzynin.PNG"),
 			new MethodBeta(BetaCalculator.No6, "Нерегуляризованный одношаговый метод", "no6.PNG"),
 			new MethodBeta(BetaCalculator.No6Mod, "Модифицированный НО метод", "no6_mod.PNG") };
-
 	}
 }

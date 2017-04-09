@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
 
-namespace HeatEquationSolver
+namespace HeatEquationSolver.Settings
 {
 	public static class DataManager
 	{

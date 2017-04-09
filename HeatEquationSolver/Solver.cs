@@ -1,6 +1,7 @@
 ﻿using HeatEquationSolver.BetaCalculators;
 using HeatEquationSolver.Equations;
 using HeatEquationSolver.Helpers;
+using HeatEquationSolver.Settings;
 using NLog;
 using System;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace HeatEquationSolver
 		public double[] PredY;
 		public double Norm;
 
-		public Solver(Settings settings)
+		public Solver(Settings.Settings settings)
 		{
 			this.settings = settings;
 			N = settings.N;
