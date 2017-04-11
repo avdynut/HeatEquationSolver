@@ -66,7 +66,7 @@
 					<TextBox
                         Grid.Row="1"
                         MinWidth="100"
-                        Text="{Binding Functions.u}" />
+                        Text="{Binding Functions.u, UpdateSourceTrigger=PropertyChanged}" />
 					<Image Grid.Row="2" Source="pack://siteoforigin:,,,/Images/ModelEquation/K.PNG" />
 					<TextBox
                         Grid.Row="2"
@@ -91,7 +91,7 @@
                         Grid.Row="4"
                         Width="15"
                         Margin="40,0,0,0"
-                        Text="{Binding T1}" />
+                        Text="{Binding T1, UpdateSourceTrigger=PropertyChanged}" />
 					<TextBox
                         Grid.Row="4"
                         MinWidth="50"
@@ -102,7 +102,7 @@
                         Grid.Row="5"
                         Width="15"
                         Margin="20,0,0,0"
-                        Text="{Binding X1}" />
+                        Text="{Binding X1, UpdateSourceTrigger=PropertyChanged}" />
 					<TextBox
                         Grid.Row="5"
                         MinWidth="50"
@@ -113,7 +113,7 @@
                         Grid.Row="6"
                         Width="15"
                         Margin="20,0,0,0"
-                        Text="{Binding X2}" />
+                        Text="{Binding X2, UpdateSourceTrigger=PropertyChanged}" />
 					<TextBox
                         Grid.Row="6"
                         MinWidth="50"

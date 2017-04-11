@@ -20,19 +20,32 @@ namespace HeatEquationSolverUI
 		public double X1
 		{
 			get => _settings.X1;
-			set => _settings.X1 = value;
+			set
+			{
+				_settings.X1 = value;
+				((FunctionsViewModel)Functions).CalculateLeftBoundCond();
+			}
 		}
 
 		public double X2
 		{
 			get => _settings.X2;
-			set { _settings.X2 = value; OnPropertyChanged(nameof(H)); }
+			set
+			{
+				_settings.X2 = value;
+				((FunctionsViewModel)Functions).CalculateRightBoundCond();
+				OnPropertyChanged(nameof(H));
+			}
 		}
 
 		public double T1
 		{
 			get => _settings.T1;
-			set => _settings.T1 = value;
+			set
+			{
+				_settings.T1 = value;
+				((FunctionsViewModel)Functions).CalculateInitCond();
+			}
 		}
 		public double T2
 		{

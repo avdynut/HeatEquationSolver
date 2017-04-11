@@ -5,67 +5,57 @@ using System.Linq.Expressions;
 
 namespace HeatEquationSolver.Equations
 {
-	public class ParsedEquation : HeatEquation
+	public sealed class ParsedEquation : HeatEquation
 	{
-		private readonly ArithmeticLanguage language = new ArithmeticLanguage();
-
-		private Func<Variables, decimal> k;
-		public override ComplexFunction K => (x, t, u) => (double)k(new Variables { x = x, t = t, u = u });
-
-		private Func<Variables, decimal> dK_duFunc;
-		public override ComplexFunction dK_du => (x, t, u) => (double)dK_duFunc(new Variables { x = x, t = t, u = u });
-
-		private Func<Variables, decimal> gFunc;
-		public override ComplexFunction g => (x, t, u) => (double)gFunc(new Variables { x = x, t = t, u = u, K = K(x, t, u) });
-
-		private Func<Variables, decimal> initCond;
-		public override InitialCondition InitCond => x => (double)initCond(new Variables { x = x });
-
-		private Func<Variables, decimal> leftBoundCond;
-		public override BoundaryCondtion LeftBoundCond => t => (double)leftBoundCond(new Variables { t = t });
-
-		private Func<Variables, decimal> rightBoundCond;
-		public override BoundaryCondtion RightBoundCond => t => (double)rightBoundCond(new Variables { t = t });
-
-		#region Optional
-
-		private Func<Variables, decimal> uFunc;
-		public override Function u => (x, t) => (double)uFunc(new Variables { x = x, t = t });
-
-		private Func<Variables, decimal> du_dxFunc;
-		public override Function du_dx => (x, t) => (double)du_dxFunc(new Variables { x = x, t = t });
-
-		private Func<Variables, decimal> d2u_dx2Func;
-		public override Function d2u_dx2 => (x, t) => (double)d2u_dx2Func(new Variables { x = x, t = t });
-
-		private Func<Variables, decimal> du_dtFunc;
-		public override Function du_dt => (x, t) => (double)du_dtFunc(new Variables { x = x, t = t });
-
-		#endregion
+		public ParsedEquation()
+		{
+		}
 
 		public ParsedEquation(IFunctions functions)
 		{
-			k = Compile(functions.K);
-			dK_duFunc = Compile(functions.dK_du);
-			gFunc = Compile(functions.g);
-			initCond = Compile(functions.InitCond);
-			leftBoundCond = Compile(functions.LeftBoundCond);
-			rightBoundCond = Compile(functions.RightBoundCond);
+			var k = Compile(functions.K);
+			K = (x, t, u) => (double)k(new Variables { x = x, t = t, u = u });
 
-			uFunc = Compile(functions.u);
-			du_dxFunc = Compile(functions.du_dx);
-			d2u_dx2Func = Compile(functions.d2u_dx2);
-			du_dtFunc = Compile(functions.du_dt);
+			var dK_duFunc = Compile(functions.dK_du);
+			dK_du = (x, t, u) => (double)dK_duFunc(new Variables { x = x, t = t, u = u });
+
+			var gFunc = Compile(functions.g);
+			g = (x, t, u) => (double)gFunc(new Variables { x = x, t = t, u = u, K = K(x, t, u) });
+
+			var initCond = Compile(functions.InitCond);
+			InitCond = x => (double)initCond(new Variables { x = x });
+
+			var leftBoundCond = Compile(functions.LeftBoundCond);
+			LeftBoundCond = t => (double)leftBoundCond(new Variables { t = t });
+
+			var rightBoundCond = Compile(functions.RightBoundCond);
+			RightBoundCond = t => (double)rightBoundCond(new Variables { t = t });
+
+			var uFunc = Compile(functions.u);
+			if (uFunc != null)
+				u = (x, t) => (double)uFunc(new Variables { x = x, t = t });
+
+			var du_dxFunc = Compile(functions.du_dx);
+			if (du_dxFunc != null)
+				du_dx = (x, t) => (double)du_dxFunc(new Variables { x = x, t = t });
+
+			var d2u_dx2Func = Compile(functions.d2u_dx2);
+			if (d2u_dx2Func != null)
+				d2u_dx2 = (x, t) => (double)d2u_dx2Func(new Variables { x = x, t = t });
+
+			var du_dtFunc = Compile(functions.du_dt);
+			if (du_dtFunc != null)
+				du_dt = (x, t) => (double)du_dtFunc(new Variables { x = x, t = t });
 		}
 
 		public Expression<Func<Variables, decimal>> Parse(string func)
 		{
-			return string.IsNullOrEmpty(func) ? null : language.Parse<Variables>(func);
+			return new ArithmeticLanguage().Parse<Variables>(func);
 		}
 
-		public Func<Variables, decimal> Compile(string func)
+		private Func<Variables, decimal> Compile(string func)
 		{
-			return Parse(func).Compile();
+			return string.IsNullOrEmpty(func) ? null : Parse(func).Compile();
 		}
 
 		public struct Variables
