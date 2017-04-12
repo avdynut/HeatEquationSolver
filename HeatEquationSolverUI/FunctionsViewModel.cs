@@ -95,11 +95,10 @@ namespace HeatEquationSolverUI
 				return null;
 			string func = u.Replace(symbol, value);
 			expr = ParseFunction(func);
-			return IsZeroFunction(expr.Compile()) ? "0"
-				: expr.Body.ToString().Replace("Convert", "").Replace("Param_0.", "").Replace("(", "").Replace(")", "").Replace(" ", "");
+			return expr?.Body.ToString();
 		}
 
-		private Expression<Func<ParsedEquation.Variables, decimal>> ParseFunction(string func)
+		private Expression<Func<double, double, double>> ParseFunction(string func)
 		{
 			try
 			{
@@ -109,15 +108,6 @@ namespace HeatEquationSolverUI
 			{
 				return null;
 			}
-		}
-
-		private bool IsZeroFunction(Func<ParsedEquation.Variables, decimal> func)
-		{
-			var r = new Random();
-			for (int i = 0; i < 10; i++)
-				if (func(new ParsedEquation.Variables { x = r.NextDouble(), t = r.Next() }) != 0)
-					return false;
-			return true;
 		}
 	}
 }

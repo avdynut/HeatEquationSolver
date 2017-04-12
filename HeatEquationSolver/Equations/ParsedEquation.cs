@@ -1,5 +1,5 @@
-﻿using HeatEquationSolver.Settings;
-using StringToExpression.LanguageDefinitions;
+﻿using Differential;
+using HeatEquationSolver.Settings;
 using System;
 using System.Linq.Expressions;
 
@@ -13,57 +13,41 @@ namespace HeatEquationSolver.Equations
 
 		public ParsedEquation(IFunctions functions)
 		{
-			var k = Compile(functions.K);
-			K = (x, t, u) => (double)k(new Variables { x = x, t = t, u = u });
+			var k = ((Expression<Func<double, double, double, double>>)CodeDom.GetExpressionFrom($"(x, t, u) => {functions.K}")).Compile();
+			K = (x, t, u) => k(x, t, u);
 
-			var dK_duFunc = Compile(functions.dK_du);
-			dK_du = (x, t, u) => (double)dK_duFunc(new Variables { x = x, t = t, u = u });
+			var dK_duFunc = ((Expression<Func<double, double, double, double>>)CodeDom.GetExpressionFrom($"(x, t, u) => {functions.dK_du}")).Compile();
+			dK_du = (x, t, u) => dK_duFunc(x, t, u);
 
-			var gFunc = Compile(functions.g);
-			g = (x, t, u) => (double)gFunc(new Variables { x = x, t = t, u = u, K = K(x, t, u) });
+			var gFunc = ((Expression<Func<double, double, double, double, double>>)CodeDom.GetExpressionFrom($"(x, t, u, K) => {functions.g}")).Compile();
+			g = (x, t, u) => gFunc(x, t, u, K(x, t, u));
 
-			var initCond = Compile(functions.InitCond);
-			InitCond = x => (double)initCond(new Variables { x = x });
+			var initCond = ((Expression<Func<double, double>>)CodeDom.GetExpressionFrom($"x => {functions.InitCond}")).Compile();
+			InitCond = x => initCond(x);
 
-			var leftBoundCond = Compile(functions.LeftBoundCond);
-			LeftBoundCond = t => (double)leftBoundCond(new Variables { t = t });
+			var leftBoundCond = ((Expression<Func<double, double>>)CodeDom.GetExpressionFrom($"t => {functions.LeftBoundCond}")).Compile();
+			LeftBoundCond = t => leftBoundCond(t);
 
-			var rightBoundCond = Compile(functions.RightBoundCond);
-			RightBoundCond = t => (double)rightBoundCond(new Variables { t = t });
+			var rightBoundCond = ((Expression<Func<double, double>>)CodeDom.GetExpressionFrom($"t => {functions.RightBoundCond}")).Compile();
+			RightBoundCond = t => rightBoundCond(t);
 
-			var uFunc = Compile(functions.u);
-			if (uFunc != null)
-				u = (x, t) => (double)uFunc(new Variables { x = x, t = t });
-
-			var du_dxFunc = Compile(functions.du_dx);
-			if (du_dxFunc != null)
-				du_dx = (x, t) => (double)du_dxFunc(new Variables { x = x, t = t });
-
-			var d2u_dx2Func = Compile(functions.d2u_dx2);
-			if (d2u_dx2Func != null)
-				d2u_dx2 = (x, t) => (double)d2u_dx2Func(new Variables { x = x, t = t });
-
-			var du_dtFunc = Compile(functions.du_dt);
-			if (du_dtFunc != null)
-				du_dt = (x, t) => (double)du_dtFunc(new Variables { x = x, t = t });
+			u = Compile(functions.u);
+			du_dx = Compile(functions.du_dx);
+			d2u_dx2 = Compile(functions.d2u_dx2);
+			du_dt = Compile(functions.du_dt);
 		}
 
-		public Expression<Func<Variables, decimal>> Parse(string func)
+		public Expression<Func<double, double, double>> Parse(string func)
 		{
-			return new ArithmeticLanguage().Parse<Variables>(func);
+			return ((Expression<Func<double, double, double>>)CodeDom.GetExpressionFrom($"(x, t) => {func}")).Simplify();
 		}
 
-		private Func<Variables, decimal> Compile(string func)
+		private Function Compile(string func)
 		{
-			return string.IsNullOrEmpty(func) ? null : Parse(func).Compile();
-		}
-
-		public struct Variables
-		{
-			public double x { get; set; }
-			public double t { get; set; }
-			public double u { get; set; }
-			public double K { get; set; }
+			if (string.IsNullOrEmpty(func))
+				return null;
+			var f = Parse(func).Compile();
+			return (x, t) => f(x, t);
 		}
 	}
 }

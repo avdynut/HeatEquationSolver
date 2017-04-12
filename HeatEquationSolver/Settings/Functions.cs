@@ -4,7 +4,7 @@
 	{
 		public string K { get; set; } = "x*x*t+u*u";
 		public string dK_du { get; set; } = "2*u";
-		public string g { get; set; } = "x*x+6*x*t-(2*u*(2*x*t+3*t*t)*(2*x*t+3*t*t))-(2*t*K)";
+		public string g { get; set; } = "x*x+6*x*t-2*u*Math.Pow(2*x*t+3*t*t,2)-2*t*K";
 		public string InitCond { get; set; } = "0";
 		public string LeftBoundCond { get; set; } = "0";
 		public string RightBoundCond { get; set; } = "t+3*t*t";
