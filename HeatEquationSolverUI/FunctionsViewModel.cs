@@ -8,12 +8,43 @@ namespace HeatEquationSolverUI
 {
 	public class FunctionsViewModel : ViewModelBase, IFunctions
 	{
-		private IFunctions functions;
+		private readonly ParsedEquation parsedEquation;
 		private Settings _settings;
+		private IFunctions functions;
 
-		public string K { get => functions.K; set => functions.K = value; }
-		public string dK_du { get => functions.dK_du; set => functions.dK_du = value; }
-		public string g { get => functions.g; set => functions.g = value; }
+		public string K
+		{
+			get => functions.K;
+			set
+			{
+				functions.K = value;
+				var expr = ParseFunction<Func<double, double, double, double>>(K, "x", "t", "u");
+				if (expr == null)
+					return;
+				dK_du = parsedEquation.Derivative(expr, "u").Body.ToString().Replace(" ", "");
+				CalculateG();
+			}
+		}
+
+		public string dK_du
+		{
+			get => functions.dK_du;
+			set
+			{
+				functions.dK_du = value;
+				OnPropertyChanged(nameof(dK_du));
+			}
+		}
+
+		public string g
+		{
+			get => functions.g;
+			set
+			{
+				functions.g = value;
+				OnPropertyChanged(nameof(g));
+			}
+		}
 
 		public string InitCond
 		{
@@ -60,6 +91,7 @@ namespace HeatEquationSolverUI
 				CalculateInitCond();
 				CalculateLeftBoundCond();
 				CalculateRightBoundCond();
+				CalculateG();
 			}
 		}
 
@@ -69,6 +101,7 @@ namespace HeatEquationSolverUI
 
 		public FunctionsViewModel(Settings settings)
 		{
+			parsedEquation = new ParsedEquation();
 			_settings = settings;
 			functions = settings.Functions;
 		}
@@ -90,19 +123,32 @@ namespace HeatEquationSolverUI
 
 		private string SubstituteValueInU(string symbol, string value)
 		{
-			var expr = ParseFunction(u);
+			var expr = ParseFunction<Func<double, double, double>>(u, "x", "t");
 			if (expr == null)
 				return null;
 			string func = u.Replace(symbol, value);
-			expr = ParseFunction(func);
-			return expr?.Body.ToString();
+			expr = ParseFunction<Func<double, double, double>>(func, "x", "t");
+			return expr?.Body.ToString().Replace(" ", "");
 		}
 
-		private Expression<Func<double, double, double>> ParseFunction(string func)
+		public void CalculateG()
+		{
+			var exprU = ParseFunction<Func<double, double, double>>(u, "x", "t");
+			var exprK = ParseFunction<Func<double, double, double, double>>(K, "x", "t", "u");
+			if (exprU == null || exprK == null)
+				return;
+			du_dt = parsedEquation.Derivative(exprU, "t").Body.ToString();
+			var dUdx = parsedEquation.Derivative(exprU, "x");
+			du_dx = dUdx.Body.ToString();
+			d2u_dx2 = parsedEquation.Derivative(dUdx, "x").Body.ToString();
+			g = $"{du_dt}-{dK_du}*Math.Pow({du_dx},2)-{d2u_dx2}*K".Replace(" ", "");
+		}
+
+		private Expression<T> ParseFunction<T>(string func, params string[] variables)
 		{
 			try
 			{
-				return new ParsedEquation().Parse(func);
+				return parsedEquation.Parse<T>(func, variables);
 			}
 			catch
 			{

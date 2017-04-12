@@ -71,7 +71,7 @@
 					<TextBox
                         Grid.Row="2"
                         MinWidth="100"
-                        Text="{Binding Functions.K}" />
+                        Text="{Binding Functions.K, UpdateSourceTrigger=PropertyChanged}" />
 					<Image
                         Grid.Row="2"
                         Margin="140,0,0,0"
@@ -80,7 +80,7 @@
                         Grid.Row="2"
                         MinWidth="100"
                         Margin="182,0,0,0"
-                        Text="{Binding Functions.dK_du}" />
+                        Text="{Binding Functions.dK_du}" IsReadOnly="True"/>
 					<Image Grid.Row="3" Source="pack://siteoforigin:,,,/Images/ModelEquation/g.PNG" />
 					<TextBox
                         Grid.Row="3"

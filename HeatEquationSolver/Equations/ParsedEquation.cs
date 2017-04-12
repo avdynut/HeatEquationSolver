@@ -37,17 +37,22 @@ namespace HeatEquationSolver.Equations
 			du_dt = Compile(functions.du_dt);
 		}
 
-		public Expression<Func<double, double, double>> Parse(string func)
+		public Expression<T> Parse<T>(string func, params string[] variables)
 		{
-			return ((Expression<Func<double, double, double>>)CodeDom.GetExpressionFrom($"(x, t) => {func}")).Simplify();
+			return ((Expression<T>)CodeDom.GetExpressionFrom($"({string.Join(",", variables)}) => {func}")).Simplify();
 		}
 
 		private Function Compile(string func)
 		{
 			if (string.IsNullOrEmpty(func))
 				return null;
-			var f = Parse(func).Compile();
+			var f = Parse<Func<double, double, double>>(func, "x", "t").Compile();
 			return (x, t) => f(x, t);
+		}
+
+		public Expression<T> Derivative<T>(Expression<T> expr, string byVariable)
+		{
+			return expr.Derive(byVariable).Simplify();
 		}
 	}
 }
