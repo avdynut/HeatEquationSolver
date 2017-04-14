@@ -1,5 +1,5 @@
-﻿using Differential;
-using HeatEquationSolver.Settings;
+﻿using HeatEquationSolver.Settings;
+using MathExpressionsNet;
 using System;
 using System.Linq.Expressions;
 
