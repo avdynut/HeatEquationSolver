@@ -13,22 +13,22 @@ namespace HeatEquationSolver.Equations
 
 		public ParsedEquation(IFunctions functions)
 		{
-			var k = ((Expression<Func<double, double, double, double>>)CodeDom.GetExpressionFrom($"(x, t, u) => {functions.K}")).Compile();
+			var k = Parse<Func<double, double, double, double>>(functions.K, "x", "t", "u").Compile();
 			K = (x, t, u) => k(x, t, u);
 
-			var dK_duFunc = ((Expression<Func<double, double, double, double>>)CodeDom.GetExpressionFrom($"(x, t, u) => {functions.dK_du}")).Compile();
+			var dK_duFunc = Parse<Func<double, double, double, double>>(functions.dK_du, "x", "t", "u").Compile();
 			dK_du = (x, t, u) => dK_duFunc(x, t, u);
 
-			var gFunc = ((Expression<Func<double, double, double, double, double>>)CodeDom.GetExpressionFrom($"(x, t, u, K) => {functions.g}")).Compile();
+			var gFunc = Parse<Func<double, double, double, double, double>>(functions.g, "x", "t", "u", "K").Compile();
 			g = (x, t, u) => gFunc(x, t, u, K(x, t, u));
 
-			var initCond = ((Expression<Func<double, double>>)CodeDom.GetExpressionFrom($"x => {functions.InitCond}")).Compile();
+			var initCond = Parse<Func<double, double>>(functions.InitCond, "x").Compile();
 			InitCond = x => initCond(x);
 
-			var leftBoundCond = ((Expression<Func<double, double>>)CodeDom.GetExpressionFrom($"t => {functions.LeftBoundCond}")).Compile();
+			var leftBoundCond = Parse<Func<double, double>>(functions.LeftBoundCond, "t").Compile();
 			LeftBoundCond = t => leftBoundCond(t);
 
-			var rightBoundCond = ((Expression<Func<double, double>>)CodeDom.GetExpressionFrom($"t => {functions.RightBoundCond}")).Compile();
+			var rightBoundCond = Parse<Func<double, double>>(functions.RightBoundCond, "t").Compile();
 			RightBoundCond = t => rightBoundCond(t);
 
 			u = Compile(functions.u);
@@ -39,7 +39,7 @@ namespace HeatEquationSolver.Equations
 
 		public Expression<T> Parse<T>(string func, params string[] variables)
 		{
-			return ((Expression<T>)CodeDom.GetExpressionFrom($"({string.Join(",", variables)}) => {func}")).Simplify();
+			return CodeDom.ParseExpression<T>(func, variables);
 		}
 
 		private Function Compile(string func)
