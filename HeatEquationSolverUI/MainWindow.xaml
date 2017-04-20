@@ -72,15 +72,6 @@
                         Grid.Row="2"
                         MinWidth="100"
                         Text="{Binding Functions.K, UpdateSourceTrigger=PropertyChanged}" />
-					<Image
-                        Grid.Row="2"
-                        Margin="140,0,0,0"
-                        Source="pack://siteoforigin:,,,/Images/ModelEquation/dK_du.png" />
-					<TextBox
-                        Grid.Row="2"
-                        MinWidth="100"
-                        Margin="182,0,0,0"
-                        Text="{Binding Functions.dK_du}" IsReadOnly="True"/>
 					<Image Grid.Row="3" Source="pack://siteoforigin:,,,/Images/ModelEquation/g.PNG" />
 					<TextBox
                         Grid.Row="3"
@@ -180,10 +171,10 @@
 			</Grid.RowDefinitions>
 			<Button
                 Grid.Row="0"
-                Width="40"
+                Width="40" Height="30"
                 Margin="5,10,5,0"
                 Command="{Binding SolveCommand}"
-                Content="{Binding SolveButtonText}"
+                Content="{Binding SolveButtonText, UpdateSourceTrigger=PropertyChanged}"
                 FontSize="10"
                 IsDefault="True"
                 IsEnabled="{Binding SolveButtonIsEnabled}" />
@@ -197,16 +188,26 @@
                 Value="{Binding ProgressBarValue}" />
 		</Grid>
 		<GroupBox Grid.Column="2" Header="Ответ">
-			<StackPanel>
-				<TextBox
-                    Height="310"
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<TextBox Grid.Row="0"
 					Width="180"
                     IsReadOnly="True"
                     Text="{Binding Answer}"
                     VerticalScrollBarVisibility="Auto" />
-				<Label Content="Норма невязки:" />
-				<Label Content="{Binding Norm}" />
-			</StackPanel>
+				<StackPanel Grid.Row="1">
+					<Label Content="Норма невязки:" />
+					<Label Content="{Binding Norm}" />
+				</StackPanel>
+				<StackPanel Grid.Row="2">
+					<Label Content="Затрачено времени (секунд):"/>
+					<Label Content="{Binding ElapsedSeconds}"/>
+				</StackPanel>
+			</Grid>
 		</GroupBox>
 		<!--<Label Content="Developer: Andrey Arekhva, 2016-2017"/>-->
 	</Grid>

@@ -115,11 +115,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\ModelEquation\dK_du.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="he.ico" />
   </ItemGroup>
   <ItemGroup>

@@ -26,16 +26,6 @@ namespace HeatEquationSolverUI
 			}
 		}
 
-		public string dK_du
-		{
-			get => functions.dK_du;
-			set
-			{
-				functions.dK_du = value;
-				OnPropertyChanged(nameof(dK_du));
-			}
-		}
-
 		public string g
 		{
 			get => functions.g;
@@ -95,6 +85,7 @@ namespace HeatEquationSolverUI
 			}
 		}
 
+		public string dK_du { get => functions.dK_du; set => functions.dK_du = value; }
 		public string du_dx { get => functions.du_dx; set => functions.du_dx = value; }
 		public string d2u_dx2 { get => functions.d2u_dx2; set => functions.d2u_dx2 = value; }
 		public string du_dt { get => functions.du_dt; set => functions.du_dt = value; }

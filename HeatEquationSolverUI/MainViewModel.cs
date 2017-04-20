@@ -3,6 +3,7 @@ using HeatEquationSolver.BetaCalculators;
 using HeatEquationSolver.Settings;
 using HeatEquationSolverUI.Base;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -56,7 +57,7 @@ namespace HeatEquationSolverUI
 		public int N
 		{
 			get => _settings.N;
-			set { _settings.N = value; OnPropertyChanged(nameof(H)); }
+			set { _settings.N = value; OnPropertyChanged(nameof(H)); OnPropertyChanged(nameof(N)); }
 		}
 
 		public int M
@@ -64,50 +65,15 @@ namespace HeatEquationSolverUI
 			get => _settings.M;
 			set { _settings.M = value; OnPropertyChanged(nameof(Tau)); OnPropertyChanged(nameof(M)); }
 		}
-		public double Epsilon
-		{
-			get => _settings.Epsilon;
-			set => _settings.Epsilon = value;
-		}
 
-		public double Epsilon2
-		{
-			get => _settings.Epsilon2;
-			set => _settings.Epsilon2 = value;
-		}
-
-		public double Alpha
-		{
-			get => _settings.Alpha;
-			set => _settings.Alpha = value;
-		}
-
-		public double Beta0
-		{
-			get => _settings.Beta0;
-			set => _settings.Beta0 = value;
-		}
-
-		public BetaCalculator BetaCalculatorMethod
-		{
-			get => _settings.BetaCalculatorMethod;
-			set => _settings.BetaCalculatorMethod = value;
-		}
-
-		public int MaxIterations
-		{
-			get => _settings.MaxIterations;
-			set => _settings.MaxIterations = value;
-		}
-
-		public bool UseParsedEquation
-		{
-			get => _settings.UseParsedEquation;
-			set => _settings.UseParsedEquation = value;
-		}
-
+		public double Epsilon { get => _settings.Epsilon; set => _settings.Epsilon = value; }
+		public double Epsilon2 { get => _settings.Epsilon2; set => _settings.Epsilon2 = value; }
+		public double Alpha { get => _settings.Alpha; set => _settings.Alpha = value; }
+		public double Beta0 { get => _settings.Beta0; set => _settings.Beta0 = value; }
+		public BetaCalculator BetaCalculatorMethod { get => _settings.BetaCalculatorMethod; set => _settings.BetaCalculatorMethod = value; }
+		public int MaxIterations { get => _settings.MaxIterations; set => _settings.MaxIterations = value; }
+		public bool UseParsedEquation { get => _settings.UseParsedEquation; set => _settings.UseParsedEquation = value; }
 		public IFunctions Functions { get; set; }
-
 		public double H => _settings.H;
 		public double Tau => _settings.Tau;
 		private MethodBeta _currentMethodForBeta;
@@ -116,7 +82,12 @@ namespace HeatEquationSolverUI
 		public MethodBeta CurrentMethodForBeta
 		{
 			get => _currentMethodForBeta;
-			set { _currentMethodForBeta = value; OnPropertyChanged(nameof(CurrentMethodForBeta)); _settings.BetaCalculatorMethod = _currentMethodForBeta.BetaCalculator; }
+			set
+			{
+				_currentMethodForBeta = value;
+				OnPropertyChanged(nameof(CurrentMethodForBeta));
+				_settings.BetaCalculatorMethod = _currentMethodForBeta.BetaCalculator;
+			}
 		}
 
 		#endregion
@@ -155,12 +126,17 @@ namespace HeatEquationSolverUI
 
 		public int ProgressBarValue { get; set; }
 
+		private double _elapsedSeconds;
+		public double ElapsedSeconds
+		{
+			get => _elapsedSeconds;
+			set { _elapsedSeconds = value; OnPropertyChanged(nameof(ElapsedSeconds)); }
+		}
 
 		#endregion
 
 		private readonly DelegateCommand _solveCommand;
 		public ICommand SolveCommand => _solveCommand;
-
 		private CancellationTokenSource _cancellation;
 
 		public MainViewModel()
@@ -190,7 +166,11 @@ namespace HeatEquationSolverUI
 				var progressIndicator = new Progress<int>(ReportProgress);
 				var task = Task.Run(() => qn.Solve(_cancellation.Token, progressIndicator));
 				SolveButtonText = CancelText;
+				var sw = new Stopwatch();
+				sw.Start();
 				await task;
+				sw.Stop();
+				ElapsedSeconds = sw.Elapsed.TotalSeconds;
 
 				Answer = qn.Answer.Aggregate("", (current, xi) => current + (xi + "\n")).TrimEnd();
 				Norm = qn.Norm.ToString();
