@@ -24,7 +24,6 @@ namespace HeatEquationSolver
 
 		private readonly double[] x;
 		public double[] Answer;
-		public double[] PredY;
 		public double Norm;
 
 		public Solver(Settings.Settings settings)
@@ -47,41 +46,24 @@ namespace HeatEquationSolver
 
 		public void Solve(CancellationToken cancellationToken, IProgress<int> progress = null)
 		{
-			var y0 = new double[N + 1];
+			var y = new double[N + 1];
 			for (int n = 0; n <= N; n++)
-				y0[n] = equation.InitCond(x[n]);
-			Logger.Debug("Layer 0, y='{0}'", y0.AsString());
+				y[n] = equation.InitCond(x[n]);
+			Logger.Debug("Layer 0, y='{0}'", y.AsString());
 
-			for (int m = 0; m < M; m++)
+			tau = Tau;
+			y = SolvingAndFindingOptimalTau(y, 0);
+			for (int m = 1; m < M - 1; m++)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
 				progress?.Report(m);
-				tau = Tau;
-				var yWithPredTau = SolveNonlinearSystem(y0, settings.T1 + m * Tau + Tau);
-				int k = 1;
-				double norm;
-				double[] yWithNextTau;
-				do
-				{
-					cancellationToken.ThrowIfCancellationRequested();
-					k *= 2;
-					tau = Tau / k;
-					double t0 = settings.T1 + m * Tau;
-					yWithNextTau = (double[])y0.Clone();
-					for (int i = 0; i < k; i++)
-						yWithNextTau = SolveNonlinearSystem(yWithNextTau, t0 += tau);
-					norm = CalculateNorm(yWithPredTau, yWithNextTau);
-					Logger.Debug("norm={0}", norm);
-					yWithPredTau = (double[])yWithNextTau.Clone();
-
-				} while (norm > settings.Epsilon2);
-				PredY = (double[])y0.Clone();
-				y0 = yWithNextTau;
-				Logger.Debug("m={0}, tau=Tau/{1}, norm={2}", m, k, norm);
+				y = SolveNonlinearSystem(y, settings.T1 + m * Tau + Tau);
 			}
+			y = SolvingAndFindingOptimalTau(y, M);
 
-			Answer = y0;
+			progress?.Report(M);
+			Answer = y;
 			Norm = 0;
-
 			if (equation.u == null)
 				Norm = settings.Epsilon2;
 			else
@@ -89,10 +71,33 @@ namespace HeatEquationSolver
 				var exactSol = new double[N + 1];
 				for (int n = 0; n <= N; n++)
 					exactSol[n] = equation.u(x[n], settings.T2);
-				Norm = CalculateNorm(y0, exactSol);
+				Norm = CalculateNorm(y, exactSol);
 			}
 
 			Logger.Debug("Answer='{0}', Norm={1}", Answer.AsString(), Norm);
+		}
+
+		private double[] SolvingAndFindingOptimalTau(double[] y, int m)
+		{
+			int k = 1;
+			double norm;
+			var yWithPredTau = SolveNonlinearSystem(y, settings.T1 + m * Tau + Tau);
+			double[] yWithNextTau;
+			do
+			{
+				k *= 2;
+				tau = tau / k;
+				double t0 = settings.T1 + m * Tau;
+				yWithNextTau = (double[])y.Clone();
+				for (int i = 0; i < k; i++)
+					yWithNextTau = SolveNonlinearSystem(yWithNextTau, t0 += tau);
+				norm = CalculateNorm(yWithPredTau, yWithNextTau);
+				Logger.Debug("norm={0}", norm);
+				yWithPredTau = (double[])yWithNextTau.Clone();
+
+			} while (norm > settings.Epsilon2);
+			Logger.Debug("m={0}, tau=Tau/{1}, norm={2}", m, k, norm);
+			return yWithNextTau;
 		}
 
 		private double[] SolveNonlinearSystem(double[] y, double t)

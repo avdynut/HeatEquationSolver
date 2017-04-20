@@ -57,13 +57,19 @@ namespace HeatEquationSolverUI
 		public int N
 		{
 			get => _settings.N;
-			set { _settings.N = value; OnPropertyChanged(nameof(H)); OnPropertyChanged(nameof(N)); }
+			set { _settings.N = value; OnPropertyChanged(nameof(H)); }
 		}
 
 		public int M
 		{
 			get => _settings.M;
-			set { _settings.M = value; OnPropertyChanged(nameof(Tau)); OnPropertyChanged(nameof(M)); }
+			set
+			{
+				_settings.M = value;
+				OnPropertyChanged(nameof(Tau));
+				OnPropertyChanged(nameof(M));
+				ProgressBarValue = 0;
+			}
 		}
 
 		public double Epsilon { get => _settings.Epsilon; set => _settings.Epsilon = value; }
@@ -124,14 +130,14 @@ namespace HeatEquationSolverUI
 			set { _answer = value; OnPropertyChanged(nameof(Answer)); }
 		}
 
-		public int ProgressBarValue { get; set; }
-
-		private double _elapsedSeconds;
-		public double ElapsedSeconds
+		private int _progressValue;
+		public int ProgressBarValue
 		{
-			get => _elapsedSeconds;
-			set { _elapsedSeconds = value; OnPropertyChanged(nameof(ElapsedSeconds)); }
+			get => _progressValue;
+			set { _progressValue = value; OnPropertyChanged(nameof(ProgressBarValue)); }
 		}
+
+		public double ElapsedSeconds { get; set; }
 
 		#endregion
 
@@ -171,8 +177,9 @@ namespace HeatEquationSolverUI
 				await task;
 				sw.Stop();
 				ElapsedSeconds = sw.Elapsed.TotalSeconds;
+				OnPropertyChanged(nameof(ElapsedSeconds));
 
-				Answer = qn.Answer.Aggregate("", (current, xi) => current + (xi + "\n")).TrimEnd();
+				Answer = string.Join(Environment.NewLine, qn.Answer);
 				Norm = qn.Norm.ToString();
 				DataManager.SaveSettingsToFile();
 			}
@@ -188,7 +195,6 @@ namespace HeatEquationSolverUI
 		private void ReportProgress(int value)
 		{
 			ProgressBarValue = ++value;
-			OnPropertyChanged(nameof(ProgressBarValue));
 		}
 	}
 }
