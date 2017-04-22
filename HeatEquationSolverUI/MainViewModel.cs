@@ -167,10 +167,11 @@ namespace HeatEquationSolverUI
 			{
 				Norm = Answer = string.Empty;
 				ElapsedSeconds = ProgressBarValue = 0;
-				var qn = new Solver(_settings);
+				var solver = new Solver(_settings);
+				solver.ChangedNumberOfLayers += Solver_ChangedNumberOfLayers;
 
 				var progressIndicator = new Progress<int>(v => ProgressBarValue = v);
-				var task = Task.Run(() => qn.Solve(_cancellation.Token, progressIndicator));
+				var task = Task.Run(() => solver.Solve(_cancellation.Token, progressIndicator));
 				SolveButtonText = CancelText;
 				var sw = new Stopwatch();
 				sw.Start();
@@ -179,8 +180,8 @@ namespace HeatEquationSolverUI
 				ElapsedSeconds = sw.Elapsed.TotalSeconds;
 				OnPropertyChanged(nameof(ElapsedSeconds));
 
-				Answer = string.Join(Environment.NewLine, qn.Answer);
-				Norm = qn.Norm.ToString();
+				Answer = string.Join(Environment.NewLine, solver.Answer);
+				Norm = solver.Norm.ToString();
 				DataManager.SaveSettingsToFile();
 			}
 			catch (Exception ex)
@@ -190,6 +191,12 @@ namespace HeatEquationSolverUI
 
 			SolveButtonText = SolveText;
 			SolveButtonIsEnabled = true;
+		}
+
+		private void Solver_ChangedNumberOfLayers(int m)
+		{
+			_settings.M = m;
+			OnPropertyChanged(nameof(M));
 		}
 	}
 }

@@ -10,6 +10,9 @@ namespace HeatEquationSolver
 {
 	public class Solver
 	{
+		public delegate void LayersQuantityHandler(int m);
+		public event LayersQuantityHandler ChangedNumberOfLayers;
+
 		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
 		private Settings.Settings settings;
@@ -47,15 +50,20 @@ namespace HeatEquationSolver
 				y[n] = equation.InitCond(x[n]);
 			Logger.Debug("Layer 0, y='{0}'", y.AsString());
 
+			progress?.Report(1);
 			FindOptimalTau(y, settings.T1);
 			settings.M = (int)((settings.T2 - settings.T1) / tau);
-			for (int m = 1; m <= settings.M; m++)
+			ChangedNumberOfLayers?.Invoke(settings.M);
+
+			for (int m = 1; m < settings.M; m++)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
 				progress?.Report(m);
 				y = SolveNonlinearSystem(y, settings.T1 + m * tau);
 			}
-			//y = SolvingAndFindingOptimalTau(y, M);
+			FindOptimalTau(y, settings.T2 - tau);
+			progress?.Report(settings.M);
+			y = SolveNonlinearSystem(y, settings.T2);
 
 			Answer = y;
 			Norm = 0;

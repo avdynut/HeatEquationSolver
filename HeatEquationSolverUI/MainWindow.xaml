@@ -185,7 +185,7 @@
                 Maximum="{Binding M}"
                 Orientation="Vertical"
                 ToolTip="{Binding ProgressBarValue}"
-                Value="{Binding ProgressBarValue}" />
+                Value="{Binding ProgressBarValue, UpdateSourceTrigger=PropertyChanged}" />
 		</Grid>
 		<GroupBox Grid.Column="2" Header="Ответ">
 			<Grid>

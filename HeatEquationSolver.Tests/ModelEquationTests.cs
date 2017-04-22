@@ -33,7 +33,7 @@ namespace HeatEquationSolver.Tests
 		[Test]
 		public void SolverShouldFindCorrectApporximatedValues()
 		{
-			double[] expectedValues = { 0, 0.3102857914, 0.6401564002, 0.9901277839, 1.3601037514, 1.7500824502, 2.1600631799, 2.5900455358, 3.0400292471, 3.5100141182, 4 };
+			double[] expectedValues = { 0, 0.3101042406, 0.6400414248, 0.9900327861, 1.3600262915, 1.7500207651, 2.1600158569, 2.5900114047, 3.0400073153, 3.5100035281, 4 };
 			var approximatedValues = solver.Answer.Select(x => Math.Round(x, 10));
 			Assert.That(approximatedValues, Is.EqualTo(expectedValues), "Incorrect answer");
 		}
@@ -51,7 +51,7 @@ namespace HeatEquationSolver.Tests
 		[Test]
 		public void SolverShouldReturnCorrectNorm()
 		{
-			double expectedNorm = 0.000121;
+			double expectedNorm = 3.9E-05;
 			Assert.That(Math.Round(solver.Norm, 6), Is.EqualTo(expectedNorm), "Incorrect norm");
 		}
 	}
