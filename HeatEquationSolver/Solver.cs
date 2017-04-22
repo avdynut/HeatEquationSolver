@@ -1,7 +1,6 @@
 ﻿using HeatEquationSolver.BetaCalculators;
 using HeatEquationSolver.Equations;
 using HeatEquationSolver.Helpers;
-using HeatEquationSolver.Settings;
 using NLog;
 using System;
 using System.Linq;
@@ -13,11 +12,9 @@ namespace HeatEquationSolver
 	{
 		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-		private ISettings settings;
+		private Settings.Settings settings;
 		private int N;
-		private int M;
 		private double h;
-		private double Tau;
 		private double tau;
 		private BetaCalculatorBase betaCalculator;
 		private HeatEquation equation;
@@ -30,9 +27,8 @@ namespace HeatEquationSolver
 		{
 			this.settings = settings;
 			N = settings.N;
-			M = settings.M;
 			h = settings.H;
-			Tau = settings.Tau;
+			tau = settings.Tau;
 			betaCalculator = settings.BetaCalculator;
 			equation = settings.Equation;
 
@@ -41,7 +37,7 @@ namespace HeatEquationSolver
 				x[i] = settings.X1 + i * h;
 
 			Logger.Debug("X1={0}, X2={1}, T1={2}, T2={3}, N={4}, M={5}, h={6}, Tau={7}, Epsilon={8}, Beta0={9}, MethodForBeta={10}",
-				settings.X1, settings.X2, settings.T1, settings.T2, N, M, h, Tau, settings.Epsilon, settings.Beta0, settings.BetaCalculatorMethod);
+				settings.X1, settings.X2, settings.T1, settings.T2, N, settings.M, h, tau, settings.Epsilon, settings.Beta0, settings.BetaCalculatorMethod);
 		}
 
 		public void Solve(CancellationToken cancellationToken, IProgress<int> progress = null)
@@ -51,17 +47,16 @@ namespace HeatEquationSolver
 				y[n] = equation.InitCond(x[n]);
 			Logger.Debug("Layer 0, y='{0}'", y.AsString());
 
-			tau = Tau;
-			y = SolvingAndFindingOptimalTau(y, 0);
-			for (int m = 1; m < M - 1; m++)
+			FindOptimalTau(y, settings.T1);
+			settings.M = (int)((settings.T2 - settings.T1) / tau);
+			for (int m = 1; m <= settings.M; m++)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
 				progress?.Report(m);
-				y = SolveNonlinearSystem(y, settings.T1 + m * Tau + Tau);
+				y = SolveNonlinearSystem(y, settings.T1 + m * tau);
 			}
-			y = SolvingAndFindingOptimalTau(y, M);
+			//y = SolvingAndFindingOptimalTau(y, M);
 
-			progress?.Report(M);
 			Answer = y;
 			Norm = 0;
 			if (equation.u == null)
@@ -77,27 +72,23 @@ namespace HeatEquationSolver
 			Logger.Debug("Answer='{0}', Norm={1}", Answer.AsString(), Norm);
 		}
 
-		private double[] SolvingAndFindingOptimalTau(double[] y, int m)
+		private void FindOptimalTau(double[] yPred, double tPred)
 		{
 			int k = 1;
 			double norm;
-			var yWithPredTau = SolveNonlinearSystem(y, settings.T1 + m * Tau + Tau);
-			double[] yWithNextTau;
+			var yNext = SolveNonlinearSystem(yPred, tPred + tau);
 			do
 			{
 				k *= 2;
-				tau = tau / k;
-				double t0 = settings.T1 + m * Tau;
-				yWithNextTau = (double[])y.Clone();
-				for (int i = 0; i < k; i++)
-					yWithNextTau = SolveNonlinearSystem(yWithNextTau, t0 += tau);
-				norm = CalculateNorm(yWithPredTau, yWithNextTau);
+				tau /= 2;
+				var y = (double[])yPred.Clone();
+				for (int i = 1; i <= k; i++)
+					y = SolveNonlinearSystem(y, tPred + i * tau);
+				norm = CalculateNorm(yNext, y);
+				yNext = y;
 				Logger.Debug("norm={0}", norm);
-				yWithPredTau = (double[])yWithNextTau.Clone();
-
 			} while (norm > settings.Epsilon2);
-			Logger.Debug("m={0}, tau=Tau/{1}, norm={2}", m, k, norm);
-			return yWithNextTau;
+			tau *= 2;
 		}
 
 		private double[] SolveNonlinearSystem(double[] y, double t)

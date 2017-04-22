@@ -166,10 +166,10 @@ namespace HeatEquationSolverUI
 			try
 			{
 				Norm = Answer = string.Empty;
-
+				ElapsedSeconds = ProgressBarValue = 0;
 				var qn = new Solver(_settings);
 
-				var progressIndicator = new Progress<int>(ReportProgress);
+				var progressIndicator = new Progress<int>(v => ProgressBarValue = v);
 				var task = Task.Run(() => qn.Solve(_cancellation.Token, progressIndicator));
 				SolveButtonText = CancelText;
 				var sw = new Stopwatch();
@@ -190,11 +190,6 @@ namespace HeatEquationSolverUI
 
 			SolveButtonText = SolveText;
 			SolveButtonIsEnabled = true;
-		}
-
-		private void ReportProgress(int value)
-		{
-			ProgressBarValue = ++value;
 		}
 	}
 }
