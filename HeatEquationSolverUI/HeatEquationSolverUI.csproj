@@ -118,8 +118,8 @@
     <Resource Include="he.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\MethodsForBeta\no6.PNG" />
-    <Resource Include="Images\MethodsForBeta\no6_mod.PNG" />
+    <Resource Include="Images\MethodsForBeta\osmoip_1_274.PNG" />
+    <Resource Include="Images\MethodsForBeta\osmoip.PNG" />
     <Resource Include="Images\MethodsForBeta\puzynin.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

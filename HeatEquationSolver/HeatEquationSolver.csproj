@@ -55,8 +55,8 @@
     <Compile Include="Settings\Functions.cs" />
     <Compile Include="Equations\HeatEquation.cs" />
     <Compile Include="BetaCalculators\BetaCalculatorBase.cs" />
-    <Compile Include="BetaCalculators\No6Method.cs" />
-    <Compile Include="BetaCalculators\No6ModMethod.cs" />
+    <Compile Include="BetaCalculators\Osmoip_1_274.cs" />
+    <Compile Include="BetaCalculators\Osmoip.cs" />
     <Compile Include="BetaCalculators\PuzyninMethod.cs" />
     <Compile Include="Equations\ParsedEquation.cs" />
     <Compile Include="Helpers\Matrix.cs" />

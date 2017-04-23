@@ -43,10 +43,10 @@ namespace HeatEquationSolver.Settings
 				{
 					case BetaCalculators.BetaCalculator.Puzynin:
 						return new PuzyninMethod();
-					case BetaCalculators.BetaCalculator.No6:
-						return new No6Method();
-					case BetaCalculators.BetaCalculator.No6Mod:
-						return new No6ModMethod();
+					case BetaCalculators.BetaCalculator.Osmoip_1_274:
+						return new Osmoip_1_274();
+					case BetaCalculators.BetaCalculator.Osmoip:
+						return new Osmoip();
 					default:
 						throw new ArgumentOutOfRangeException();
 				}

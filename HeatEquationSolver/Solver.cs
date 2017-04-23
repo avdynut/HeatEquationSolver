@@ -61,9 +61,15 @@ namespace HeatEquationSolver
 				progress?.Report(m);
 				y = SolveNonlinearSystem(y, settings.T1 + m * tau);
 			}
-			FindOptimalTau(y, settings.T2 - tau);
+
+			double t = settings.T2 - tau;
+			FindOptimalTau(y, t);
 			progress?.Report(settings.M);
-			y = SolveNonlinearSystem(y, settings.T2);
+			while (t != settings.T2)
+			{
+				t += tau;
+				y = SolveNonlinearSystem(y, t);
+			}
 
 			Answer = y;
 			Norm = 0;
@@ -119,7 +125,7 @@ namespace HeatEquationSolver
 
 				f = SubstituteInSystem(t, y, yK);
 				Norm = CalculateNorm(f);
-				betaCalculator.NextBeta(Norm);
+				betaCalculator.CalculateNextBeta(Norm);
 			}
 
 			Logger.Debug("t={0}, {1} iterations, yK='{2}'", t, iterations, yK.AsString());

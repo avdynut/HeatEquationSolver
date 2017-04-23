@@ -16,8 +16,8 @@ namespace HeatEquationSolverUI
 		}
 
 		public static readonly MethodBeta[] Methods = {
-			new MethodBeta(BetaCalculator.Puzynin, "Метод Пузынина", "puzynin.PNG"),
-			new MethodBeta(BetaCalculator.No6, "Нерегуляризованный одношаговый метод", "no6.PNG"),
-			new MethodBeta(BetaCalculator.No6Mod, "Модифицированный НО метод", "no6_mod.PNG") };
+			new MethodBeta(BetaCalculator.Puzynin, "Метод И.В. Пузынина", "puzynin.PNG"),
+			new MethodBeta(BetaCalculator.Osmoip_1_274, "Одношаговый метод неполного прогноза (1.274)", "osmoip_1_274.PNG"),
+			new MethodBeta(BetaCalculator.Osmoip, "Модифицированный НО метод", "osmoip.PNG") };
 	}
 }
