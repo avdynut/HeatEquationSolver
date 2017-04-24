@@ -3,17 +3,15 @@
 namespace HeatEquationSolver.BetaCalculators
 {
 	/// <summary>
-	/// One-step method of incomplete predict
+	/// One-step method of incomplete predict (1.267)
 	/// </summary>
-	public class Osmoip : Osmoip_1_274
+	public class Osmoip_1_267 : BetaCalculatorBase
 	{
 		public override double Multiplier => -Math.Sqrt(Beta);
 
 		protected override void CalculateBeta(double norm)
 		{
-			double nextBeta = Math.Min(1, norm0 * norm0 * gamma / (norm * norm * Beta));
-			gamma *= nextBeta / Beta;
-			Beta = nextBeta;
+			Beta = Math.Min(1, Beta * predNorm * predNorm / (norm * norm));
 			predNorm = norm;
 		}
 	}

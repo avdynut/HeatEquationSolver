@@ -3,7 +3,7 @@
 	public abstract class BetaCalculatorBase
 	{
 		protected double predNorm;
-		public abstract double Multiplier { get; }
+		public virtual double Multiplier => -Beta;
 		public double Beta { get; protected set; }
 
 		public virtual void Init(double beta0, double firstNorm)
@@ -26,7 +26,10 @@
 	public enum BetaCalculator
 	{
 		Puzynin,
+		Osmoip_1_5,
+		Osmoip_1_47,
+		Osmoip_1_267,
 		Osmoip_1_274,
-		Osmoip
+		Osmoip_1_301
 	}
 }

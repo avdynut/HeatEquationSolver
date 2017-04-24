@@ -2,10 +2,11 @@
 
 namespace HeatEquationSolver.BetaCalculators
 {
+	/// <summary>
+	/// One-step method of incomplete predict of I.V. Puzynin
+	/// </summary>
 	public class PuzyninMethod : BetaCalculatorBase
 	{
-		public override double Multiplier => -Beta;
-
 		protected override void CalculateBeta(double norm)
 		{
 			Beta = Math.Min(1, Beta * predNorm / norm);
