@@ -7,41 +7,37 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="HeatEquationSolver"
 	SizeToContent="WidthAndHeight"
-	MinWidth="591"
-	MinHeight="448"
+	MinWidth="676"
+	MinHeight="510"
     FontSize="14"
 	Icon="he.ico"
     mc:Ignorable="d">
 	<Window.Resources>
-		<local:MainViewModel x:Key="Settings" />
+		<local:MainViewModel x:Key="Settings"/>
 	</Window.Resources>
 	<Grid DataContext="{StaticResource Settings}">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition MinWidth="410" Width="2*"/>
 			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="3*"/>
 		</Grid.ColumnDefinitions>
 		<GroupBox Grid.Column="0" Header="Параметры">
 			<Grid>
 				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="2*"/>
+					<RowDefinition Height="3*"/>
 				</Grid.RowDefinitions>
-				<Image Grid.Row="0" Source="pack://siteoforigin:,,,/Images/equation.PNG" />
+				<Image Grid.Row="0" Source="pack://siteoforigin:,,,/Images/equation.PNG" Stretch="None"/>
 				<Grid Grid.Row="1">
 					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto" />
-						<RowDefinition Height="Auto" />
-						<RowDefinition Height="Auto" />
-						<RowDefinition Height="Auto" />
-						<RowDefinition Height="Auto" />
-						<RowDefinition Height="Auto" />
-						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto"/>
+						<RowDefinition MinHeight="20" MaxHeight="35"/>
+						<RowDefinition MinHeight="20" MaxHeight="35"/>
+						<RowDefinition MinHeight="20" MaxHeight="35"/>
+						<RowDefinition MinHeight="20" MaxHeight="35"/>
+						<RowDefinition MinHeight="20" MaxHeight="35"/>
+						<RowDefinition MinHeight="20" MaxHeight="35"/>
 					</Grid.RowDefinitions>
 					<Grid.Resources>
 						<BooleanToVisibilityConverter x:Key="b2v" />
@@ -85,7 +81,7 @@
                         Text="{Binding T1, UpdateSourceTrigger=PropertyChanged}" />
 					<TextBox
                         Grid.Row="4"
-                        MinWidth="50"
+                        MinWidth="55"
                         Margin="78,0,0,0"
                         Text="{Binding Functions.InitCond}" />
 					<Image Grid.Row="5" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_0_t.PNG" />
@@ -96,7 +92,7 @@
                         Text="{Binding X1, UpdateSourceTrigger=PropertyChanged}" />
 					<TextBox
                         Grid.Row="5"
-                        MinWidth="50"
+                        MinWidth="55"
                         Margin="78,0,0,0"
                         Text="{Binding Functions.LeftBoundCond}" />
 					<Image Grid.Row="6" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_1_t.PNG" />
@@ -107,54 +103,58 @@
                         Text="{Binding X2, UpdateSourceTrigger=PropertyChanged}" />
 					<TextBox
                         Grid.Row="6"
-                        MinWidth="50"
+                        MinWidth="55"
                         Margin="78,0,0,0"
                         Text="{Binding Functions.RightBoundCond}" />
 				</Grid>
 				<Grid Grid.Row="2">
 					<Grid.RowDefinitions>
-						<RowDefinition/>
-						<RowDefinition/>
-						<RowDefinition/>
-						<RowDefinition/>
-						<RowDefinition/>
-						<RowDefinition/>
-						<RowDefinition/>
+						<RowDefinition MinHeight="29" MaxHeight="35"/>
+						<RowDefinition MinHeight="29" MaxHeight="35"/>
+						<RowDefinition MinHeight="29" MaxHeight="35"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition MinHeight="29" MaxHeight="35"/>
+						<RowDefinition MinHeight="29" MaxHeight="35"/>
 					</Grid.RowDefinitions>
 					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="78"/>
+						<ColumnDefinition Width="70"/>
 						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.Resources>
 						<Style TargetType="TextBox">
 							<Setter Property="Height" Value="22"/>
-							<Setter Property="Width" Value="50"/>
+							<Setter Property="MinWidth" Value="55"/>
 							<Setter Property="HorizontalAlignment" Value="Left"/>
 						</Style>
 						<Style TargetType="Label">
 							<Setter Property="HorizontalAlignment" Value="Right"/>
+							<Setter Property="VerticalAlignment" Value="Center"/>
 						</Style>
 					</Grid.Resources>
 					<Label Grid.Row="0" Grid.Column="2" Content="N" />
-					<TextBox Grid.Row="0" Grid.Column="3" Text="{Binding N, UpdateSourceTrigger=PropertyChanged}" />
-					<Label Grid.Row="0" Grid.Column="4" Content="{Binding H}" HorizontalAlignment="Left" ToolTip="h"/>
+					<StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
+						<TextBox Text="{Binding N, UpdateSourceTrigger=PropertyChanged}" />
+						<Label Content="{Binding H}" HorizontalAlignment="Left" ToolTip="h"/>
+					</StackPanel>
 					<Label Grid.Row="1" Grid.Column="0" Content="T" />
 					<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding T2}"/>
 					<Label Grid.Row="1" Grid.Column="2" Content="M" />
-					<TextBox Grid.Row="1" Grid.Column="3" Text="{Binding M, UpdateSourceTrigger=PropertyChanged}" />
-					<Label Grid.Row="1" Grid.Column="4" Content="{Binding Tau}" HorizontalAlignment="Left" ToolTip="tau"/>
+					<StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal">
+						<TextBox Text="{Binding M, UpdateSourceTrigger=PropertyChanged}" />
+						<Label Content="{Binding Tau}" HorizontalAlignment="Left" ToolTip="tau"/>
+					</StackPanel>
 					<Label Grid.Row="2" Grid.Column="0" Content="Eps" />
 					<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Epsilon}" ToolTip="В решении системы нелинейных уравнений" />
 					<Label Grid.Row="2" Grid.Column="2" Content="Eps2" />
 					<TextBox Grid.Row="2" Grid.Column="3" Text="{Binding Epsilon2}" ToolTip="От слоя к слою" />
-					<ComboBox Grid.Row="3" Grid.ColumnSpan="5"
+					<ComboBox Grid.Row="3" Grid.ColumnSpan="4" Margin="0,7,0,0"
                         DisplayMemberPath="Name"
                         ItemsSource="{Binding MethodsForBeta}"
-                        SelectedItem="{Binding CurrentMethodForBeta}" Width="310" HorizontalAlignment="Left"/>
-					<Image Grid.Row="4" Grid.ColumnSpan="5" Source="{Binding CurrentMethodForBeta.RelativePathToImage}" />
+                        SelectedItem="{Binding CurrentMethodForBeta}" Width="398" HorizontalAlignment="Left"/>
+					<Image Grid.Row="4" Grid.ColumnSpan="4" Source="{Binding CurrentMethodForBeta.PathToImage}" Stretch="None" Width="398" HorizontalAlignment="Left"/>
 					<Label Grid.Row="5" Grid.Column="0" Content="Beta0" />
 					<TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Beta0}" />
 					<Label Grid.Row="5" Grid.Column="2" Content="Alpha" />
@@ -195,7 +195,7 @@
 					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 				<TextBox Grid.Row="0"
-					Width="180"
+					MinWidth="180"
                     IsReadOnly="True"
                     Text="{Binding Answer}"
                     VerticalScrollBarVisibility="Auto" />

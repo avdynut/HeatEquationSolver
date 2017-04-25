@@ -118,9 +118,26 @@
     <Resource Include="he.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\MethodsForBeta\osmoip_1_274.PNG" />
-    <Resource Include="Images\MethodsForBeta\osmoip.PNG" />
-    <Resource Include="Images\MethodsForBeta\puzynin.PNG" />
+    <None Include="Images\MethodsForBeta\osmoip_1_274.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Images\MethodsForBeta\puzynin.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\MethodsForBeta\osmoip_1_267.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Images\MethodsForBeta\osmoip_1_301.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Images\MethodsForBeta\osmoip_1_47.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Images\MethodsForBeta\osmoip_1_5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
