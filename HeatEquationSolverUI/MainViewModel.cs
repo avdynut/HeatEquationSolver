@@ -16,7 +16,7 @@ namespace HeatEquationSolverUI
 	{
 		#region Settings
 
-		private readonly Settings _settings;
+		private Settings _settings;
 
 		public double X1
 		{
@@ -48,6 +48,7 @@ namespace HeatEquationSolverUI
 				((FunctionsViewModel)Functions).CalculateInitCond();
 			}
 		}
+
 		public double T2
 		{
 			get => _settings.T2;
@@ -143,13 +144,23 @@ namespace HeatEquationSolverUI
 
 		private readonly DelegateCommand _solveCommand;
 		public ICommand SolveCommand => _solveCommand;
+
+		private readonly DelegateCommand _resetCommand;
+		public ICommand ResetCommand => _resetCommand;
+
 		private CancellationTokenSource _cancellation;
 
 		public MainViewModel()
 		{
+			Init();
+			_solveCommand = new DelegateCommand(SolveEquation);
+			_resetCommand = new DelegateCommand(ResetSettings);
+		}
+
+		private void Init()
+		{
 			_settings = DataManager.Settings;
 			Functions = new FunctionsViewModel(_settings);
-			_solveCommand = new DelegateCommand(SolveEquation);
 			_currentMethodForBeta = MethodBeta.Methods.First(m => m.BetaCalculator.Equals(_settings.BetaCalculatorMethod));
 		}
 
@@ -197,6 +208,28 @@ namespace HeatEquationSolverUI
 		{
 			_settings.M = m;
 			OnPropertyChanged(nameof(M));
+		}
+
+		private void ResetSettings()
+		{
+			DataManager.ResetSetting();
+			Init();
+			OnPropertyChanged(nameof(Functions));
+			OnPropertyChanged(nameof(X1));
+			OnPropertyChanged(nameof(X2));
+			OnPropertyChanged(nameof(T1));
+			OnPropertyChanged(nameof(T2));
+			OnPropertyChanged(nameof(N));
+			OnPropertyChanged(nameof(M));
+			OnPropertyChanged(nameof(Epsilon));
+			OnPropertyChanged(nameof(Epsilon2));
+			OnPropertyChanged(nameof(Alpha));
+			OnPropertyChanged(nameof(Beta0));
+			OnPropertyChanged(nameof(BetaCalculatorMethod));
+			OnPropertyChanged(nameof(MaxIterations));
+			OnPropertyChanged(nameof(H));
+			OnPropertyChanged(nameof(Tau));
+			OnPropertyChanged(nameof(CurrentMethodForBeta));
 		}
 	}
 }

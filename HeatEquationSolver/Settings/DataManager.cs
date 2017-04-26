@@ -6,7 +6,7 @@ namespace HeatEquationSolver.Settings
 	public static class DataManager
 	{
 		private const string FilePath = "settings.json";
-		public static readonly Settings Settings;
+		public static Settings Settings;
 
 		static DataManager()
 		{
@@ -16,13 +16,18 @@ namespace HeatEquationSolver.Settings
 			}
 			catch
 			{
-				Settings = new Settings();
+				ResetSetting();
 			}
 		}
 
 		public static void SaveSettingsToFile()
 		{
 			File.WriteAllText(FilePath, JsonConvert.SerializeObject(Settings, Formatting.Indented));
+		}
+
+		public static void ResetSetting()
+		{
+			Settings = new Settings();
 		}
 	}
 }
