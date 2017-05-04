@@ -42,8 +42,9 @@ namespace HeatEquationSolver.Tests
 		public void ApproximatedValuesShouldResembleToExactValues()
 		{
 			var exactValues = new double[settings.N + 1];
+			var h = (settings.X2 - settings.X1) / settings.N;
 			for (int i = 0; i <= settings.N; i++)
-				exactValues[i] = Math.Round(equation.u(settings.X1 + i * settings.H, settings.T2), 3);
+				exactValues[i] = Math.Round(equation.u(settings.X1 + i * h, settings.T2), 3);
 			var approximatedValues = solver.Answer.Select(x => Math.Round(x, 3));
 			Assert.That(approximatedValues, Is.EqualTo(exactValues), "Incorrect answer");
 		}

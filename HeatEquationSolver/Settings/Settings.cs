@@ -31,9 +31,6 @@ namespace HeatEquationSolver.Settings
 		public bool UseParsedEquation { get; set; } = true;
 		public IFunctions Functions { get; set; } = new Functions();
 
-		[JsonIgnore] public double H => (X2 - X1) / N;
-		[JsonIgnore] public double Tau => (T2 - T1) / M;
-
 		[JsonIgnore]
 		public BetaCalculatorBase BetaCalculator
 		{

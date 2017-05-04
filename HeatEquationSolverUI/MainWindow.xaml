@@ -6,9 +6,9 @@
     xmlns:local="clr-namespace:HeatEquationSolverUI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="HeatEquationSolver"
-	SizeToContent="WidthAndHeight"
+	SizeToContent="Width"
 	MinWidth="676"
-	MinHeight="510"
+	MinHeight="510" Height="510"
     FontSize="14"
 	Icon="he.ico"
     mc:Ignorable="d">
@@ -135,17 +135,11 @@
 						</Style>
 					</Grid.Resources>
 					<Label Grid.Row="0" Grid.Column="2" Content="N" />
-					<StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
-						<TextBox Text="{Binding N, UpdateSourceTrigger=PropertyChanged}" />
-						<Label Content="{Binding H}" HorizontalAlignment="Left" ToolTip="h"/>
-					</StackPanel>
+					<TextBox Grid.Row="0" Grid.Column="3" Text="{Binding N, UpdateSourceTrigger=PropertyChanged}" />
 					<Label Grid.Row="1" Grid.Column="0" Content="T" />
 					<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding T2}"/>
 					<Label Grid.Row="1" Grid.Column="2" Content="M" />
-					<StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal">
-						<TextBox Text="{Binding M, UpdateSourceTrigger=PropertyChanged}" />
-						<Label Content="{Binding Tau}" HorizontalAlignment="Left" ToolTip="tau"/>
-					</StackPanel>
+					<TextBox Grid.Row="1" Grid.Column="3" Text="{Binding M, UpdateSourceTrigger=PropertyChanged}" />
 					<Label Grid.Row="2" Grid.Column="0" Content="Eps" />
 					<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Epsilon}" ToolTip="В решении системы нелинейных уравнений" />
 					<Label Grid.Row="2" Grid.Column="2" Content="Eps2" />

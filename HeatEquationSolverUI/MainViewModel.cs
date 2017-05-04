@@ -35,7 +35,6 @@ namespace HeatEquationSolverUI
 			{
 				_settings.X2 = value;
 				((FunctionsViewModel)Functions).CalculateRightBoundCond();
-				OnPropertyChanged(nameof(H));
 			}
 		}
 
@@ -49,17 +48,8 @@ namespace HeatEquationSolverUI
 			}
 		}
 
-		public double T2
-		{
-			get => _settings.T2;
-			set { _settings.T2 = value; OnPropertyChanged(nameof(Tau)); }
-		}
-
-		public int N
-		{
-			get => _settings.N;
-			set { _settings.N = value; OnPropertyChanged(nameof(H)); }
-		}
+		public double T2 { get => _settings.T2; set => _settings.T2 = value; }
+		public int N { get => _settings.N; set => _settings.N = value; }
 
 		public int M
 		{
@@ -67,7 +57,6 @@ namespace HeatEquationSolverUI
 			set
 			{
 				_settings.M = value;
-				OnPropertyChanged(nameof(Tau));
 				OnPropertyChanged(nameof(M));
 				ProgressBarValue = 0;
 			}
@@ -81,11 +70,10 @@ namespace HeatEquationSolverUI
 		public int MaxIterations { get => _settings.MaxIterations; set => _settings.MaxIterations = value; }
 		public bool UseParsedEquation { get => _settings.UseParsedEquation; set => _settings.UseParsedEquation = value; }
 		public IFunctions Functions { get; set; }
-		public double H => _settings.H;
-		public double Tau => _settings.Tau;
-		private MethodBeta _currentMethodForBeta;
-		public MethodBeta[] MethodsForBeta => MethodBeta.Methods;
 
+
+		public MethodBeta[] MethodsForBeta => MethodBeta.Methods;
+		private MethodBeta _currentMethodForBeta;
 		public MethodBeta CurrentMethodForBeta
 		{
 			get => _currentMethodForBeta;
@@ -227,8 +215,6 @@ namespace HeatEquationSolverUI
 			OnPropertyChanged(nameof(Beta0));
 			OnPropertyChanged(nameof(BetaCalculatorMethod));
 			OnPropertyChanged(nameof(MaxIterations));
-			OnPropertyChanged(nameof(H));
-			OnPropertyChanged(nameof(Tau));
 			OnPropertyChanged(nameof(CurrentMethodForBeta));
 		}
 	}

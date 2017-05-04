@@ -30,8 +30,8 @@ namespace HeatEquationSolver
 		{
 			this.settings = settings;
 			N = settings.N;
-			h = settings.H;
-			tau = settings.Tau;
+			h = (settings.X2 - settings.X1) / N;
+			tau = (settings.T2 - settings.T1) / settings.M;
 			betaCalculator = settings.BetaCalculator;
 			equation = settings.Equation;
 
