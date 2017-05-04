@@ -47,6 +47,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HeatEquationSolverUI\HeatEquationSolverUI.csproj">
+      <Project>{795bb736-68a0-4a7d-9c50-ec9d61887e89}</Project>
+      <Name>HeatEquationSolverUI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HeatEquationSolver\HeatEquationSolver.csproj">
       <Project>{bd9c1151-54c7-4f86-9bad-0acb44cca252}</Project>
       <Name>HeatEquationSolver</Name>

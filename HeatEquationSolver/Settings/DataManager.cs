@@ -6,7 +6,7 @@ namespace HeatEquationSolver.Settings
 	public static class DataManager
 	{
 		private const string FilePath = "settings.json";
-		public static Settings Settings;
+		public static ISettings Settings;
 
 		static DataManager()
 		{

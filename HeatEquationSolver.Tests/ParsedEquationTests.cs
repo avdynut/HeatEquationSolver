@@ -3,13 +3,12 @@ using HeatEquationSolver.Settings;
 using NUnit.Framework;
 using System;
 using System.Linq;
-using System.Threading;
 
 namespace HeatEquationSolver.Tests
 {
 	public class ParsedEquationTests
 	{
-		private Settings.Settings settings;
+		private ISettings settings;
 		private ParsedEquation equation;
 		private ModelEquation modelEq;
 
@@ -21,7 +20,7 @@ namespace HeatEquationSolver.Tests
 		{
 			settings = DataManager.Settings;
 			settings.UseParsedEquation = true;
-			equation = (ParsedEquation)settings.Equation;
+			equation = new ParsedEquation(settings.Functions);
 			modelEq = new ModelEquation();
 		}
 
@@ -47,11 +46,11 @@ namespace HeatEquationSolver.Tests
 		public void CheckSolution()
 		{
 			var pSolver = new Solver(settings);
-			pSolver.Solve(new CancellationToken());
+			pSolver.Solve();
 
 			settings.UseParsedEquation = false;
 			var mSolver = new Solver(settings);
-			mSolver.Solve(new CancellationToken());
+			mSolver.Solve();
 
 			Assert.That(pSolver.Norm.Round(), Is.EqualTo(mSolver.Norm.Round()), "Incorrect norm");
 			Assert.That(pSolver.Answer.Select(a => a.Round()), Is.EqualTo(mSolver.Answer.Select(a => a.Round())), "Incorrect answer");

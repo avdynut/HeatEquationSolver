@@ -16,7 +16,7 @@ namespace HeatEquationSolverUI
 	{
 		#region Settings
 
-		private Settings _settings;
+		private ISettings _settings;
 
 		public double X1
 		{

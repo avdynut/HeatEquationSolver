@@ -9,7 +9,7 @@ namespace HeatEquationSolverUI
 	public class FunctionsViewModel : ViewModelBase, IFunctions
 	{
 		private readonly ParsedEquation parsedEquation;
-		private Settings _settings;
+		private ISettings _settings;
 		private IFunctions functions;
 
 		public string K
@@ -90,7 +90,7 @@ namespace HeatEquationSolverUI
 		public string d2u_dx2 { get => functions.d2u_dx2; set => functions.d2u_dx2 = value; }
 		public string du_dt { get => functions.du_dt; set => functions.du_dt = value; }
 
-		public FunctionsViewModel(Settings settings)
+		public FunctionsViewModel(ISettings settings)
 		{
 			parsedEquation = new ParsedEquation();
 			_settings = settings;

@@ -3,13 +3,12 @@ using HeatEquationSolver.Settings;
 using NUnit.Framework;
 using System;
 using System.Linq;
-using System.Threading;
 
 namespace HeatEquationSolver.Tests
 {
 	public class ModelEquationTests
 	{
-		private Settings.Settings settings;
+		private ISettings settings;
 		private Solver solver;
 		private HeatEquation equation;
 
@@ -20,7 +19,7 @@ namespace HeatEquationSolver.Tests
 			settings.UseParsedEquation = false;
 			equation = new ModelEquation();
 			solver = new Solver(settings);
-			solver.Solve(new CancellationToken());
+			solver.Solve();
 		}
 
 		[Test]

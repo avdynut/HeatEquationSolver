@@ -1,6 +1,7 @@
 ﻿using HeatEquationSolver.BetaCalculators;
 using HeatEquationSolver.Equations;
 using HeatEquationSolver.Helpers;
+using HeatEquationSolver.Settings;
 using NLog;
 using System;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace HeatEquationSolver
 
 		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-		private Settings.Settings settings;
+		private ISettings settings;
 		private int N;
 		private double h;
 		private double tau;
@@ -26,14 +27,35 @@ namespace HeatEquationSolver
 		public double[] Answer;
 		public double Norm;
 
-		public Solver(Settings.Settings settings)
+		private BetaCalculatorBase GetBetaCalculator(BetaCalculator betaCalculatorMethod)
+		{
+			switch (betaCalculatorMethod)
+			{
+				case BetaCalculator.Puzynin:
+					return new PuzyninMethod();
+				case BetaCalculator.Osmoip_1_5:
+					return new Osmoip_1_5();
+				case BetaCalculator.Osmoip_1_47:
+					return new Osmoip_1_47();
+				case BetaCalculator.Osmoip_1_267:
+					return new Osmoip_1_267();
+				case BetaCalculator.Osmoip_1_274:
+					return new Osmoip_1_274();
+				case BetaCalculator.Osmoip_1_301:
+					return new Osmoip_1_301();
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
+		public Solver(ISettings settings)
 		{
 			this.settings = settings;
 			N = settings.N;
 			h = (settings.X2 - settings.X1) / N;
 			tau = (settings.T2 - settings.T1) / settings.M;
-			betaCalculator = settings.BetaCalculator;
-			equation = settings.Equation;
+			betaCalculator = GetBetaCalculator(settings.BetaCalculatorMethod);
+			equation = settings.UseParsedEquation ? new ParsedEquation(settings.Functions) : (HeatEquation)new ModelEquation();
 
 			x = new double[N + 1];
 			for (int i = 0; i <= N; i++)
@@ -43,7 +65,7 @@ namespace HeatEquationSolver
 				settings.X1, settings.X2, settings.T1, settings.T2, N, settings.M, h, tau, settings.Epsilon, settings.Beta0, settings.BetaCalculatorMethod);
 		}
 
-		public void Solve(CancellationToken cancellationToken, IProgress<int> progress = null)
+		public void Solve(CancellationToken cancellationToken = new CancellationToken(), IProgress<int> progress = null)
 		{
 			var y = new double[N + 1];
 			for (int n = 0; n <= N; n++)
