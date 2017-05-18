@@ -4,6 +4,7 @@ using HeatEquationSolver.Helpers;
 using HeatEquationSolver.Settings;
 using NLog;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
@@ -22,10 +23,12 @@ namespace HeatEquationSolver
 		private double tau;
 		private BetaCalculatorBase betaCalculator;
 		private HeatEquation equation;
+		private List<double> iterationsOnLayers;
 
 		private readonly double[] x;
 		public double[] Answer;
 		public double Norm;
+		public double AverageIterationsOnLayer => iterationsOnLayers.Average();
 
 		private BetaCalculatorBase GetBetaCalculator(BetaCalculator betaCalculatorMethod)
 		{
@@ -67,13 +70,15 @@ namespace HeatEquationSolver
 
 		public void Solve(CancellationToken cancellationToken = new CancellationToken(), IProgress<int> progress = null)
 		{
+			iterationsOnLayers = new List<double>();
+
 			var y = new double[N + 1];
 			for (int n = 0; n <= N; n++)
 				y[n] = equation.InitCond(x[n]);
 			Logger.Debug("Layer 0, y='{0}'", y.AsString());
 
 			progress?.Report(1);
-			FindOptimalTau(y, settings.T1);
+			FindOptimalTau(y, settings.T1, cancellationToken);
 			settings.M = (int)((settings.T2 - settings.T1) / tau);
 			ChangedNumberOfLayers?.Invoke(settings.M);
 
@@ -85,7 +90,7 @@ namespace HeatEquationSolver
 			}
 
 			double t = settings.T2 - tau;
-			FindOptimalTau(y, t);
+			FindOptimalTau(y, t, cancellationToken);
 			progress?.Report(settings.M);
 			while (t != settings.T2)
 			{
@@ -108,13 +113,14 @@ namespace HeatEquationSolver
 			Logger.Debug("Answer='{0}', Norm={1}", Answer.AsString(), Norm);
 		}
 
-		private void FindOptimalTau(double[] yPred, double tPred)
+		private void FindOptimalTau(double[] yPred, double tPred, CancellationToken cancellationToken)
 		{
 			int k = 1;
 			double norm;
 			var yNext = SolveNonlinearSystem(yPred, tPred + tau);
 			do
 			{
+				cancellationToken.ThrowIfCancellationRequested();
 				k *= 2;
 				tau /= 2;
 				var y = (double[])yPred.Clone();
@@ -135,7 +141,7 @@ namespace HeatEquationSolver
 			betaCalculator.Init(settings.Beta0, Norm);
 			int iterations = 0;
 
-			while (Norm > settings.Epsilon)
+			while (Norm >= settings.Epsilon)
 			{
 				if (++iterations > settings.MaxIterations)
 					throw new Exception("Exceeded max number of iterations");
@@ -150,6 +156,7 @@ namespace HeatEquationSolver
 				betaCalculator.CalculateNextBeta(Norm);
 			}
 
+			iterationsOnLayers.Add(iterations);
 			Logger.Debug("t={0}, {1} iterations, yK='{2}'", t, iterations, yK.AsString());
 			return yK;
 		}

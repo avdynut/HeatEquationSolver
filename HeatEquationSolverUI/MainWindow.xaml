@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:HeatEquationSolverUI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="HeatEquationSolver"
+    Title="Решение квазилинейных задач теплопроводности"
 	SizeToContent="Width"
 	MinWidth="676"
 	MinHeight="510" Height="510"

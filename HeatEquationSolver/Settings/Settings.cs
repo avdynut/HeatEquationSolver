@@ -13,7 +13,7 @@ namespace HeatEquationSolver.Settings
 		public double T2 { get; set; } = 1;
 
 		public int N { get; set; } = 10;
-		public int M { get; set; } = 10;
+		public int M { get; set; } = 100;
 
 		public double Epsilon { get; set; } = 1e-5;
 		public double Epsilon2 { get; set; } = 1e-4;

@@ -32,7 +32,7 @@ namespace HeatEquationSolver.Tests
 		[Test]
 		public void SolverShouldFindCorrectApporximatedValues()
 		{
-			double[] expectedValues = { 0, 0.3101042406, 0.6400414248, 0.9900327861, 1.3600262915, 1.7500207651, 2.1600158569, 2.5900114047, 3.0400073153, 3.5100035281, 4 };
+			double[] expectedValues = { 0, 0.3113863739, 0.6405373478, 0.9904271701, 1.3603425658, 1.7502704243, 2.1602063966, 2.590148376, 3.0400951342, 3.5100458662, 4 };
 			var approximatedValues = solver.Answer.Select(x => Math.Round(x, 10));
 			Assert.That(approximatedValues, Is.EqualTo(expectedValues), "Incorrect answer");
 		}
@@ -44,15 +44,15 @@ namespace HeatEquationSolver.Tests
 			var h = (settings.X2 - settings.X1) / settings.N;
 			for (int i = 0; i <= settings.N; i++)
 				exactValues[i] = Math.Round(equation.u(settings.X1 + i * h, settings.T2), 3);
-			var approximatedValues = solver.Answer.Select(x => Math.Round(x, 3));
+			var approximatedValues = solver.Answer.Select(x => Math.Round(x, 2));
 			Assert.That(approximatedValues, Is.EqualTo(exactValues), "Incorrect answer");
 		}
 
 		[Test]
 		public void SolverShouldReturnCorrectNorm()
 		{
-			double expectedNorm = 3.9E-05;
-			Assert.That(Math.Round(solver.Norm, 6), Is.EqualTo(expectedNorm), "Incorrect norm");
+			double expectedNorm = 0.00052;
+			Assert.That(Math.Round(solver.Norm, 5), Is.EqualTo(expectedNorm), "Incorrect norm");
 		}
 	}
 }
