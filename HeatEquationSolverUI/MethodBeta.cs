@@ -18,10 +18,10 @@ namespace HeatEquationSolverUI
 
 		public static readonly MethodBeta[] Methods = {
 			new MethodBeta(BetaCalculator.Puzynin, "I. Метод И.В. Пузынина", "puzynin.PNG"),
-			new MethodBeta(BetaCalculator.Osmoip_1_5, "II. Одношаг. метод неполн. прогноза (1.5)", "osmoip_1_5.PNG"),
-			new MethodBeta(BetaCalculator.Osmoip_1_47, "III. Одношаг. метод неполн. прогноза (1.47)", "osmoip_1_47.PNG"),
-			new MethodBeta(BetaCalculator.Osmoip_1_267, "IV. Одношаг. метод неполн. прогноза (1.267)", "osmoip_1_267.PNG"),
-			new MethodBeta(BetaCalculator.Osmoip_1_301, "V. Одношаг. метод неполн. прогноза (1.301)", "osmoip_1_301.PNG"),
-			new MethodBeta(BetaCalculator.Osmoip_1_274, "VI. Одношаг. метод неполн. прогноза (1.274)", "osmoip_1_274.PNG") };
+			new MethodBeta(BetaCalculator.Osmoip_1_5, "II. Одношаговый метод неполного прогноза (1.5)", "osmoip_1_5.PNG"),
+			new MethodBeta(BetaCalculator.Osmoip_1_47, "III. Одношаговый метод неполного прогноза (1.47)", "osmoip_1_47.PNG"),
+			new MethodBeta(BetaCalculator.Osmoip_1_267, "IV. Одношаговый метод неполного прогноза (1.267)", "osmoip_1_267.PNG"),
+			new MethodBeta(BetaCalculator.Osmoip_1_301, "V. Одношаговый метод неполного прогноза (1.301)", "osmoip_1_301.PNG"),
+			new MethodBeta(BetaCalculator.Osmoip_1_274, "VI. Одношаговый метод неполного прогноза (1.274)", "osmoip_1_274.PNG") };
 	}
 }

@@ -18,7 +18,7 @@
 		string g { get; set; }
 
 		/// <summary>
-		/// f = f(x) = u(x, 0) - initial condition
+		/// f = f(x) = u(x, t1) - initial condition
 		/// </summary>
 		string InitCond { get; set; }
 

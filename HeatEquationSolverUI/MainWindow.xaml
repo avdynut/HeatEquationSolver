@@ -57,55 +57,65 @@
                         Name="UseParsedEquation"
                         Grid.Row="0"
                         Content="Ввод данных"
-                        IsChecked="{Binding UseParsedEquation}" />
+                        IsChecked="{Binding UseParsedEquation}" FontSize="12" Margin="0,0,0,2"
+						ToolTip="Установленная галочка позволяет вводить свои функции, иначе будет решаться модельная задача"/>
 					<Image Grid.Row="1" Source="pack://siteoforigin:,,,/Images/ModelEquation/u.PNG" />
 					<TextBox
                         Grid.Row="1"
                         MinWidth="100"
-                        Text="{Binding Functions.u, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding Functions.u, UpdateSourceTrigger=PropertyChanged}" 
+						ToolTip="Точное решение, f(x,t). Можно оставить поле пустым"/>
 					<Image Grid.Row="2" Source="pack://siteoforigin:,,,/Images/ModelEquation/K.PNG" />
 					<TextBox
                         Grid.Row="2"
                         MinWidth="100"
-                        Text="{Binding Functions.K, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding Functions.K, UpdateSourceTrigger=PropertyChanged}" 
+						ToolTip="Ядро, f(x,t,u)"/>
 					<Image Grid.Row="3" Source="pack://siteoforigin:,,,/Images/ModelEquation/g.PNG" />
 					<TextBox
                         Grid.Row="3"
                         MinWidth="295"
-                        Text="{Binding Functions.g}" />
+                        Text="{Binding Functions.g}" 
+						ToolTip="f(x,t,u,K). Вычисляется автоматически при введенных u и K"/>
 					<Image Grid.Row="4" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_x_0.PNG" />
 					<TextBox
                         Grid.Row="4"
                         Width="15"
                         Margin="40,0,0,0"
-                        Text="{Binding T1, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding T1, UpdateSourceTrigger=PropertyChanged}" 
+						ToolTip="T1, начальное значение по оси времени t"/>
 					<TextBox
                         Grid.Row="4"
                         MinWidth="55"
                         Margin="78,0,0,0"
-                        Text="{Binding Functions.InitCond}" />
+                        Text="{Binding Functions.InitCond}" 
+						ToolTip="Начальное условие, вычисляется автоматически при введенном u"/>
 					<Image Grid.Row="5" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_0_t.PNG" />
 					<TextBox
                         Grid.Row="5"
                         Width="15"
                         Margin="20,0,0,0"
-                        Text="{Binding X1, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding X1, UpdateSourceTrigger=PropertyChanged}" 
+						ToolTip="X1, начальное значение по оси x"/>
 					<TextBox
                         Grid.Row="5"
                         MinWidth="55"
                         Margin="78,0,0,0"
-                        Text="{Binding Functions.LeftBoundCond}" />
+                        Text="{Binding Functions.LeftBoundCond}" 
+						ToolTip="Левое граничное условие, вычисляется автоматически при введенном u"/>
 					<Image Grid.Row="6" Source="pack://siteoforigin:,,,/Images/ModelEquation/u_1_t.PNG" />
 					<TextBox
                         Grid.Row="6"
                         Width="15"
                         Margin="20,0,0,0"
-                        Text="{Binding X2, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding X2, UpdateSourceTrigger=PropertyChanged}" 
+						ToolTip="X2, правая граница по оси x"/>
 					<TextBox
                         Grid.Row="6"
                         MinWidth="55"
                         Margin="78,0,0,0"
-                        Text="{Binding Functions.RightBoundCond}" />
+                        Text="{Binding Functions.RightBoundCond}" 
+						ToolTip="Правое граничное условие, вычисляется автоматически при введенном u"/>
 				</Grid>
 				<Grid Grid.Row="2">
 					<Grid.RowDefinitions>
@@ -132,31 +142,35 @@
 						<Style TargetType="Label">
 							<Setter Property="HorizontalAlignment" Value="Right"/>
 							<Setter Property="VerticalAlignment" Value="Center"/>
+							<Setter Property="FontFamily" Value="Cambria Math"/>
+							<Setter Property="FontStyle" Value="Italic"/>
 						</Style>
 					</Grid.Resources>
 					<Label Grid.Row="0" Grid.Column="2" Content="N" />
-					<TextBox Grid.Row="0" Grid.Column="3" Text="{Binding N, UpdateSourceTrigger=PropertyChanged}" />
-					<Label Grid.Row="1" Grid.Column="0" Content="T" />
-					<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding T2}"/>
+					<TextBox Grid.Row="0" Grid.Column="3" Text="{Binding N, UpdateSourceTrigger=PropertyChanged}" ToolTip="Количество разбиений отрезка по x"/>
+					<Label Grid.Row="1" Grid.Column="0" Content="T2" />
+					<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding T2}" ToolTip="Верхняя граница по t"/>
 					<Label Grid.Row="1" Grid.Column="2" Content="M" />
-					<TextBox Grid.Row="1" Grid.Column="3" Text="{Binding M, UpdateSourceTrigger=PropertyChanged}" />
-					<Label Grid.Row="2" Grid.Column="0" Content="Eps" />
-					<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Epsilon}" ToolTip="В решении системы нелинейных уравнений" />
-					<Label Grid.Row="2" Grid.Column="2" Content="Eps2" />
-					<TextBox Grid.Row="2" Grid.Column="3" Text="{Binding Epsilon2}" ToolTip="От слоя к слою" />
+					<TextBox Grid.Row="1" Grid.Column="3" Text="{Binding M, UpdateSourceTrigger=PropertyChanged}" ToolTip="Количество разбиений отрезка по t" />
+					<Label Grid.Row="2" Grid.Column="0" Content="ε" />
+					<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Epsilon}" ToolTip="Точность, в решении системы нелинейных уравнений" />
+					<Label Grid.Row="2" Grid.Column="2" Content="ε_2" />
+					<TextBox Grid.Row="2" Grid.Column="3" Text="{Binding Epsilon2}" ToolTip="Точность для нахождения оптимального шага тау" />
 					<ComboBox Grid.Row="3" Grid.ColumnSpan="4" Margin="0,7,0,0"
                         DisplayMemberPath="Name"
                         ItemsSource="{Binding MethodsForBeta}"
-                        SelectedItem="{Binding CurrentMethodForBeta}" Width="398" HorizontalAlignment="Left"/>
+                        SelectedItem="{Binding CurrentMethodForBeta}" Width="398" HorizontalAlignment="Left"
+						ToolTip="Правила регулировки шага бета"/>
 					<Image Grid.Row="4" Grid.ColumnSpan="4" Source="{Binding CurrentMethodForBeta.PathToImage}" Stretch="None" Width="398" HorizontalAlignment="Left"/>
-					<Label Grid.Row="5" Grid.Column="0" Content="Beta0" />
-					<TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Beta0}" />
-					<Label Grid.Row="5" Grid.Column="2" Content="Alpha" />
-					<TextBox Grid.Row="5" Grid.Column="3" Text="{Binding Alpha}" />
+					<Label Grid.Row="5" Grid.Column="0" Content="β_0" />
+					<TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Beta0}" ToolTip="Начальное значение шаговой длины"/>
+					<Label Grid.Row="5" Grid.Column="2" Content="α" />
+					<TextBox Grid.Row="5" Grid.Column="3" Text="{Binding Alpha}" ToolTip="Значение α в шаге 1 регуляризованного алгоритма"/>
 					<Label Grid.Row="6" Grid.ColumnSpan="3" Content="max количество итераций"/>
-					<TextBox Grid.Row="6" Grid.Column="3" Text="{Binding MaxIterations}"/>
+					<TextBox Grid.Row="6" Grid.Column="3" Text="{Binding MaxIterations}" ToolTip="max число итераций для нахождения решения системы на слое"/>
 					<Button Grid.Row="6" Grid.Column="3" HorizontalAlignment="Right" Width="90" Height="22" 
-							Content="Сброс параметров" FontSize="10" Command="{Binding ResetCommand}"/>
+							Content="Сброс параметров" FontSize="10" Command="{Binding ResetCommand}"
+							ToolTip="Возвращает все параметры в значения по умолчанию"/>
 				</Grid>
 			</Grid>
 		</GroupBox>
@@ -194,10 +208,11 @@
 					MinWidth="180"
                     IsReadOnly="True"
                     Text="{Binding Answer}"
-                    VerticalScrollBarVisibility="Auto" />
+                    VerticalScrollBarVisibility="Auto" 
+					ToolTip="Вектор приближенных значений решения задачи в точках x_0,x_1,…,x_N"/>
 				<StackPanel Grid.Row="1">
 					<Label Content="Норма невязки:" />
-					<Label Content="{Binding Norm}" />
+					<Label Content="{Binding Norm}" ToolTip="Если точное решение не задано, выводится значение ε_2"/>
 				</StackPanel>
 				<StackPanel Grid.Row="2">
 					<Label Content="Затрачено времени (секунд):"/>
